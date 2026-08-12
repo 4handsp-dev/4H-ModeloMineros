@@ -194,6 +194,11 @@
   .ib3 { background:#FFF8E1; color:#827717; }
   .ib4 { background:#E8F5E9; color:#1B5E20; }
   .ib5 { background:#E0F2F1; color:#004D40; }
+  .ib-na { background:#EEF1F3; color:#6B7A86; }
+  .item-dot.item-dot-na { width:auto; padding:0 5px; font-size:8.5px; font-weight:800; }
+  .item-dot.idf-na { background:#8A96A0; border-color:#8A96A0; color:white; }
+  .mat-label-0 { color:#6B7A86; }
+  .pfill.p0 { background:#B0B7BE; }
 
   /* ── Fila de ítems ── */
   .item-row {
@@ -379,7 +384,7 @@
     </p>
 
     <!-- KPI cards -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="grid gap-3" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
       <div class="kpi-card p-4">
         <div class="flex items-center gap-1.5 mb-2">
           <span class="mi mi-sm" style="color:var(--teal);">insights</span>
@@ -413,13 +418,23 @@
       </div>
       <div class="kpi-card p-4">
         <div class="flex items-center gap-1.5 mb-2">
-          <span class="mi mi-sm" style="color:var(--teal);">fact_check</span>
-          <p class="text-xs" style="color:rgba(255,255,255,.5);">Sub-elementos</p>
+          <span class="mi mi-sm" style="color:var(--teal);">bolt</span>
+          <p class="text-xs" style="color:rgba(255,255,255,.5);">Energía renovable</p>
         </div>
-        <p id="headerItemCount" class="text-2xl font-black leading-none" style="color:var(--sand);font-family:'Space Grotesk',sans-serif;">
-          72 <span class="text-sm font-normal" style="opacity:.6;">ítems</span>
+        <p class="text-2xl font-black leading-none" style="color:var(--sand);font-family:'Space Grotesk',sans-serif;">
+          58<span class="text-sm font-normal" style="opacity:.6;">% del mix</span>
         </p>
-        <p class="text-xs mt-1.5" style="color:rgba(255,255,255,.35);">valorados individualmente</p>
+        <p class="text-xs mt-1.5" style="color:rgba(255,255,255,.35);">↑18% vs 2024 · transición energética</p>
+      </div>
+      <div class="kpi-card p-4">
+        <div class="flex items-center gap-1.5 mb-2">
+          <span class="mi mi-sm" style="color:var(--teal);">health_and_safety</span>
+          <p class="text-xs" style="color:rgba(255,255,255,.5);">Seguridad (SST)</p>
+        </div>
+        <p class="text-2xl font-black leading-none" style="color:var(--sand);font-family:'Space Grotesk',sans-serif;">
+          0<span class="text-sm font-normal" style="opacity:.6;"> fatalidades</span>
+        </p>
+        <p class="text-xs mt-1.5" style="color:rgba(255,255,255,.35);">FFR = 0 · GRI 403-9 · 2025</p>
       </div>
     </div>
   </div>
@@ -480,6 +495,7 @@
     <!-- Pestañas: todas visibles (wrap), sin scroll -->
     <div id="tabScrollContainer" class="flex flex-wrap gap-2 justify-center" style="padding:9px 6px;">
       <button class="tab-btn" onclick="showTab('resumen',this)"><span class="mi">dashboard</span> Resumen</button>
+      <button class="tab-btn" onclick="showTab('ejecutivo',this)"><span class="mi">insights</span> Tablero madurez</button>
       <button class="tab-btn" onclick="showTab('capa1',this)"><span class="mi">layers</span> Capa 1 · Componentes</button>
       <button class="tab-btn" onclick="showTab('capa2',this)"><span class="mi">hub</span> Capa 2 · IROs</button>
       <button class="tab-btn" onclick="showTab('capa3',this)"><span class="mi">center_focus_strong</span> Capa 3 · Materialidad</button>
@@ -895,7 +911,7 @@
       <span class="mi" style="font-size:15px;" id="topicsEditIcon">edit</span>
       <span id="topicsEditLabel">Activar edición</span>
     </button>
-    <span style="font-size:9.5px;color:#AAA;">Con edición activa: nombre, cuadrante, roles, reporte y marcos editables; clic en Gobernanza/Procesos/Indicadores para ciclar ✗ → △ → ✓.</span>
+    <span style="font-size:9.5px;color:#AAA;">Con edición activa: nombre, cuadrante, roles, reporte y marcos editables; clic en Gobernanza/Procesos/Tecnología-datos/Indicadores para ciclar ✗ → △ → ✓.</span>
   </div>
   <div class="dx-card overflow-hidden">
     <table class="w-full text-xs">
@@ -908,6 +924,7 @@
           <th class="text-center py-3 px-2 font-semibold text-gray-400 hidden md:table-cell">Gobernanza</th>
           <th class="text-center py-3 px-2 font-semibold text-gray-400 hidden md:table-cell">Roles</th>
           <th class="text-center py-3 px-2 font-semibold text-gray-400 hidden md:table-cell">Procesos</th>
+          <th class="text-center py-3 px-2 font-semibold text-gray-400 hidden md:table-cell" title="Tecnología y trazabilidad del dato donde el volumen/criticidad lo exige">Tec./datos</th>
           <th class="text-center py-3 px-2 font-semibold text-gray-400 hidden md:table-cell">Indicadores</th>
           <th class="text-center py-3 px-2 font-semibold text-gray-400">Reporte</th>
           <th class="text-left py-3 px-2 font-semibold text-gray-400 hidden md:table-cell">Marcos</th>
@@ -916,7 +933,7 @@
       <tbody id="topicsTableBody"></tbody>
     </table>
     <p style="font-size:10.5px;color:#B0B0B0;padding:8px 16px;border-top:1px solid #F5F5F5;" class="no-print"><span class="mi mi-sm" style="font-size:13px;vertical-align:middle;color:#C8C8C8;margin-right:4px;">touch_app</span>Clic en cada criterio para ciclar: <span class="crit-btn crit-0">✗ No existe</span> → <span class="crit-btn crit-1">△ Parcial</span> → <span class="crit-btn crit-2">✓ Completo</span></p>
-    <p style="font-size:9px;color:#9A9A9A;padding:0 16px 10px;line-height:1.5;"><span class="mi mi-sm" style="font-size:12px;vertical-align:middle;color:#C8C8C8;margin-right:3px;">info</span><strong style="color:#8A8A8A;">Alcance:</strong> Gobernanza, Procesos, Indicadores, Roles y Reporte (capítulo) son <strong>valoración y mapeo del modelo, a validar por el analista</strong>; el nombre, el cuadrante y los Marcos (GRI/SASB/TCFD) son referencias de la Memoria 2025 y de estándares aplicables. La <strong>Madurez global</strong> proviene de la calificación del analista por nivel.</p>
+    <p style="font-size:9px;color:#9A9A9A;padding:0 16px 10px;line-height:1.5;"><span class="mi mi-sm" style="font-size:12px;vertical-align:middle;color:#C8C8C8;margin-right:3px;">info</span><strong style="color:#8A8A8A;">Alcance:</strong> Gobernanza, Procesos, Tecnología/datos, Indicadores, Roles y Reporte (capítulo) son <strong>valoración y mapeo del modelo, a validar por el analista</strong>; el nombre, el cuadrante y los Marcos (GRI/SASB/TCFD) son referencias de la Memoria 2025 y de estándares aplicables. La <strong>Madurez global</strong> proviene de la calificación del analista por nivel.</p>
   </div>
 
   <!-- ══ Madurez de asuntos materiales (doble calificación) ══ -->
@@ -1344,114 +1361,26 @@
 
 <!-- ══════════════════════════════════ TAB MARCO DE REFERENCIA -->
 <div id="tab-marcos" class="section-tab">
+  <div class="mb-5 flex items-start justify-between gap-3" style="flex-wrap:wrap;">
+    <div style="min-width:0;">
+      <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Marco de referencia</h2>
+      <p class="text-xs mt-1" style="color:var(--gray-dp);max-width:660px;">Normas y estándares que la entidad declara en sus informes, organizados en cuatro capas: legal obligatoria, estándares internacionales de desempeño, específicos de minería y oro, y reporte y divulgación ESG. Validado con la Memoria 2025, el AIF y el Código País; editable por el analista experto.</p>
+    </div>
+    <button id="marcoEditBtn" onclick="toggleMarcoEdit()" class="no-print flex-shrink-0" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:7px 14px;border-radius:8px;cursor:pointer;border:1.5px solid var(--orange);background:white;color:var(--orange);font-family:'Satoshi','Inter',sans-serif;">
+      <span class="mi" style="font-size:15px;" id="marcoEditIcon">edit</span>
+      <span id="marcoEditLabel">Activar edición</span>
+    </button>
+  </div>
+  <div id="marcoContent"></div>
+</div>
+
+<!-- ══════════════════════════════════ TAB EJECUTIVO CONSOLIDADO -->
+<div id="tab-ejecutivo" class="section-tab">
   <div class="mb-5">
-    <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Marco de referencia</h2>
-    <p class="text-xs mt-1" style="color:var(--gray-dp);">Marcos y estándares internacionales de sostenibilidad activos en el modelo de gestión, y regulación aplicable por país de operación.</p>
+    <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Tablero de madurez</h2>
+    <p class="text-xs mt-1" style="color:var(--gray-dp);max-width:730px;">Resultado consolidado de la valoración de cada elemento por componente (Capa 1) y de cada asunto material (Capa 3), con base en la calificación del <strong>Analista experto</strong> (global ponderado por nivel Corporativo/Colombia/Nicaragua). Vista de lectura rápida para dirección; el detalle y la edición están en las pestañas Capa 1 y Capa 3.</p>
   </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="resumen-row-3">
-
-    <!-- Marcos de referencia -->
-    <div style="border:1px solid #E8E8E8;border-radius:12px;padding:20px;background:white;">
-      <h2 style="font-size:12px;font-weight:700;font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);margin:0 0 14px;">Marcos de referencia activos</h2>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">GRI</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Universal + Sectorial Minería 14.x</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">TCFD</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Clima · 4 columnas activas</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">SASB</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Metals &amp; Mining EM-MM-xxx</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">WGC</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">10 Principios Minería Responsable</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">ISO 45001 · SGSST</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">SGSST certificado Col + Nic</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Certificado</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">COSO ERM</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">2017 + ISO 31000 · SGIR integrado</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">TSM</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Towards Sustainable Mining</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#B8860B;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#B8860B;">En implementación</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">ISSB</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">IFRS S1-S2 · En preparación</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:var(--navy);border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:var(--navy);">Marco futuro</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">NI 43-101 · CIM</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Reservas y recursos minerales</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-radius:8px;padding:10px 12px;background:white;">
-          <p style="font-size:13px;font-weight:800;color:var(--navy);font-family:'Space Grotesk',sans-serif;margin:0 0 2px;">TSX30 · SEDAR+</p>
-          <p style="font-size:10px;color:#777;line-height:1.4;margin:0 0 6px;">Reporte a mercados: TSX:MSA · BVC · OTCQX</p>
-          <span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:5px;height:5px;background:#2E7D32;border-radius:50%;flex-shrink:0;display:inline-block;"></span><span style="font-size:10px;font-weight:600;color:#2E7D32;">Activo</span></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Marco normativo -->
-    <div style="border:1px solid #E8E8E8;border-radius:12px;padding:20px;background:white;">
-      <h2 style="font-size:12px;font-weight:700;font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);margin:0 0 4px;">Marco normativo · Regulación por país</h2>
-      <p style="font-size:10px;color:var(--gray-dp);margin:0 0 14px;line-height:1.5;">Normatividad aplicable en cada país de operación. Colombia cuenta con circulares de divulgación ASG; Nicaragua se rige por el marco ambiental-minero y sus permisos.</p>
-      <div style="display:flex;flex-direction:column;gap:10px;">
-        <div style="display:flex;align-items:center;gap:6px;margin-bottom:1px;"><span style="font-size:13px;">🇨🇴</span><span style="font-size:11px;font-weight:800;color:var(--navy);font-family:'Gotu',sans-serif;">Colombia · divulgación ASG obligatoria/progresiva</span></div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid var(--navy);border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">CE 031 de 2021 · Superintendencia Financiera</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Revelación de información ASG para entidades vigiladas por la SFC. Aplica a emisores de valores en BVC.</p>
-          <span style="font-size:9.5px;font-weight:600;color:var(--navy);background:#F0F4F8;padding:2px 7px;border-radius:4px;display:inline-block;">SFC · Emisores BVC</span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid var(--navy);border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">CE 100-000010 · 2023 / Cap. XV CBJ · Supersociedades</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Capítulo XV del Código de Buen Gobierno. Guía para revelación voluntaria progresiva de sostenibilidad.</p>
-          <span style="font-size:9.5px;font-weight:600;color:var(--navy);background:#F0F4F8;padding:2px 7px;border-radius:4px;display:inline-block;">SS · Código BG · 2023</span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid var(--orange);border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">CE 100-000002 de 2025 · Supersociedades</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Información no financiera obligatoria para sociedades vigiladas. Alineado con ISSB y GRI. Vigente 2025.</p>
-          <span style="font-size:9.5px;font-weight:600;color:var(--orange);background:#FEF3EB;padding:2px 7px;border-radius:4px;display:inline-block;">SS · 2025 · Vigente</span>
-        </div>
-
-        <div style="display:flex;align-items:center;gap:6px;margin:8px 0 1px;"><span style="font-size:13px;">🇳🇮</span><span style="font-size:11px;font-weight:800;color:#2E7D32;font-family:'Gotu',sans-serif;">Nicaragua · marco ambiental-minero (HEMCO)</span></div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid #2E7D32;border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">Ley 387 de 2001 · Ley Especial sobre Exploración y Explotación de Minas</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Régimen de concesiones y obligaciones mineras (Reglamento de 2002). Reforma reciente para ordenar la minería artesanal y crear el Fondo de Desarrollo Minero. Autoridad: Ministerio de Energía y Minas (MEM).</p>
-          <span style="font-size:9.5px;font-weight:600;color:#2E7D32;background:#EAF6EC;padding:2px 7px;border-radius:4px;display:inline-block;">MEM · Ley de Minas</span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid #2E7D32;border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">Ley 217 de 1996 · Ley General del Medio Ambiente y los Recursos Naturales</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Marco ambiental nacional: evaluación de impacto ambiental, permisos y uso sostenible de los recursos, aplicable a la operación minera subterránea.</p>
-          <span style="font-size:9.5px;font-weight:600;color:#2E7D32;background:#EAF6EC;padding:2px 7px;border-radius:4px;display:inline-block;">Marco ambiental</span>
-        </div>
-        <div style="border:1px solid #EBEBEB;border-left:3px solid #2E7D32;border-radius:0 8px 8px 0;padding:12px 14px;">
-          <p style="font-size:11px;font-weight:700;color:var(--navy);margin:0 0 3px;">MARENA · Autoridad ambiental competente</p>
-          <p style="font-size:10px;color:#666;line-height:1.5;margin:0 0 6px;">Regulación, permisos ambientales / EIA y monitoreo de la calidad ambiental; integra la Comisión Nacional de Minería.</p>
-          <span style="font-size:9.5px;font-weight:600;color:#2E7D32;background:#EAF6EC;padding:2px 7px;border-radius:4px;display:inline-block;">MARENA · EIA / permisos</span>
-        </div>
-        <div style="border:1px dashed #E0E0E0;border-radius:8px;padding:9px 12px;background:#FAFAFA;">
-          <p style="font-size:9.5px;color:#777;line-height:1.5;margin:0;"><strong style="color:#B45309;">Nota:</strong> a diferencia de Colombia, Nicaragua no cuenta con una circular de divulgación ASG tipo ISSB/IFRS S1-S2; el deber de gestión y reporte se ancla en el marco ambiental-minero y en los permisos. Alcance específico a validar por el análisis experto.</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  <div id="ejecutivoContent"></div>
 </div>
 
 </main>
@@ -1462,8 +1391,8 @@
 // ═══════════════════════════════════════════════
 // CONSTANTS
 // ═══════════════════════════════════════════════
-const SCORE_LABELS = ['','Inicial','Básico','Definido','Gestionado','Optimizado'];
-const MAT_COLORS  = ['','#EF4444','#F97316','#EAB308','#22C55E','#10B981'];
+const SCORE_LABELS = ['No aplica','Inicial','Básico','Definido','Gestionado','Optimizado'];
+const MAT_COLORS  = ['#9AA4AC','#EF4444','#F97316','#EAB308','#22C55E','#10B981'];
 
 // ═══════════════════════════════════════════════
 // COMPONENT METADATA
@@ -1610,6 +1539,21 @@ const DEFAULT_ITEMS = [
 // ═══════════════════════════════════════════════
 const topics = [{"name": "Gobierno corporativo", "type": "dm", "marcos": "GRI 2-9 a 2-21 · Código País", "crit": [2, 2, 2, 2, 2]}, {"name": "Materiales, residuos y relaves", "type": "dm", "marcos": "GRI 306 · SASB EM-MM-150a", "crit": [2, 2, 2, 2, 2]}, {"name": "Gestión de riesgos y crisis", "type": "dm", "marcos": "GRI 2-25 · COSO ERM · ISO 31000", "crit": [2, 2, 2, 2, 2]}, {"name": "Gestión de la energía", "type": "dm", "marcos": "GRI 302 · SASB EM-MM-130a", "crit": [2, 2, 2, 2, 2]}, {"name": "Salud y seguridad en el trabajo", "type": "dm", "marcos": "GRI 403 · ISO 45001 · SASB 320a", "crit": [2, 2, 2, 2, 2]}, {"name": "Gestión social con las comunidades", "type": "dm", "marcos": "GRI 413 · ISO 26000", "crit": [2, 2, 2, 2, 2]}, {"name": "Biodiversidad", "type": "dm", "marcos": "GRI 304 · SASB 160a · TNFD", "crit": [2, 2, 2, 2, 2]}, {"name": "Gestión de la cadena de suministro", "type": "dm", "marcos": "GRI 204 · 308 · 414", "crit": [2, 2, 2, 2, 2]}, {"name": "Minería artesanal y de pequeña escala", "type": "dm", "marcos": "GRI Sectorial 14 · Swiss Better Gold", "crit": [2, 2, 2, 2, 2]}, {"name": "Ética, transparencia e integridad", "type": "fin", "marcos": "GRI 205 · 206 · ISO 37001", "crit": [2, 2, 2, 2, 2]}, {"name": "Innovación y competitividad", "type": "fin", "marcos": "GRI 3-3", "crit": [2, 2, 2, 2, 2]}, {"name": "Sostenibilidad financiera", "type": "fin", "marcos": "GRI 201 · 207", "crit": [2, 2, 2, 2, 2]}, {"name": "Derechos humanos", "type": "fin", "marcos": "GRI 408-411 · UNGPs", "crit": [2, 2, 2, 2, 2]}, {"name": "Relaciones laborales", "type": "lp", "marcos": "GRI 401 · 402 · OIT", "crit": [2, 2, 2, 2, 2]}, {"name": "Cambio climático", "type": "lp", "marcos": "GRI 305 · TCFD · SASB 110a", "crit": [2, 2, 2, 2, 2]}, {"name": "Impactos económicos directos e indirectos", "type": "lp", "marcos": "GRI 201 · 203", "crit": [2, 2, 2, 2, 2]}, {"name": "Agua", "type": "imp", "marcos": "GRI 303 · SASB 140a", "crit": [2, 2, 2, 2, 2]}, {"name": "Ciberseguridad", "type": "imp", "marcos": "GRI 3-3", "crit": [2, 2, 2, 2, 2]}];
 
+function goldSplitBrechas(){
+  return [
+  {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Trazabilidad del oro (cadena de custodia)',
+   descripcion:'Sin trazabilidad del oro de la mina al destino (LBMA/RMI): limita el acceso a mercados de oro responsable y la demostración de origen. Requerido por WGC/LBMA; Swiss Better Gold es referente de custodia en Nicaragua.',
+   topics:[8], iros:['R-09'], comps:[5,6],
+   acciones:['Implementar una cadena de custodia trazable del oro (de la mina al destino)','Publicar el % de onzas bajo certificación de cadena de custodia (LBMA/RMI)','Extender Swiss Better Gold como referente de trazabilidad del mineral artesanal'],
+   fuente:'Memoria 2025 — sin sistema de trazabilidad end-to-end del oro (WGC/LBMA)'},
+
+  {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Debida diligencia ASG de proveedores',
+   descripcion:'Baja cobertura de evaluación ambiental de proveedores (3.20%, GRI 308-1) frente a la social (57.98%, GRI 414-1): brecha de debida diligencia en la cadena de suministro con riesgo reputacional y de acceso a mercados responsables.',
+   topics:[8], iros:['R-09'], comps:[5,6],
+   acciones:['Ampliar la evaluación ambiental de proveedores (GRI 308-1: 3.20% → meta)','Homologar la cobertura ambiental con la social (partir del 57.98% de GRI 414-1)','Formalizar la debida diligencia ASG de proveedores con criterios, seguimiento y remediación'],
+   fuente:'KPI — proveedores eval. ambiental 3.20% (GRI 308-1) vs. social 57.98% (GRI 414-1)'}
+  ];
+}
 const brechas = [
   {prioridad:'CRÍTICA', color:'#C62828', horizonte:'C', titulo:'Medición de Alcance 3 y riesgo de transición',
    descripcion:'El Alcance 3 no está medido: impide dimensionar la huella de la cadena de valor y cuantificar el riesgo de transición. Requerido por WGC, ICMM y prerequisito de ISSB S2.',
@@ -1629,11 +1573,7 @@ const brechas = [
    acciones:['Definir arquitectura de datos ESG unificada (única fuente de verdad)','Evaluar plataformas (Enablon / Intelex / SAP Sustainability)','Integrar con el ERP para automatizar KPIs'],
    fuente:'Diagnóstico — fragmentación de sistemas'},
 
-  {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Trazabilidad del oro y debida diligencia de proveedores',
-   descripcion:'Sin trazabilidad del oro (LBMA/RMI) y con baja cobertura de evaluación ambiental de proveedores (3.20%). Riesgo de acceso a mercados responsables y de cadena de suministro.',
-   topics:[8], iros:['R-09'], comps:[5,6],
-   acciones:['Implementar cadena de custodia trazable del oro','Ampliar la evaluación ASG de proveedores (ambiental 3.20% → meta)','Extender Swiss Better Gold como referente de trazabilidad'],
-   fuente:'KPI — proveedores eval. ambiental 3.20% (GRI 308-1)'},
+  ...goldSplitBrechas(),
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Escenarios climáticos 1.5°C/2°C en planificación financiera',
    descripcion:'TCFD activo, pero los escenarios 1.5°C/2°C no están integrados en la planificación financiera ni en el capex de largo plazo. Falta un net-zero pathway cuantificado.',
@@ -1772,6 +1712,7 @@ function loadState() {
     // ── Intentar formato v5 (tripartito)
     const s = JSON.parse(localStorage.getItem('mineros_dx_v5'));
     if (s && s.items && s.items.length === 12 && s.items[0] && s.items[0].corp) {
+      if (!Array.isArray(s.notes)) s.notes = [];
       DEFAULT_ITEMS.forEach((defItems, ci) => {
         ['corp','col','nic'].forEach(lv => {
           if (!s.items[ci][lv]) {
@@ -1847,6 +1788,14 @@ function loadState() {
       if (s.topicsEdit === undefined) s.topicsEdit = false;
       if (!s.kpiCaptions) s.kpiCaptions = {};
       if (s.contentRev !== 4) { s.kpiData = null; s.iroData = null; s.contentRev = 4; }
+      // Migración: dividir la brecha combinada de oro en dos (trazabilidad / debida diligencia)
+      if (!s.brechaGoldSplit) {
+        if (Array.isArray(s.brechasData)) {
+          var _gsi = s.brechasData.findIndex(function(b){ return b && b.titulo === 'Trazabilidad del oro y debida diligencia de proveedores'; });
+          if (_gsi >= 0) s.brechasData.splice.apply(s.brechasData, [_gsi, 1].concat(goldSplitBrechas()));
+        }
+        s.brechaGoldSplit = true;
+      }
       return s;
     }
     // ── Migrar formato v4 (arrays planos) conservando valoración Corp
@@ -1887,7 +1836,39 @@ function resetAll() {
   location.reload();
 }
 
+// ── IDs de trazabilidad de elementos (Capa 1): estables, compartidos por los 3 niveles ──
+function _pad2(n){ return (n<10?'0':'')+n; }
+function assignItemIds(s){
+  if(!s || !Array.isArray(s.items)) return;
+  if(!s.itemSeq) s.itemSeq={};
+  s.items.forEach(function(comp, ci){
+    if(!comp) return;
+    var levels=['corp','col','nic'], eidByIndex={}, maxSeq=0;
+    levels.forEach(function(lv){ (comp[lv]||[]).forEach(function(it,ii){
+      if(it && it.eid){ if(eidByIndex[ii]===undefined) eidByIndex[ii]=it.eid;
+        var m=/(\d+)$/.exec(it.eid); if(m){ var nu=parseInt(m[1],10); if(nu>maxSeq) maxSeq=nu; } }
+    }); });
+    if((s.itemSeq[ci]||0)>maxSeq) maxSeq=s.itemSeq[ci];
+    levels.forEach(function(lv){ (comp[lv]||[]).forEach(function(it,ii){
+      if(it && !it.eid){
+        if(eidByIndex[ii]===undefined){ maxSeq++; eidByIndex[ii]='C'+(ci+1)+'-'+_pad2(maxSeq); }
+        it.eid=eidByIndex[ii];
+      }
+    }); });
+    s.itemSeq[ci]=maxSeq;
+  });
+}
+function nextItemId(ci){
+  if(!state.itemSeq) state.itemSeq={};
+  var maxSeq=state.itemSeq[ci]||0;
+  ['corp','col','nic'].forEach(function(lv){ (state.items[ci] && state.items[ci][lv]||[]).forEach(function(it){
+    if(it && it.eid){ var m=/(\d+)$/.exec(it.eid); if(m){ var nu=parseInt(m[1],10); if(nu>maxSeq) maxSeq=nu; } }
+  }); });
+  maxSeq++; state.itemSeq[ci]=maxSeq; return 'C'+(ci+1)+'-'+_pad2(maxSeq);
+}
+
 let state = loadState();
+assignItemIds(state);
 
 // ═══════════════════════════════════════════════
 // TAB NAVIGATION
@@ -1896,6 +1877,7 @@ function showTab(id, btn) {
   document.querySelectorAll('.section-tab').forEach(function(t){ t.style.display = 'none'; });
   var tab = document.getElementById('tab-' + id);
   if (tab) tab.style.display = 'block';
+  if (id === 'ejecutivo' && typeof renderEjecutivo === 'function') renderEjecutivo();
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   // Asegurar que el botón activo sea siempre visible en el scroll
@@ -2014,6 +1996,7 @@ function updateModelDiagram() {
 // Combina nivel de madurez + criterios de diseño + evidencia
 // ═══════════════════════════════════════════════
 function suggestRationale(scoreVal, evidence) {
+  if (scoreVal === 0) return "NO APLICA — El requisito de este elemento no aplica en este nivel (alcance, responsabilidad u operación diferente). Por ello se EXCLUYE del cálculo de madurez del componente y del global. Justifique brevemente por qué no aplica; el analista debe validarlo.";
   const v = Math.min(5, Math.max(1, Math.round(scoreVal || 1)));
   const name = SCORE_LABELS[v] || '';
   // Lectura de diseño ANCLADA a la evidencia (inferencia, sin afirmar hechos no vistos)
@@ -2042,6 +2025,282 @@ function suggestRationale(scoreVal, evidence) {
     + 'Qué debería mejorar (según el modelo): ' + improves[v] + '\n\n'
     + 'Alcance de esta sustentación: el modelo no verifica de forma independiente la idoneidad del responsable, la supervisión ni la frecuencia salvo que la evidencia lo mencione explícitamente. El analista experto debe validar lo documentado y completar los vacíos antes de fijar la calificación definitiva.';
 }
+// ── Sustentación por asunto material basada en los 6 criterios + fuentes ──
+var CRIT_META={
+  gov:{n:'Gobernanza', req:'supervisión formal del asunto por un órgano de gobierno con responsabilidad definida', src:'GRI 2-12/2-13 y 3-3; ESRS 2 (GOV); Código País'},
+  roles:{n:'Roles / responsable', req:'un responsable idóneo asignado con segregación de funciones', src:'modelo de tres líneas de defensa (IIA); GRI 2-13; ISO 37000'},
+  proc:{n:'Procesos', req:'un proceso documentado, estandarizado y con frecuencia definida', src:'GRI 3-3 «gestión del tema material» y la norma/estándar ISO específico del asunto'},
+  tech:{n:'Tecnología/datos', req:'soporte tecnológico y trazabilidad del dato donde el volumen o la criticidad lo exigen', src:'buenas prácticas de gestión de información ESG; controles ITGC; trazabilidad exigida por ISSB S1/S2'},
+  ind:{n:'Indicadores', req:'indicadores de resultado con línea base, meta y seguimiento', src:'estándar temático GRI/SASB del asunto; TCFD/ISSB para métricas'},
+  rep:{n:'Reporte', req:'divulgación pública trazable y, deseablemente, con aseguramiento independiente', src:'GRI/SASB/TCFD/ISSB; aseguramiento externo (ISAE 3000)'}
+};
+function critWord(v){ return v==='✓'?'consolidado':(v==='△'?'parcial':(v==='✗'?'ausente':'no evaluado')); }
+// Justificación OBSERVADA por asunto × criterio (adaptada a la evidencia de la Memoria 2025)
+var TOPIC_CRIT_JUSTIF=[
+ { /*1 Gobierno corporativo*/ gov:'la Junta opera con comités especializados (Auditoría y Riesgos, Gobierno Corporativo y Sostenibilidad, Compensación) y gobierno fiscal país por país; tras la reforma 2025 pasó de 9 a 5 miembros', roles:'la responsabilidad recae en la Junta Directiva y la Secretaría General, con comités de apoyo', proc:'existe un marco de gobierno documentado (Código de Buen Gobierno, reglamentos de comités)', tech:'el gobierno se apoya en información corporativa, pero no se evidencia una plataforma que dé trazabilidad a la independencia/diversidad (aún no publicadas)', ind:'se reportan indicadores de estructura (miembros, comités, % mujeres en alta dirección, 100% formación en ética)', rep:'se divulga en el capítulo de estructura de gobernanza (GRI 2-9 a 2-21)' },
+ { /*2 Materiales, residuos y relaves*/ gov:'la VP HSEQ supervisa; el estándar corporativo de relaves está en desarrollo bajo el gobierno del área', roles:'responsable claro en VP HSEQ / Gestión Ambiental', proc:'la gestión de residuos sigue GRI 306, pero el estándar corporativo de relaves aún no está finalizado (solo el primer ejercicio de riesgo en la presa San José, 2025)', tech:'el monitoreo de relaves es incipiente; no hay un sistema consolidado de gestión/alerta de presas (referencia GISTM)', ind:'se reportan indicadores de residuos y relaves (GRI 306; SASB EM-MM-150a; Nicaragua incluida desde 2025)', rep:'se divulga en gestión ambiental y climática' },
+ { /*3 Gestión de riesgos y crisis*/ gov:'el Comité de Auditoría y Riesgos supervisa con un ciclo trimestral', roles:'responsable definido en el Comité de Auditoría y Riesgos', proc:'el SGIR está formalizado bajo COSO ERM 2017 + ISO 31000, con las tres líneas de defensa', tech:'cuenta con una plataforma tecnológica dedicada al SGIR y reportes trimestrales', ind:'los riesgos están integrados al plan estratégico con seguimiento', rep:'se divulga en estructura de gobernanza (GRI 2-25); brecha: riesgo de transición por Alcance 3 no medido' },
+ { /*4 Gestión de la energía*/ gov:'Gestión Ambiental y Climática supervisa la transición energética', roles:'responsable en Gestión Ambiental y Climática', proc:'hay proyectos de transición en ejecución (Salto Grande, conversión a GLP, solar) y gestión del mix', tech:'la energía se mide por fuente e intensidad (GRI 302-1/302-3)', ind:'58% del mix es renovable (↑18%) con intensidad GJ/oz reportada', rep:'se divulga en gestión ambiental y climática (GRI 302 · SASB EM-MM-130a)' },
+ { /*5 SST*/ gov:'la VP HSEQ supervisa; el SGSST está certificado en ISO 45001 (Colombia y Nicaragua)', roles:'responsable en VP HSEQ', proc:'el SGSST certificado tiene procedimientos y comités operando', tech:'existen sistemas de registro de indicadores SST (TRIFR/LTIFR, FFR)', ind:'KPIs completos (FFR=0), aunque TRIFR y LTIFR de empleados subieron frente a 2024 (alerta de causa raíz)', rep:'se divulga en salud y seguridad en el trabajo (GRI 403 · SASB EM-MM-320a)' },
+ { /*6 Gestión social*/ gov:'Gestión Social supervisa con mecanismos de PQR y relacionamiento (GRI 413)', roles:'responsable en Gestión Social', proc:'operan procesos de relacionamiento, Obras por Impuestos y Fundación Mineros', tech:'el sistema de PQR está activo, pero no hay un índice formal de licencia social ni medición de impacto', ind:'13/13 quejas cerradas y beneficiarios reportados; falta medir el impacto transformador, no solo la cobertura', rep:'se divulga en gestión social (GRI 413 · ISO 26000)' },
+ { /*7 Biodiversidad*/ gov:'Gestión Ambiental supervisa, con meta de impacto neto positivo 2030', roles:'responsable en Gestión Ambiental', proc:'la restauración y compensación están activas, pero sin línea base TNFD/SBTN de estado del ecosistema a nivel paisaje', tech:'los datos de restauración/fauna se registran, sin un sistema de monitoreo del estado del ecosistema', ind:'se reportan indicadores de actividad (ha restauradas, árboles, rescates de fauna) (GRI 304)', rep:'se divulga en gestión ambiental y climática (GRI 304 · SASB EM-MM-160a · TNFD)' },
+ { /*8 Cadena de suministro*/ gov:'Abastecimiento/Compras supervisa, pero no hay un gobierno ASG integral de la cadena', roles:'responsable en Abastecimiento / Compras', proc:'la evaluación de proveedores es parcial (social 57.98%, ambiental solo 3.20%)', tech:'no existe trazabilidad del oro de mina a destino final ni un sistema integral de datos ASG de proveedores (requerido por LBMA/WGC)', ind:'la cobertura de evaluación está reportada pero es baja, sobre todo la ambiental', rep:'se divulga parcialmente en desarrollo económico (GRI 204 · 308 · 414)' },
+ { /*9 Minería artesanal*/ gov:'Gestión Social y Operaciones Nicaragua supervisan bajo el modelo Bonanza', roles:'responsable en Gestión Social / Operaciones Nicaragua', proc:'las alianzas de coexistencia y Swiss Better Gold están activas; la formalización aún está en desarrollo', tech:'la trazabilidad del mineral artesanal está en desarrollo (el 74% de la producción de Hemco proviene de mineros artesanales)', ind:'se reportan indicadores de coexistencia, eliminación de mercurio y trabajo infantil (GRI Sectorial 14)', rep:'se divulga en desarrollo económico (GRI 14 · Swiss Better Gold)' },
+ { /*10 Ética*/ gov:'Ética y Cumplimiento / Auditoría Interna supervisan bajo el modelo de tres líneas', roles:'responsable en Ética y Cumplimiento / Auditoría Interna', proc:'operan el programa de ética, el canal de denuncias y la evaluación del 100% de operaciones por corrupción', tech:'el canal de denuncias y el seguimiento de la formación en ética están operativos', ind:'0 incidentes de corrupción y 100% de formación (GRI 205)', rep:'se divulga en estructura de gobernanza (GRI 205 · 206 · ISO 37001)' },
+ { /*11 Innovación*/ gov:'Operaciones/Tecnología supervisan, sin un gobierno formal de la innovación', roles:'responsable disperso entre Operaciones / Tecnología', proc:'las iniciativas tecnológicas están dispersas, sin un proceso formal de innovación documentado', tech:'no hay una plataforma ESG integrada; las iniciativas de digitalización están aisladas', ind:'no se identifican indicadores formales de innovación/competitividad', rep:'se divulga marginalmente (GRI 3-3)' },
+ { /*12 Sostenibilidad financiera*/ gov:'la VP Financiera (CFO) supervisa, con gobierno fiscal país por país', roles:'responsable en la VP Financiera (CFO)', proc:'los procesos financieros están auditados; EEFF consolidados con revisor fiscal (Deloitte)', tech:'los sistemas financieros son robustos y auditables (GRI 201-1, GRI 207-4)', ind:'resultados 2025 auditados récord (ingresos $800M, utilidad neta $145M, caja neta $93M)', rep:'se divulga en desarrollo económico y en los EEFF (GRI 201 · 207)' },
+ { /*13 Derechos humanos*/ gov:'Jurídica/Gestión Humana supervisan, con compromiso UNGP declarado', roles:'responsable compartido entre Jurídica / Gestión Humana', proc:'la debida diligencia en DDHH es parcial; la evidencia sistemática aún es limitada', tech:'no hay un sistema de debida diligencia/monitoreo de DDHH en la cadena', ind:'los indicadores de DDHH son parciales (GRI 408-411)', rep:'se divulga en el capítulo de derechos humanos (GRI 408-411 · UNGP)' },
+ { /*14 Relaciones laborales*/ gov:'Gestión Humana/Talento supervisa, con políticas de talento documentadas', roles:'responsable en Gestión Humana / Talento', proc:'los procesos de talento (rotación, formación, evaluación) están definidos', tech:'los sistemas de talento son parciales, con menor formalización local en Nicaragua', ind:'se reportan indicadores GRI 401/404/405 (rotación 9.89%, horas de formación)', rep:'se divulga en nuestro talento (GRI 401 · 402 · OIT)' },
+ { /*15 Cambio climático*/ gov:'Gestión Ambiental y Climática supervisa, con TCFD activo en sus 4 columnas', roles:'responsable en Gestión Ambiental y Climática', proc:'Alcance 1 y 2 están medidos, pero el Alcance 3 no y los escenarios 1.5°C/2°C no están integrados en la planificación financiera', tech:'la medición de Alcance 1-2 está sistematizada; falta trazabilidad del Alcance 3 (cadena)', ind:'las emisiones y su intensidad se reportan (GRI 305 · TCFD)', rep:'se divulga en gestión ambiental y climática (GRI 305 · TCFD · SASB EM-MM-110a)' },
+ { /*16 Impactos económicos*/ gov:'Desarrollo Económico y Financiera supervisan', roles:'responsable en Desarrollo Económico / Financiera', proc:'los procesos de compras locales e inversión social están documentados', tech:'los datos económicos se miden (compras locales $215.6M, 22.23% del área de influencia)', ind:'se reportan indicadores GRI 201/203 (valor distribuido, compras locales, impuestos)', rep:'se divulga en desarrollo económico (GRI 201 · 203)' },
+ { /*17 Agua*/ gov:'Gestión Ambiental supervisa, con ISO 14046 (huella hídrica)', roles:'responsable en Gestión Ambiental', proc:'se gestiona el ciclo del agua (extracción, consumo, vertimientos, recirculación)', tech:'la medición del agua sigue GRI 303 e ISO 14046, con datos de recirculación por país', ind:'se reportan indicadores GRI 303 (extracción, consumo neto, recirculación)', rep:'se divulga en gestión ambiental y climática (GRI 303 · SASB EM-MM-140a)' },
+ { /*18 Ciberseguridad*/ gov:'Tecnología de la Información es responsable, sin un gobierno ASG formal del tema', roles:'responsable en Tecnología de la Información', proc:'está identificado como material, pero sin un proceso/política pública específica', tech:'no hay un sistema de gestión de ciberseguridad reportado formalmente', ind:'no se reporta formalmente en la Memoria 2025', rep:'sin divulgación formal (GRI 3-3 · no reportado)' }
+];
+
+function suggestTopicRationale(ti, scoreVal){
+  var meta=(typeof getTopicsMeta==='function')?getTopicsMeta()[ti]:null;
+  var tm=(typeof TOPIC_MATURITY!=='undefined'&&TOPIC_MATURITY[ti])?TOPIC_MATURITY[ti]:{ev:''};
+  if(!meta) return '';
+  if(scoreVal===0) return 'NO APLICA — Este asunto material no aplica en el nivel/alcance en edición (operación o responsabilidad diferente). Se EXCLUYE del cálculo de madurez. Justifique brevemente por qué no aplica; el analista debe validarlo.';
+  var v=Math.min(5,Math.max(1,Math.round(scoreVal||1)));
+  var label=(typeof SCORE_LABELS!=='undefined'&&SCORE_LABELS[v])?SCORE_LABELS[v]:'';
+  var evaluables=[['gov',meta.gov],['proc',meta.proc],['tech',meta.tech],['ind',meta.ind]];
+  var cons=evaluables.filter(function(c){return c[1]==='✓';});
+  var parc=evaluables.filter(function(c){return c[1]==='△';});
+  var aus =evaluables.filter(function(c){return c[1]==='✗';});
+  // Criterios evaluados
+  var J=(typeof TOPIC_CRIT_JUSTIF!=='undefined'&&TOPIC_CRIT_JUSTIF[ti])?TOPIC_CRIT_JUSTIF[ti]:{};
+  function critLine(name,key,val){ var sym=(val==='✓'||val==='△'||val==='✗'); var w=sym?(' ('+critWord(val)+')'):''; var obs=J[key]?(' — '+J[key]):''; var cm=CRIT_META[key]; var ev=cm?(' Se evalúa contra: '+cm.req+' ('+cm.src+').'):''; return '• '+name+': '+val+w+obs+'.'+ev; }
+  var lines=[
+    critLine('Gobernanza','gov',meta.gov),
+    critLine('Roles / responsable','roles',meta.roles||'sin asignar'),
+    critLine('Procesos','proc',meta.proc),
+    critLine('Tecnología / datos','tech',meta.tech||'△'),
+    critLine('Indicadores','ind',meta.ind),
+    critLine('Reporte / divulgación','rep',meta.rep||'sin divulgación')
+  ];
+  // Por qué el nivel
+  function names(arr){ return arr.map(function(c){return CRIT_META[c[0]].n;}).join(', '); }
+  var porque='El nivel '+v+' · '+label+' (para el alcance en edición) se sustenta en que '+cons.length+' de 4 criterios evaluables están consolidados'+(cons.length?(' ['+names(cons)+']'):'')+'.';
+  if(parc.length) porque+=' Se observan de forma parcial (△): '+names(parc)+'.';
+  if(aus.length)  porque+=' No se evidencian (✗): '+names(aus)+'.';
+  porque+=' El responsable asignado es '+(meta.roles||'—')+' y la divulgación se realiza en «'+(meta.rep||'—')+'». '
+    +(cons.length>=3?'La combinación de criterios respalda un diseño maduro; el margen restante es de optimización/aseguramiento.'
+     :(cons.length===2?'La base existe pero aún no es integral; los criterios parciales o ausentes limitan un nivel superior.'
+     :'La gestión del asunto es incipiente: los criterios ausentes/parciales explican la calificación baja.'));
+  // Qué debería mejorar — por criterio no consolidado, con fuente
+  var gaps=parc.concat(aus);
+  var mejoras=gaps.map(function(c){ var m=CRIT_META[c[0]];
+    return '• '+m.n+' ('+c[1]+'): la escala/estándar espera '+m.req+'. Criterio contra el que se evalúa: '+m.src+'. El analista debe CONFIRMAR en campo si existe evidencia no reportada o REFUTAR el hallazgo.';
+  });
+  // Reporte/Roles como buenas prácticas si están vacíos
+  if(!meta.rep){ mejoras.push('• '+CRIT_META.rep.n+': no se identifica divulgación específica; se espera '+CRIT_META.rep.req+'. Criterio: '+CRIT_META.rep.src+'.'); }
+  if(!meta.roles){ mejoras.push('• '+CRIT_META.roles.n+': responsable no asignado; se espera '+CRIT_META.roles.req+'. Criterio: '+CRIT_META.roles.src+'.'); }
+  if(!mejoras.length){ mejoras=['• Los criterios evaluables están consolidados; la mejora esperada es sostener la eficiencia, la trazabilidad del dato y el aseguramiento independiente (ISAE 3000), y validar benchmarking externo frente a los marcos del asunto ('+(meta.marcos||'GRI/SASB')+').']; }
+  var evTxt=(tm.ev&&tm.ev.trim())?tm.ev.trim():'El modelo no dispone de evidencia documentada específica para este asunto en las fuentes analizadas; a validar por el analista.';
+  var marcosTxt=meta.marcos?('\n\nMARCOS DE REFERENCIA DEL ASUNTO: '+meta.marcos+'.'):'';
+  return 'CALIFICACIÓN DEL MODELO — Nivel '+v+' · '+label+'  (asunto: «'+meta.name+'»).\n\n'
+    +'BASE DE LA CALIFICACIÓN — criterios de diseño evaluados:\n'+lines.join('\n')+'\n\n'
+    +'EVIDENCIA (Memoria 2025 y fuentes revisadas): '+evTxt+'\n\n'
+    +'POR QUÉ ESTE NIVEL: '+porque+'\n\n'
+    +'QUÉ DEBERÍA MEJORAR (según el modelo) — con el criterio/norma contra el que se evalúa vs. la situación observada:\n'+mejoras.join('\n')+marcosTxt+'\n\n'
+    +'ALCANCE (diagnóstico de auditoría): es una valoración de DISEÑO del modelo; no verifica de forma independiente la operación efectiva. El analista experto debe CONFIRMAR o REFUTAR cada criterio contra la evidencia real de la compañía antes de fijar la calificación definitiva.';
+}
+// ── Sustentación por ELEMENTO (Capa 1) basada en los 5 criterios de diseño + fuentes ──
+var DISENO_CRIT={
+  efic:{n:'Eficiencia', req:'que la actividad cumpla su propósito con resultados y sin desperdicio', src:'eficacia operativa; control interno (COSO 2013)'},
+  idon:{n:'Idoneidad del responsable y supervisión', req:'un responsable idóneo y supervisión independiente (2ª/3ª línea de defensa)', src:'modelo de tres líneas (IIA); COSO ERM 2017; GRI 2-13'},
+  form:{n:'Formalización y evidencia', req:'la actividad formalizada (política/procedimiento) con evidencia trazable', src:'GRI 3-3; norma ISO de gestión aplicable; evidencia de auditoría (NIA 500)'},
+  auto:{n:'Automatización / trazabilidad del dato (cuando se requiere)', req:'automatización y trazabilidad del dato donde el volumen o la criticidad lo exigen', src:'controles ITGC; trazabilidad ISSB S1/S2; gobierno del dato'},
+  frec:{n:'Frecuencia apropiada', req:'una frecuencia de ejecución/monitoreo calibrada al riesgo', src:'COSO ERM (monitoreo continuo); gobierno del dato'}
+};
+var DISENO_EXPL={
+  efic:{'✓':'la evidencia revisada sugiere que la actividad produce resultados y cumple su propósito de forma consistente','△':'la actividad opera pero con resultados parciales o sin evidencia consistente de eficacia','✗':'no se evidencia que la actividad produzca resultados ni cumpla su propósito de forma estable'},
+  idon:{'✓':'se infiere un responsable idóneo con supervisión independiente (2ª/3ª línea de defensa) verificable','△':'existe un responsable, pero la supervisión independiente es limitada o no está formalizada','✗':'no se evidencia un responsable idóneo ni una supervisión independiente del elemento'},
+  form:{'✓':'la actividad está formalizada en política/procedimiento y deja evidencia trazable','△':'hay documentación parcial o evidencia no sistemática de la actividad','✗':'no se evidencia formalización (política/procedimiento) ni evidencia documentada suficiente'},
+  auto:{'✓':'el dato clave está automatizado y es trazable de extremo a extremo donde el elemento lo requiere','△':'existe soporte tecnológico parcial; la trazabilidad del dato aún no es completa','✗':'no hay automatización ni trazabilidad del dato pese a que el volumen o la criticidad del elemento lo exigirían'},
+  frec:{'✓':'la actividad se ejecuta y monitorea con una frecuencia calibrada al nivel de riesgo','△':'existe alguna frecuencia, pero no está calibrada al riesgo o es irregular','✗':'no se evidencia una frecuencia establecida de ejecución o monitoreo'}
+};
+var LEVEL_CRIT={
+  1:{efic:'✗',idon:'✗',form:'✗',auto:'✗',frec:'✗'},
+  2:{efic:'△',idon:'✗',form:'△',auto:'✗',frec:'✗'},
+  3:{efic:'✓',idon:'△',form:'✓',auto:'△',frec:'△'},
+  4:{efic:'✓',idon:'✓',form:'✓',auto:'△',frec:'✓'},
+  5:{efic:'✓',idon:'✓',form:'✓',auto:'✓',frec:'✓'}
+};
+var LEVEL_READ={
+  1:'En las fuentes analizadas no se observa una actividad diseñada, formalizada ni con evidencia suficiente.',
+  2:'La evidencia muestra una actividad presente pero parcial o incipiente, sin estandarización ni frecuencia establecida.',
+  3:'La evidencia respalda una actividad documentada y estandarizada; aún sin supervisión independiente robusta, trazabilidad completa o automatización donde el dato la exige.',
+  4:'El conjunto de la evidencia sugiere un diseño maduro, medido y supervisado; el margen restante es de optimización y aseguramiento.',
+  5:'La evidencia respalda un diseño en el nivel más alto de la escala, con cobertura simultánea de los criterios y mejora continua.'
+};
+function extractMarcos(t){
+  t=t||''; var out=[];
+  var pats=[/GRI\s?[0-9][0-9A-Za-z\-]*/g,/SASB\s?[A-Z0-9\-]*/g,/TCFD/g,/ISSB/g,/IFRS S[12]/g,/ISO\s?[0-9]{3,5}/g,/COSO ERM(?:\s?2017)?/g,/WGC/g,/\bTSM\b/g,/ICMM/g,/NI\s?43-101/g,/Swiss Better Gold/g,/UNGP/g,/Principios Rectores/g,/\bOIT\b/g,/Pacto Global/g,/Código País/g,/Ley\s?[0-9]+/g,/Decreto\s?[0-9]+/g,/CE\s?[0-9\-]+/g];
+  pats.forEach(function(re){ var m=t.match(re); if(m) m.forEach(function(x){ x=(x||'').trim(); if(x && out.indexOf(x)<0) out.push(x); }); });
+  return out.slice(0,6).join(' · ');
+}
+var CRIT_SIGNALS={
+ efic:{ pos:/(logr\w+|cumpl\w+|efectiv\w+|resultado\w*|meta\w*|reduc\w+|mejora\w*|[0-9]+%|0 (incidentes|corrupci)|activ\w+|operativ\w+|robust\w+|certificad\w+)/i,
+        neg:/(no se logr\w+|sin resultado\w*|ineficaz|no cumpl\w+|incipiente|no medido|no existe|deficien\w+|parcial\w*)/i },
+ idon:{ pos:/(Comit[eé][^.,;]{0,34}|Junta Directiva|Auditor[ií]a(?: y Riesgos)?|Revisor[ií]a Fiscal|VP [A-Za-zÁÉÍÓÚ]+|tres l[ií]neas|supervisi[oó]n)/i,
+        neg:/(sin responsable|no (?:hay|existe)[^.,;]{0,22}(?:responsable|supervis)|no asignad\w+|no publicad\w+|sin supervisi[oó]n)/i },
+ form:{ pos:/(document\w+|pol[ií]tica\w*|procedimiento\w*|formaliz\w+|certificad\w+|est[aá]ndar\w*|sistema de gesti[oó]n|reglament\w+|SG[A-Z]{2,})/i,
+        neg:/(no (?:existe|est[aá]|se)[^.,;]{0,26}(?:formal|document|pol[ií]tica|procedimiento)|sin (?:pol[ií]tica|procedimiento|formaliz\w+)|en desarrollo|no finaliz\w+|no formal|informal|no documentad\w+)/i },
+ auto:{ pos:/(plataforma\w*|AMATIA|Xipe|DataScope|trazabilidad|automatiz\w+|monitoreo|software|tecnol[oó]g\w+|digitaliz\w+|medid\w+|indicador\w*)/i,
+        neg:/(no (?:medid|automatiz|trazab)\w*|sin (?:plataforma|sistema|trazabilidad)|dispers\w+|manual|no integrad\w+|no reportad\w+)/i },
+ frec:{ pos:/(trimestral\w*|mensual\w*|anual\w*|peri[oó]dic\w*|continuo|ciclo\w*|bienal|cadenc\w+|permanente)/i,
+        neg:/(sin (?:frecuencia|cadencia|periodicidad)|espor[aá]dic\w*|no peri[oó]dic\w+|puntual)/i }
+};
+function obsForCrit(k, text, status){
+  var sig=CRIT_SIGNALS[k]; if(!sig) return ''; text=(text||'');
+  var mPos=sig.pos?text.match(sig.pos):null, mNeg=sig.neg?text.match(sig.neg):null;
+  function snip(m){ var s=(m[0]||'').trim(); if(s.length>44) s=s.slice(0,42)+'…'; return s; }
+  function P(m){ return 'la evidencia del elemento lo respalda («…'+snip(m)+'…»)'; }
+  function N(m){ return 'la evidencia del elemento señala una carencia («…'+snip(m)+'…»)'; }
+  if(status==='✓'){ if(mPos) return P(mPos); if(mNeg) return N(mNeg); }
+  else { if(mNeg) return N(mNeg); if(mPos) return P(mPos); }
+  return (status==='✓'?'es coherente con el nivel asignado, aunque la descripción del elemento no lo detalla de forma explícita (a confirmar por el analista)'
+         :status==='△'?'la descripción del elemento no lo detalla; se infiere parcial por el nivel asignado (a confirmar por el analista)'
+         :'la descripción del elemento no evidencia este aspecto');
+}
+// Situación observada por ELEMENTO × criterio de diseño (anclada en la evidencia de cada elemento)
+var ELEM_CRIT=[
+[ /* C1 Modelo de negocio */
+ {efic:'el propósito de crear valor sostenible orienta la estrategia y está integrado en la visión multilatina',idon:'la responsabilidad recae en la alta dirección/Junta; sin una supervisión independiente específica del propósito',form:'está declarado y documentado en la Memoria (GRI 2-22)',auto:'es un enunciado estratégico que no exige trazabilidad intensiva de dato',frec:'se revisa con el ciclo estratégico y de reporte anual'},
+ {efic:'los 5 pilares IDEAS operan y se vinculan a los asuntos materiales',idon:'está gobernado por la alta dirección; falta evidenciar supervisión independiente del despliegue',form:'el marco IDEAS está documentado y vinculado a asuntos materiales',auto:'el vínculo IDEAS–asuntos–KPIs no se soporta en una plataforma integrada',frec:'se hace seguimiento con la planeación estratégica anual'},
+ {efic:'las dos operaciones (aluvial y subterránea) están descritas y en marcha',idon:'hay responsables por operación (Col/Nic) con supervisión corporativa',form:'está documentado (GRI 2-6) con portafolio y relaciones comerciales',auto:'la información operativa existe, sin una plataforma unificada de datos ESG',frec:'se actualiza con el reporte anual'},
+ {efic:'los negocios agroforestales aportan compensación ambiental y la exploración incorpora criterios ASG',idon:'lo gestionan las áreas de negocio; sin supervisión ASG formal del portafolio',form:'está documentado, aunque los criterios ASG de exploración son básicos',auto:'no hay un sistema que consolide el desempeño ASG del portafolio',frec:'se revisa con la planeación de portafolio'},
+ {efic:'hay alineación ODS por capítulo, pero sin contribución neta verificable (eficacia no demostrada)',idon:'no hay un responsable claro de la teoría del cambio ni validación independiente',form:'la alineación está declarada por capítulo, sin teoría del cambio formal con métricas',auto:'no hay métricas ni trazabilidad de la contribución neta a los ODS',frec:'solo reporte anual, sin monitoreo de contribución'},
+ {efic:'no hay plan de transición; el propósito de continuidad post-mina no se atiende',idon:'sin responsable ni gobierno del cierre/post-operación',form:'no existe un plan formal de transición documentado',auto:'sin modelación ni datos de escenarios de cierre',frec:'no hay un ciclo de revisión definido'}
+],
+[ /* C2 Grupos de interés */
+ {efic:'los grupos de interés están identificados y segmentados, con mapa publicado',idon:'gestionado por Relacionamiento/Gestión Social; supervisión del área',form:'está documentado y publicado en la Memoria (GRI 2-29)',auto:'el mapa se mantiene sin una plataforma de gestión de stakeholders integrada',frec:'se actualiza en el ciclo de materialidad/anual'},
+ {efic:'operan canales diferenciados (asambleas, PQRS, mesas, brigadas) por tipo de GI',idon:'responsabilidad en Gestión Social con equipos territoriales',form:'los mecanismos están documentados por tipo de grupo de interés',auto:'los canales no están integrados en un sistema único de relacionamiento',frec:'se ejecutan de forma recurrente según cada canal'},
+ {efic:'el canal de PQR está activo y con seguimiento a las solicitudes',idon:'gestionado por el área social con protocolos de atención',form:'tiene protocolos documentados y reportados (GRI 2-26)',auto:'el PQR opera como registro, sin analítica avanzada del dato',frec:'atención continua con seguimiento periódico'},
+ {efic:'los programas comunitarios (Corazón de Oro, brigadas, OXI) están activos y con cobertura',idon:'gestionados por Gestión Social/Fundación Mineros',form:'están documentados con jornadas y beneficiarios',auto:'se mide cobertura, sin sistema de medición de impacto',frec:'ejecución recurrente durante el año'},
+ {efic:'no se mide la licencia social; no hay evidencia de eficacia del relacionamiento en ese indicador',idon:'sin responsable del monitoreo formal de la licencia social',form:'no se usa un modelo/índice formal (p. ej. Thomson & Boutilier)',auto:'sin instrumento/dato para medir y monitorear la licencia social',frec:'no hay medición periódica del indicador'},
+ {efic:'los GI participan en la doble materialidad bienal',idon:'proceso liderado por Sostenibilidad con participación de GI',form:'la consulta está documentada, sin plataforma participativa digital formal',auto:'sin plataforma digital que sistematice la participación',frec:'participación bienal en el proceso de materialidad'},
+ {efic:'hay gestión ambiental operacional (agua, biodiversidad, suelo, emisiones) con reporte',idon:'gestionado por el área ambiental; sin gobierno formal de dependencias del capital natural',form:'documentado con indicadores GRI, pero sin análisis formal de dependencias TNFD',auto:'sin mapeo/trazabilidad de servicios ecosistémicos ni riesgos TNFD',frec:'monitoreo ambiental periódico, sin ciclo de análisis de dependencias'}
+],
+[ /* C3 Estrategia de sostenibilidad */
+ {efic:'cada pilar IDEAS conecta con asuntos, KPIs y metas: integración total',idon:'gobernado por la alta dirección de sostenibilidad',form:'la integración está totalmente documentada',auto:'el vínculo asunto–KPI–meta no está en una plataforma integrada',frec:'seguimiento con la planeación estratégica'},
+ {efic:'hay objetivos definidos y reportados por cada dimensión IDEAS',idon:'responsables por dimensión con coordinación de Sostenibilidad',form:'las metas 2025 están definidas y documentadas',auto:'el avance de metas se consolida sin automatización declarada',frec:'reporte anual de metas'},
+ {efic:'la hoja de ruta climática tiene proyectos e inversiones con avances (Salto Grande, GLP, solar)',idon:'gestionada por Gestión Ambiental y Climática',form:'los proyectos e inversiones están documentados con montos',auto:'los avances se registran, sin una plataforma de seguimiento climático integrada',frec:'seguimiento periódico de proyectos'},
+ {efic:'las contribuciones a ODS están vinculadas a indicadores GRI por asunto',idon:'coordinado por Sostenibilidad con las áreas temáticas',form:'documentado en cada capítulo temático',auto:'la vinculación ODS–indicador no está sistematizada en herramienta',frec:'actualización anual con el reporte'},
+ {efic:'no hay escenarios estratégicos de largo plazo; falta proyección más allá del ciclo anual',idon:'sin responsable del análisis prospectivo formal',form:'no publicados; sin análisis formal de escenarios 2030/2050',auto:'sin modelación de escenarios de largo plazo',frec:'no hay ciclo prospectivo definido'},
+ {efic:'TCFD está activo en estrategia/riesgo, pero los escenarios no permean las decisiones financieras',idon:'gestionado por Gestión Climática y Riesgos',form:'documentado en estrategia y riesgo, sin integración a capex',auto:'sin modelación cuantitativa 1.5°C/2°C integrada a finanzas',frec:'revisión con el ciclo de estrategia/riesgo'}
+],
+[ /* C4 Gobernanza de sostenibilidad */
+ {efic:'la Junta ejerce supervisión ASG a través de sus comités',idon:'comités de Auditoría, Riesgos y Sostenibilidad activos (GRI 2-12/2-13)',form:'la supervisión ASG está documentada',auto:'la información de gobierno se soporta corporativamente, sin plataforma dedicada',frec:'sesiones de comité periódicas'},
+ {efic:'las tres líneas de defensa operan y aportan control',idon:'1ª gestión, 2ª cumplimiento/riesgos, 3ª auditoría interna operativas',form:'el modelo está documentado',auto:'la coordinación entre líneas no se soporta en una herramienta GRC integrada',frec:'operación continua con reportes periódicos'},
+ {efic:'la compensación variable ligada a KPIs ASG alinea incentivos con el desempeño',idon:'gobernado por el Comité de Compensación',form:'confirmado y documentado en la Memoria 2025',auto:'el vínculo KPI ASG–compensación no está automatizado de forma declarada',frec:'evaluación anual de desempeño'},
+ {efic:'100% de operaciones evaluadas por corrupción y 0 incidentes: control efectivo',idon:'gestionado por Ética y Cumplimiento/Auditoría',form:'documentado (GRI 205-1/205-3) con canal de denuncias',auto:'el canal de denuncias y la evaluación operan con soporte tecnológico',frec:'evaluación anual y monitoreo continuo del canal'},
+ {efic:'el gobierno fiscal país por país aporta transparencia (6 jurisdicciones)',idon:'gestionado por la VP Financiera',form:'GRI 207-4 completo y documentado',auto:'la información fiscal es trazable y auditable',frec:'reporte fiscal anual'},
+ {efic:'no se evidencia el resultado esperado: falta transparencia de independencia/diversidad',idon:'la composición con criterios de independencia/diversidad no está publicada',form:'no publicada la composición detallada de la Junta con esos criterios',auto:'sin divulgación estructurada de la matriz de competencias/independencia',frec:'pendiente su publicación en el ciclo de reporte'},
+ {efic:'no hay continuidad asegurada: falta gestión del conocimiento y sucesión ASG',idon:'sin plan formal de sucesión para roles ASG críticos',form:'la continuidad del modelo de gobernanza ESG no está documentada',auto:'sin repositorio/sistema de conocimiento estratégico ASG',frec:'no hay ciclo de revisión de continuidad'}
+],
+[ /* C5 Cadena de valor y modelo operativo */
+ {efic:'la cadena de valor y las dos operaciones están descritas y en marcha',idon:'responsables por operación con supervisión corporativa',form:'documentado (GRI 2-6) con actividades y relaciones comerciales',auto:'la información de cadena existe, sin plataforma unificada',frec:'actualización anual'},
+ {efic:'se gestiona a 2.670 contratistas con lineamientos SST y éticos',idon:'gestionado por las áreas operativas y de abastecimiento',form:'hay auditorías/interventorías, pero sin evaluación ASG integral formal',auto:'sin sistema integral de datos ASG de proveedores',frec:'auditorías e interventorías periódicas'},
+ {efic:'Swiss Better Gold formaliza y da custodia con mineros artesanales en Nicaragua',idon:'gestionado por Operaciones Nicaragua/Gestión Social',form:'alianzas documentadas (GRI Sectorial 14.x)',auto:'la trazabilidad del mineral artesanal está en desarrollo',frec:'seguimiento continuo del programa'},
+ {efic:'la inversión social OXI ejecuta obras en el territorio (~COP 179B+)',idon:'gestionada por Gestión Social con el mecanismo OXI',form:'documentada con obras y montos',auto:'se mide ejecución, sin sistema de medición de impacto',frec:'ejecución anual de proyectos'},
+ {efic:'no hay trazabilidad del oro; el resultado esperado (mina a destino) no se cumple',idon:'sin responsable/gobierno de la trazabilidad de la cadena del oro',form:'no existe sistema de trazabilidad completo (requerido por LBMA/WGC)',auto:'sin sistema de trazabilidad end-to-end del oro',frec:'no hay proceso periódico de trazabilidad'},
+ {efic:'no se mide el Alcance 3; no hay evidencia de gestión de la huella de la cadena',idon:'sin responsable de la medición de Alcance 3',form:'no medido; identificado como reto futuro (WGC, ICMM, ISSB S2)',auto:'sin sistema de captura/estimación del Alcance 3',frec:'no hay medición periódica de Alcance 3'},
+ {efic:'hay gestión ambiental operacional con indicadores, pero sin análisis de dependencias',idon:'gestionado por el área ambiental; sin gobierno formal de externalidades',form:'documentado con GRI, sin análisis TNFD/ENCORE de dependencias',auto:'sin cuantificación/trazabilidad de externalidades ambientales totales',frec:'monitoreo ambiental periódico'}
+],
+[ /* C6 Operación responsable */
+ {efic:'la producción se referencia bajo los 10 Principios WGC',idon:'gestionado por Operaciones con lineamientos corporativos',form:'los principios están referenciados en la Memoria 2025',auto:'sin sistema que evidencie el cumplimiento de cada principio con dato',frec:'revisión con el reporte anual'},
+ {efic:'Swiss Better Gold certifica extracción responsable con artesanales',idon:'gestionado por Operaciones Nicaragua',form:'la cadena de custodia SBG está documentada',auto:'la trazabilidad de custodia se está consolidando',frec:'seguimiento continuo del programa'},
+ {efic:'los nuevos proyectos incorporan criterios ASG (Porvenir: 127 ha de compensación)',idon:'gestionado por Exploración/Proyectos',form:'documentado, aunque los criterios ASG de exploración son básicos',auto:'sin sistema que consolide el desempeño ASG de proyectos',frec:'revisión por hitos de proyecto'},
+ {efic:'el modelo agroforestal convierte la compensación ambiental en negocio sostenible',idon:'gestionado por Negocios Agroforestales S.A.S.',form:'documentado como entidad y modelo activo',auto:'sin trazabilidad integrada del desempeño ambiental del modelo',frec:'gestión operativa continua'},
+ {efic:'la comunicación de atributos responsables es limitada; no llega estructurada al mercado',idon:'sin responsable de una estrategia de comunicación de valor responsable',form:'la Memoria documenta el proceso, sin estrategia de comunicación estructurada',auto:'sin canal/plataforma de comunicación de atributos al mercado',frec:'comunicación no sistemática'},
+ {efic:'no se publica el % de producción certificada: resultado no evidenciado',idon:'sin responsable del reporte de certificación de cadena de custodia',form:'no publicado el % de onzas bajo certificación (LBMA/RMI)',auto:'sin sistema que trace el % certificado',frec:'no hay reporte periódico del indicador'}
+],
+[ /* C7 Doble materialidad */
+ {efic:'el proceso de 4 pasos produce la matriz de doble materialidad',idon:'liderado por Sostenibilidad con participación de áreas',form:'los 4 pasos están documentados explícitamente en la Memoria',auto:'el proceso se soporta documentalmente, sin herramienta dedicada',frec:'ciclo bienal documentado'},
+ {efic:'los IROs se identifican y evalúan para los 18 asuntos',idon:'coordinado por Sostenibilidad y Riesgos',form:'documentado por asunto',auto:'el registro de IROs no está en una plataforma integrada',frec:'actualización bienal'},
+ {efic:'los 18 asuntos están categorizados en 4 cuadrantes correctamente',idon:'validado por Sostenibilidad',form:'la categorización está documentada',auto:'la matriz se mantiene documentalmente',frec:'revisión bienal'},
+ {efic:'el ciclo de actualización bienal está establecido',idon:'gobernado por Sostenibilidad',form:'documentado (GRI 3-1, 3-2)',auto:'sin sistema de gestión del ciclo de materialidad',frec:'cadencia bienal explícita'},
+ {efic:'la gestión por asunto (GRI 3-3) vincula políticas, objetivos e indicadores',idon:'responsables temáticos por asunto',form:'GRI 3-3 documentado por capítulo',auto:'el vínculo política–objetivo–indicador no está sistematizado',frec:'actualización anual del reporte'},
+ {efic:'los stakeholders participan en la validación, aunque de forma no plenamente transparente',idon:'liderado por Sostenibilidad',form:'consulta documentada sin plataforma participativa formal',auto:'sin proceso digital que sistematice la participación',frec:'participación bienal'}
+],
+[ /* C8 Gestión de riesgos y oportunidades */
+ {efic:'el SGIR gestiona riesgos de forma integral y operativa',idon:'supervisado por el Comité de Auditoría y Riesgos',form:'formalizado con COSO ERM 2017 e ISO 31000',auto:'apoyado en una plataforma tecnológica dedicada',frec:'ciclo trimestral'},
+ {efic:'la herramienta SGIR habilita seguimiento y reporte a la Junta',idon:'gestionado por Riesgos con reporte al Comité',form:'la herramienta y su uso están documentados',auto:'plataforma tecnológica dedicada con seguimiento',frec:'revisiones trimestrales'},
+ {efic:'los riesgos climáticos TCFD están integrados con implicaciones financieras',idon:'gestionado por Riesgos y Gestión Climática',form:'documentado (columnas TCFD activas, GRI 201-2)',auto:'la cuantificación financiera del riesgo climático es incipiente',frec:'revisión con el ciclo de riesgo'},
+ {efic:'el riesgo de relaves tuvo su primer ejercicio formal (Presa San José)',idon:'gestionado por HSEQ/Riesgos',form:'el estándar corporativo de relaves está en desarrollo (no finalizado)',auto:'sin sistema consolidado de monitoreo de presas (referencia GISTM)',frec:'primer ejercicio 2025; falta convertirlo en ciclo anual'},
+ {efic:'los escenarios 1.5°C/2°C no permean la planificación financiera',idon:'sin responsable de integrar escenarios a capex',form:'no integrados formalmente en la planificación financiera',auto:'sin modelación cuantitativa de escenarios en finanzas',frec:'sin ciclo de integración definido'},
+ {efic:'no se cuantifican los riesgos de transición por Alcance 3 no medido',idon:'sin responsable de la medición de Alcance 3',form:'Alcance 3 no incluido en el análisis de transición',auto:'sin dato de Alcance 3 para cuantificar riesgos de cadena',frec:'no hay medición periódica'}
+],
+[ /* C9 Procesos, roles y políticas */
+ {efic:'el SGSST certificado ISO 45001 gestiona la SST con resultados (FFR=0)',idon:'gestionado por VP HSEQ; certificación auditada',form:'certificado y documentado (4 etapas, 11 componentes)',auto:'apoyado en sistemas de registro SST',frec:'auditorías periódicas de certificación'},
+ {efic:'las políticas corporativas (DEI, Talento, Ética, Anticorrupción) están vigentes',idon:'gestionadas por las áreas dueñas de cada política',form:'documentadas, vigentes y comunicadas',auto:'sin repositorio único con trazabilidad de versiones/cumplimiento',frec:'revisión periódica de políticas'},
+ {efic:'las metodologías de investigación (ICAM, 5 porqués) sostienen lecciones aprendidas',idon:'gestionado por HSEQ',form:'implementadas y documentadas (meta flash ≤15 días)',auto:'el registro de investigaciones se apoya en sistemas SST',frec:'aplicación por evento con reporte ágil'},
+ {efic:'la gestión de contratistas SST cubre 2.670 con auditorías y ATS',idon:'gestionado por HSEQ/Operaciones',form:'documentado (matrices, auditorías, interventorías, ATS)',auto:'los datos de contratistas se registran por operación',frec:'auditorías e interventorías periódicas'},
+ {efic:'el Plan de Gestión Ambiental con biodiversidad opera en Nicaragua',idon:'gestionado por el área ambiental',form:'plan documentado con componente de biodiversidad',auto:'sin sistema de monitoreo de estado del ecosistema',frec:'ejecución y seguimiento periódico'},
+ {efic:'el estándar de relaves no está finalizado: brecha regulatoria alta',idon:'gestionado por HSEQ/Riesgos, pendiente de consolidar',form:'en desarrollo; solo primer ejercicio de riesgo (Presa San José)',auto:'sin sistema estandarizado de gestión de relaves',frec:'aún sin ciclo anual establecido'},
+ {efic:'los procesos críticos carecen de PHVA y análisis costo-efectividad de controles',idon:'sin responsable del ciclo PHVA transversal de sostenibilidad',form:'sin ciclos PHVA documentados/auditables',auto:'sin análisis formal de costo-efectividad de controles',frec:'sin cadencia de mejora continua documentada'}
+],
+[ /* C10 Gestión de información y tecnología */
+ {efic:'los sistemas SST por operación (AMATIA, Xipe, QR) capturan el dato, pero fragmentados',idon:'gestionado por TI/HSEQ por geografía',form:'plataformas documentadas, con fragmentación entre países',auto:'hay soporte tecnológico por operación, sin interoperabilidad',frec:'captura operativa continua'},
+ {efic:'la herramienta del SGIR habilita el seguimiento de riesgos',idon:'gestionada por Riesgos/TI',form:'plataforma específica documentada',auto:'plataforma dedicada con seguimiento trimestral',frec:'seguimiento trimestral'},
+ {efic:'no hay plataforma ESG integrada; el dato ESG está disperso',idon:'sin gobierno de una arquitectura de datos ESG unificada',form:'no existe una única fuente de verdad documentada',auto:'datos dispersos en múltiples sistemas sin interoperabilidad',frec:'sin proceso unificado de actualización'},
+ {efic:'los KPIs ASG se recopilan manualmente; eficiencia limitada por falta de automatización',idon:'cada área consolida sus KPIs sin gobierno central del dato',form:'no documentada una automatización con ERP',auto:'recopilación manual, sin automatización declarada',frec:'consolidación periódica manual'},
+ {efic:'la calidad/trazabilidad del dato ESG no está asegurada end-to-end',idon:'sin responsable formal de la gobernanza del dato ESG',form:'sin proceso documentado de validación end-to-end',auto:'aseguramiento externo parcial (pocos indicadores)',frec:'validación no sistemática'},
+ {efic:'el reporte es un PDF estructurado; sin canal digital interactivo',idon:'gestionado por Sostenibilidad/Comunicaciones',form:'PDF con índice GRI/SASB documentado',auto:'sin dashboard, API de datos ni plataforma de transparencia',frec:'publicación anual'}
+],
+[ /* C11 Medición: indicadores de valor e impacto */
+ {efic:'las emisiones Alcance 1 y 2 están medidas con comparativo y desglose',idon:'gestionado por Gestión Climática',form:'documentado (GRI 305-1/2) con series 2024-2025',auto:'el cálculo se apoya en registros, sin plataforma de carbono integrada',frec:'medición anual'},
+ {efic:'los KPIs SST son completos y comparativos (TRIFR, LTIFR, HSIFR, FFR)',idon:'gestionado por HSEQ',form:'documentado (GRI 403-9/10, SASB 510a), desglosado por país',auto:'se apoya en los sistemas SST por operación',frec:'medición periódica/anual'},
+ {efic:'los indicadores de talento y DEI están cubiertos',idon:'gestionado por Gestión Humana',form:'documentado (GRI 401/404/405)',auto:'los datos de talento se consolidan sin automatización unificada',frec:'medición anual'},
+ {efic:'los indicadores económicos y fiscales están completos (VEDG, país por país)',idon:'gestionado por Financiera',form:'documentado (GRI 201-1, 207-4) con tablas en USD',auto:'los datos financieros son trazables y auditables',frec:'reporte anual'},
+ {efic:'los indicadores de biodiversidad miden actividad, no estado del ecosistema',idon:'gestionado por el área ambiental',form:'documentado (árboles, ha, fauna), sin indicador TNFD/SBTN de estado',auto:'sin sistema de monitoreo del estado del ecosistema a nivel paisaje',frec:'medición anual de actividad'},
+ {efic:'el Alcance 3 no se mide: brecha crítica de medición',idon:'sin responsable de la medición de Alcance 3',form:'no medido; identificado como reto futuro (WGC, ICMM, ISSB S2)',auto:'sin sistema de captura/estimación del Alcance 3',frec:'no hay medición periódica'},
+ {efic:'la equidad salarial (GRI 202-1) está omitida: brecha frente a inversores ESG',idon:'decisión de confidencialidad corporativa',form:'omitido por política de confidencialidad',auto:'sin divulgación del dato, ni siquiera agregado',frec:'no reportado'}
+],
+[ /* C12 Reporte interno y externo */
+ {efic:'la Memoria GRI (Universal + Sector 14) cubre >85% de estándares aplicables',idon:'gestionado por Sostenibilidad',form:'índice GRI completo documentado',auto:'el índice se elabora sin una plataforma de reporte automatizada',frec:'reporte anual'},
+ {efic:'SASB Metals & Mining está integrado en el índice y el texto',idon:'gestionado por Sostenibilidad',form:'indicadores SASB EM-MM referenciados y documentados',auto:'la trazabilidad SASB–dato no está automatizada',frec:'reporte anual'},
+ {efic:'el marco TCFD con 4 pilares está documentado y alineado con GRI 201-2',idon:'gestionado por Sostenibilidad/Riesgos',form:'los 4 pilares están documentados',auto:'sin herramienta que trace métricas/metas TCFD',frec:'reporte anual'},
+ {efic:'el aseguramiento externo tiene alcance limitado; no cubre todos los indicadores materiales',idon:'contratado a un tercero, con alcance parcial',form:'documentado (GRI 2-5), sin cobertura total ni Alcance 3',auto:'aseguramiento parcial sin trazabilidad end-to-end del dato',frec:'aseguramiento anual parcial'},
+ {efic:'no hay preparación formal ISSB; brecha frente a la convergencia global',idon:'sin responsable/roadmap formal de adopción ISSB',form:'sin preparación documentada (aunque hay alineación GRI/TCFD)',auto:'sin arquitectura de datos lista para ISSB S1/S2',frec:'sin ciclo de preparación definido'},
+ {efic:'no existe reporte integrado orientado al inversionista',idon:'sin responsable de un reporte integrado (IIRC/VRF)',form:'no existe formato de reporte integrado',auto:'sin dataset financiero-ESG integrado para el mercado',frec:'no producido'},
+ {efic:'no hay mapa de integración de marcos; se gestionan en paralelo',idon:'sin responsable de una visión unificada del modelo de gestión',form:'no publicado el mapa de interdependencias/sinergias',auto:'sin repositorio que relacione los marcos entre sí',frec:'sin ciclo de revisión de integración'}
+]
+];
+
+function suggestItemRationale(ci, ii, scoreVal){
+  var lv=(typeof activeLevel!=='undefined')?activeLevel:'corp';
+  var it=state.items[ci] && state.items[ci][lv] && state.items[ci][lv][ii];
+  if(!it) return '';
+  if(scoreVal===0) return 'NO APLICA — Este elemento/requisito no aplica en el nivel/alcance en edición (operación o responsabilidad diferente). Se EXCLUYE del cálculo de madurez del componente. Justifique brevemente por qué no aplica; el analista debe validarlo.';
+  var v=Math.min(5,Math.max(1,Math.round(scoreVal||1)));
+  var label=(typeof SCORE_LABELS!=='undefined'&&SCORE_LABELS[v])?SCORE_LABELS[v]:'';
+  var comp=(typeof COMP_META!=='undefined'&&COMP_META[ci])?COMP_META[ci].name:'';
+  var st=LEVEL_CRIT[v]||LEVEL_CRIT[1], order=['efic','idon','form','auto','frec'];
+  var etext=((it.label||'')+' '+(it.desc||'')); var EC=(typeof ELEM_CRIT!=='undefined'&&ELEM_CRIT[ci]&&ELEM_CRIT[ci][ii])?ELEM_CRIT[ci][ii]:null; var lines=order.map(function(k){ var s=st[k]; var d=DISENO_CRIT[k]; var obs=(EC&&EC[k])?EC[k]:obsForCrit(k,etext,s); return '• '+d.n+': '+critWord(s)+' ('+s+') — se espera '+d.req+'; en este elemento se observa: '+obs+'. Referencia del criterio: '+d.src+'.'; });
+  var cons=order.filter(function(k){return st[k]==='✓';});
+  var pend=order.filter(function(k){return st[k]!=='✓';});
+  var found=extractMarcos((it.label||'')+' '+(it.desc||''));
+  var porque='El nivel '+v+' · '+label+' se sustenta en que, según la evidencia revisada, la actividad '
+    +(cons.length?('cubre los criterios de diseño ['+cons.map(function(k){return DISENO_CRIT[k].n;}).join(', ')+']'):'aún no cubre los criterios de diseño')
+    +(pend.length?('; y presenta pendientes o parciales ['+pend.map(function(k){return DISENO_CRIT[k].n;}).join(', ')+']'):'')
+    +'. '+(LEVEL_READ[v]||'');
+  var mejoras=pend.map(function(k){ var d=DISENO_CRIT[k];
+    return '• '+d.n+': la escala espera '+d.req+'. Criterio/fuente contra el que se evalúa: '+d.src+(found?(' · marcos citados en el elemento: '+found):'')+'. El analista debe CONFIRMAR en campo la evidencia o REFUTAR el hallazgo.';
+  });
+  if(!mejoras.length) mejoras=['• Los criterios de diseño están cubiertos; la mejora esperada es sostener la eficiencia, la trazabilidad del dato y el aseguramiento independiente (ISAE 3000), y validar benchmarking externo'+(found?(' frente a los marcos citados ('+found+')'):'')+'.'];
+  var evTxt=(it.desc&&it.desc.trim())?it.desc.trim():'El modelo no dispone de evidencia documentada específica para este elemento en las fuentes analizadas; a validar por el analista.';
+  return 'CALIFICACIÓN DEL MODELO — Nivel '+v+' · '+label+'  (elemento: «'+(it.label||'')+'»'+(comp?(' · componente: '+comp):'')+').\n\n'
+    +'EVIDENCIA (Memoria 2025 y fuentes revisadas): '+evTxt+'\n\n'
+    +'POR QUÉ ESTE NIVEL — lectura por los criterios de diseño de una actividad bien diseñada:\n'+lines.join('\n')+'\n\n'+porque+'\n\n'
+    +'QUÉ DEBERÍA MEJORAR (según el modelo) — con el criterio/norma contra el que se evalúa vs. la situación observada:\n'+mejoras.join('\n')+'\n\n'
+    +'ALCANCE (diagnóstico de auditoría): es una valoración de DISEÑO del modelo; no verifica de forma independiente la operación efectiva ni la idoneidad del responsable/supervisión salvo que la evidencia lo mencione. El analista experto debe CONFIRMAR o REFUTAR cada criterio contra la evidencia real antes de fijar la calificación definitiva.';
+}
+
+
 
 // Score efectivo del elemento = calificación del Analista (expertScore),
 // con respaldo en la del Modelo si aún no existe.
@@ -2059,20 +2318,20 @@ function itemGlobal(ci, ii) {
   const col  = itemLevelScore(ci, ii, 'col');
   const nic  = itemLevelScore(ci, ii, 'nic');
   // Si algún nivel no tiene el elemento, pondera solo los disponibles
-  if (corp === null && col === null && nic === null) return 0;
   const w = levelWeights();
   let num = 0, den = 0;
-  if (corp !== null) { num += corp * w.corp; den += w.corp; }
-  if (col  !== null) { num += col  * w.col;  den += w.col;  }
-  if (nic  !== null) { num += nic  * w.nic;  den += w.nic;  }
+  if (corp !== null && corp >= 1) { num += corp * w.corp; den += w.corp; }
+  if (col  !== null && col  >= 1) { num += col  * w.col;  den += w.col;  }
+  if (nic  !== null && nic  >= 1) { num += nic  * w.nic;  den += w.nic;  }
   return den > 0 ? Math.round((num / den) * 10) / 10 : 0;
 }
 function calcCompScore(ci, level) {
   const lv = level || activeLevel || 'corp';
   const items = state.items[ci] && state.items[ci][lv];
   if (!items || items.length === 0) return 0;
-  const sum = items.reduce((s, it) => s + (itemScore(it) || 0), 0);
-  return Math.round((sum / items.length) * 10) / 10;
+  let sum = 0, nAp = 0;
+  items.forEach(function(it){ const v = itemScore(it); if (v >= 1) { sum += v; nAp++; } });
+  return nAp > 0 ? Math.round((sum / nAp) * 10) / 10 : 0;  // 0 = todos No aplica
 }
 // Pesos normalizados de los niveles (parametrizables). Suman 1.
 function levelWeights() {
@@ -2084,21 +2343,25 @@ function levelWeights() {
 }
 function weightedAvg(corp, col, nic) {
   const w = levelWeights();
-  return Math.round((corp*w.corp + col*w.col + nic*w.nic) * 10) / 10;
+  let num = 0, den = 0;
+  if (corp >= 1) { num += corp*w.corp; den += w.corp; }
+  if (col  >= 1) { num += col *w.col;  den += w.col;  }
+  if (nic  >= 1) { num += nic *w.nic;  den += w.nic;  }
+  return den > 0 ? Math.round((num/den) * 10) / 10 : 0;  // 0 = No aplica en todos los niveles
 }
 function calcCompScoreGlobal(ci) {
   // Promedio PONDERADO de los 3 niveles (pesos parametrizables)
   return weightedAvg(calcCompScore(ci,'corp'), calcCompScore(ci,'col'), calcCompScore(ci,'nic'));
 }
-function scoreIntLevel(ci, level) { return Math.min(5, Math.max(1, Math.round(calcCompScore(ci, level)))); }
-function scoreInt(ci) { return Math.min(5, Math.max(1, Math.round(calcCompScoreGlobal(ci)))); }
+function scoreIntLevel(ci, level) { const v = calcCompScore(ci, level); return v >= 1 ? Math.min(5, Math.round(v)) : 0; }
+function scoreInt(ci) { const v = calcCompScoreGlobal(ci); return v >= 1 ? Math.min(5, Math.round(v)) : 0; }
 function allScores(level) {
   if (level) return COMP_META.map((_, ci) => calcCompScore(ci, level));
   return COMP_META.map((_, ci) => calcCompScoreGlobal(ci));
 }
 function globalAvg(level) {
-  const sc = allScores(level);
-  return Math.round(sc.reduce((s, v) => s + v, 0) / sc.length * 10) / 10;
+  const sc = allScores(level).filter(function(v){ return v >= 1; });
+  return sc.length ? Math.round(sc.reduce((s, v) => s + v, 0) / sc.length * 10) / 10 : 0;
 }
 function totalItemCount() {
   return state.items.reduce((s, comp) => {
@@ -2349,8 +2612,6 @@ function updateHeaderAvg() {
   if (el) el.textContent = avg.toFixed(1);
   const sa = document.getElementById('summaryAvg');
   if (sa) sa.textContent = avg.toFixed(1);
-  const ic = document.getElementById('headerItemCount');
-  if (ic) ic.textContent = totalItemCount();
 }
 
 // ═══════════════════════════════════════════════
@@ -2375,6 +2636,13 @@ function makeItemPicker(ci, ii, field) {
     btn.addEventListener('click', onItemScoreClick);
     wrap.appendChild(btn);
   }
+  const naBtn = document.createElement('button');
+  naBtn.className = 'item-dot item-dot-na';
+  naBtn.dataset.ci = ci; naBtn.dataset.ii = ii; naBtn.dataset.val = 0; naBtn.dataset.lv = lv; naBtn.dataset.field = field;
+  naBtn.textContent = 'NA';
+  naBtn.title = 'No aplica — el requisito no aplica en este nivel; se excluye del cálculo';
+  naBtn.addEventListener('click', onItemScoreClick);
+  wrap.appendChild(naBtn);
   refreshItemPicker(wrap, state.items[ci][lv][ii][field]);
   return wrap;
 }
@@ -2382,8 +2650,9 @@ function makeItemPicker(ci, ii, field) {
 function refreshItemPicker(wrap, score) {
   wrap.querySelectorAll('.item-dot').forEach(btn => {
     const v = parseInt(btn.dataset.val);
-    btn.className = 'item-dot' + (v === score ? ` idf-${v} idr` : '');
-    btn.textContent = v;
+    const sel = (v === score);
+    if (v === 0) { btn.className = 'item-dot item-dot-na' + (sel ? ' idf-na idr' : ''); btn.textContent = 'NA'; }
+    else { btn.className = 'item-dot' + (sel ? ` idf-${v} idr` : ''); btn.textContent = v; }
   });
 }
 
@@ -2418,7 +2687,7 @@ function refreshCompHeader(ci) {
   const scGlobal = calcCompScoreGlobal(ci);
   const si       = scoreInt(ci);   // usa global
   const lbl = document.getElementById(`comp-score-lbl-${ci}`);
-  if (lbl) { lbl.textContent = `${scGlobal.toFixed(1)}/5`; lbl.className = `comp-avg-score mat-label-${si}`; }
+  if (lbl) { lbl.textContent = (scGlobal>=1)?`${scGlobal.toFixed(1)}/5`:'N/A'; lbl.className = `comp-avg-score mat-label-${si}`; }
   const sublbl = document.getElementById(`comp-score-sub-${ci}`);
   if (sublbl) { sublbl.textContent = SCORE_LABELS[si]; sublbl.className = `text-xs font-medium mat-label-${si} opacity-70`; }
   const bar = document.getElementById(`pbar-fill-${ci}`);
@@ -2426,7 +2695,7 @@ function refreshCompHeader(ci) {
   // Mini badges por nivel
   LEVELS.forEach(lv => {
     const el = document.getElementById(`comp-mini-${lv.id}-${ci}`);
-    if (el) el.textContent = calcCompScore(ci, lv.id).toFixed(1);
+    if (el) { const cs = calcCompScore(ci, lv.id); el.textContent = (cs>=1)?cs.toFixed(1):'NA'; }
   });
 }
 
@@ -2434,9 +2703,10 @@ function refreshCompHeader(ci) {
 // ITEM ROW BUILDER
 // ═══════════════════════════════════════════════
 function deltaChip(model, expert) {
-  const d = (expert||0) - (model||0);
   const box = document.createElement('span');
   box.style.cssText = 'display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:800;border-radius:5px;padding:2px 7px;white-space:nowrap;';
+  if (model === 0 || expert === 0) { box.style.background = '#EEF1F3'; box.style.color = '#6B7A86'; box.innerHTML = 'No aplica'; return box; }
+  const d = (expert||0) - (model||0);
   if (d === 0) {
     box.style.background = '#EEF1F3'; box.style.color = '#8A96A0';
     box.innerHTML = '= sin cambio';
@@ -2465,6 +2735,13 @@ function buildItemRow(ci, ii) {
   const top = document.createElement('div');
   top.style.cssText = 'display:flex;align-items:flex-start;gap:8px;';
 
+  // Chip de ID de trazabilidad del elemento
+  const idChip = document.createElement('span');
+  idChip.textContent = it.eid || '—';
+  idChip.title = 'ID de trazabilidad del elemento (Capa 1). Compartido por los niveles Corporativo/Colombia/Nicaragua.';
+  idChip.style.cssText = 'flex-shrink:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:800;color:#093E5E;background:#EEF3F6;border:1px solid #D6E2EA;border-radius:5px;padding:2px 6px;margin-top:1px;letter-spacing:.02em;white-space:nowrap;';
+  top.appendChild(idChip);
+
   const center = document.createElement('div');
   center.className = 'flex-1 min-w-0';
 
@@ -2485,7 +2762,7 @@ function buildItemRow(ci, ii) {
     state.items[ci][activeLevel][ii].desc = e.target.textContent.trim();
     // Actualizar sustentación sugerida si no ha sido editada
     const ta = document.getElementById(`irat-${ci}-${ii}`);
-    if (ta && !state.items[ci][activeLevel][ii].rationale) ta.value = suggestRationale(state.items[ci][activeLevel][ii].score, e.target.textContent.trim());
+    if (ta && !state.items[ci][activeLevel][ii].rationale) ta.value = suggestItemRationale(ci, ii, state.items[ci][activeLevel][ii].score);
     saveState();
   });
 
@@ -2514,8 +2791,8 @@ function buildItemRow(ci, ii) {
   mLbl.style.cssText = 'font-size:8.5px;font-weight:800;color:#093E5E;text-transform:uppercase;letter-spacing:.04em;';
   mLbl.textContent = 'Modelo';
   const mBadge = document.createElement('span');
-  mBadge.className = `item-badge ib${modelV}`;
-  mBadge.textContent = modelV;
+  mBadge.className = (modelV===0) ? 'item-badge ib-na' : `item-badge ib${modelV}`;
+  mBadge.textContent = (modelV===0) ? 'NA' : modelV;
   mWrap.appendChild(mLbl);
   mWrap.appendChild(mBadge);
   mWrap.appendChild(makeItemPicker(ci, ii, 'score'));
@@ -2531,8 +2808,8 @@ function buildItemRow(ci, ii) {
   aLbl.style.cssText = 'font-size:8.5px;font-weight:800;color:#F18446;text-transform:uppercase;letter-spacing:.04em;';
   aLbl.textContent = 'Analista';
   const aBadge = document.createElement('span');
-  aBadge.className = `item-badge ib${expertV}`;
-  aBadge.textContent = expertV;
+  aBadge.className = (expertV===0) ? 'item-badge ib-na' : `item-badge ib${expertV}`;
+  aBadge.textContent = (expertV===0) ? 'NA' : expertV;
   aWrap.appendChild(aLbl);
   aWrap.appendChild(aBadge);
   aWrap.appendChild(makeItemPicker(ci, ii, 'expertScore'));
@@ -2549,7 +2826,7 @@ function buildItemRow(ci, ii) {
   gWrap.style.cssText = 'display:inline-flex;align-items:center;gap:5px;background:#FFF6EF;border:1px solid #F6D9C2;border-radius:6px;padding:2px 9px;margin-left:auto;';
   gWrap.title = 'Ponderado por nivel — 🏛 ' + (scorp!==null?scorp:'—') + ' · 🇨🇴 ' + (scol!==null?scol:'—') + ' · 🇳🇮 ' + (snic!==null?snic:'—');
   gWrap.innerHTML = '<span style="font-size:8px;font-weight:800;color:#B0B0B0;text-transform:uppercase;letter-spacing:.03em;">Global</span>' +
-    '<span style="font-size:13px;font-weight:800;color:#F18446;line-height:1;">' + gv.toFixed(1) + '</span>';
+    '<span style="font-size:13px;font-weight:800;color:#F18446;line-height:1;">' + (gv>=1?gv.toFixed(1):'N/A') + '</span>';
   dual.appendChild(gWrap);
 
   // ── Sustentación (sugerida por el modelo, editable)
@@ -2561,9 +2838,9 @@ function buildItemRow(ci, ii) {
   const ta = document.createElement('textarea');
   ta.id = `irat-${ci}-${ii}`;
   ta.className = 'notes-area';
-  ta.style.cssText = 'min-height:118px;font-size:10.5px;line-height:1.5;';
+  ta.style.cssText = 'min-height:200px;font-size:10.5px;line-height:1.55;';
   ta.placeholder = 'Sustentación del nivel asignado…';
-  ta.value = it.rationale || suggestRationale(modelV, it.desc);
+  ta.value = it.rationale || suggestItemRationale(ci, ii, modelV);
   if (!state.editMode) ta.readOnly = true;
   ta.addEventListener('input', e => {
     state.items[ci][activeLevel][ii].rationale = e.target.value;
@@ -2571,6 +2848,15 @@ function buildItemRow(ci, ii) {
   });
   ratWrap.appendChild(ratLbl);
   ratWrap.appendChild(ta);
+
+  // Botón: documentar brecha a partir de la sustentación de este elemento
+  const brechaBtn = document.createElement('button');
+  brechaBtn.type = 'button'; brechaBtn.className = 'no-print';
+  brechaBtn.style.cssText = 'margin-top:7px;display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;padding:5px 11px;border-radius:7px;cursor:pointer;border:1.5px solid #E9711C;background:#FFF6EF;color:#C4631A;font-family:inherit;';
+  brechaBtn.innerHTML = '<span class="mi" style="font-size:14px;">flag</span> Documentar brecha en la hoja de Brechas';
+  brechaBtn.title = 'Crea una brecha en la pestaña Brechas con base en la sustentación de este elemento. El analista podrá complementarla y ajustarla.';
+  brechaBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); brechaFromElemento(ci, ii); });
+  ratWrap.appendChild(brechaBtn);
 
   row.appendChild(top);
   row.appendChild(dual);
@@ -2582,7 +2868,7 @@ function buildItemRow(ci, ii) {
 // ADD / DELETE ITEMS
 // ═══════════════════════════════════════════════
 function addItem(ci) {
-  state.items[ci][activeLevel].push({label: 'Nuevo elemento de diagnóstico', desc: 'Descripción y evidencia del elemento.', score: 3, expertScore: 3, rationale: ''});
+  state.items[ci][activeLevel].push({eid: nextItemId(ci), label: 'Nuevo elemento de diagnóstico', desc: 'Descripción y evidencia del elemento.', score: 3, expertScore: 3, rationale: ''});
   saveState();
   renderComponents();
   updateCharts();
@@ -2639,7 +2925,7 @@ function renderComponents() {
             <div class="flex items-center justify-between gap-2 mb-0.5">
               <h3 class="font-bold text-sm text-gray-900">${c.id}. ${c.name}</h3>
               <div class="flex items-center gap-1.5 flex-shrink-0">
-                <span id="comp-score-lbl-${ci}" class="comp-avg-score mat-label-${si}">${scGlobal.toFixed(1)}/5</span>
+                <span id="comp-score-lbl-${ci}" class="comp-avg-score mat-label-${si}">${(scGlobal>=1)?scGlobal.toFixed(1)+'/5':'N/A'}</span>
                 <span id="comp-score-sub-${ci}" class="text-xs font-medium mat-label-${si} opacity-70">${SCORE_LABELS[si]}</span>
                 <span class="chevron text-gray-300 text-xs ml-1">▼</span>
               </div>
@@ -2673,7 +2959,7 @@ function renderComponents() {
           <!-- Score legend -->
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #F2F2F2;flex-wrap:wrap;">
             <span style="font-size:10px;color:#B0B0B0;font-weight:500;letter-spacing:.03em;margin-right:2px;">Escala</span>
-            ${[1,2,3,4,5].map(v=>`<span class="item-badge ib${v}">${v}</span><span style="font-size:10px;color:#C0C0C0;">${SCORE_LABELS[v]}</span>`).join('')}
+            ${[1,2,3,4,5].map(v=>`<span class="item-badge ib${v}">${v}</span><span style="font-size:10px;color:#C0C0C0;">${SCORE_LABELS[v]}</span>`).join('')}<span class="item-badge ib-na">NA</span><span style="font-size:10px;color:#C0C0C0;">No aplica</span>
           </div>
 
           <!-- Items list para el nivel activo -->
@@ -2816,6 +3102,137 @@ function hBracketRow(nodeCount, innerHtml) {
   );
 }
 
+// ═══════════════════════════════════════════════
+// VISTA EJECUTIVA CONSOLIDADA (Capa 1 por elemento + Capa 3, base Analista)
+// ═══════════════════════════════════════════════
+function ejecTab(id){ var b=document.querySelector('.tab-btn[onclick*="'+id+'"]'); showTab(id,b); }
+function ejecTab3(){ ejecTab('capa3'); }
+function ejecGoto(ci){ ejecTab('capa1'); setTimeout(function(){ var d=document.getElementById('comp-details-'+ci); if(d){ d.open=true; d.scrollIntoView({behavior:'smooth',block:'start'}); } },90); }
+function ejecBandLabel(v){ return (v>=1)?SCORE_LABELS[Math.min(5,Math.max(1,Math.round(v)))]:'No aplica'; }
+function ejecLv(v){ return (v===null||v===undefined)?'—':(v===0?'NA':v); }
+function ejecBadge(g, size){ size=size||24; var col=(g>=1)?matColor(g):'#9AA4AC'; var txt=(g>=1)?g.toFixed(1):'NA'; var fs=(g>=1)?(size>=24?'11':'9'):'8.5';
+  return '<span style="flex-shrink:0;width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+col+';color:#fff;font-size:'+fs+'px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">'+txt+'</span>'; }
+function ejecKpiCard(title, sub, g, s){
+  var col=(g>=1)?matColor(g):'#9AA4AC';
+  return '<div class="dx-card" style="padding:13px 15px;border-top:3px solid '+col+';">'
+    +'<div style="font-size:9.5px;font-weight:800;color:#6B7A86;text-transform:uppercase;letter-spacing:.03em;">'+title+'</div>'
+    +'<div style="display:flex;align-items:baseline;gap:6px;margin-top:5px;"><span style="font-size:30px;font-weight:900;color:'+col+';line-height:1;">'+(g>=1?g.toFixed(1):'N/A')+'</span><span style="font-size:12px;color:#B0B0B0;font-weight:700;">/5</span></div>'
+    +'<div style="font-size:9.5px;font-weight:700;color:'+col+';margin-top:3px;">'+(g>=1?SCORE_LABELS[s]:'Sin datos')+'</div>'
+    +'<div style="font-size:8.5px;color:#AAB2B8;margin-top:2px;">'+sub+'</div></div>';
+}
+function ejecKpiCardNum(title, big, sub, col){
+  return '<div class="dx-card" style="padding:13px 15px;border-top:3px solid '+col+';">'
+    +'<div style="font-size:9.5px;font-weight:800;color:#6B7A86;text-transform:uppercase;letter-spacing:.03em;">'+title+'</div>'
+    +'<div style="font-size:26px;font-weight:900;color:'+col+';line-height:1;margin-top:6px;">'+big+'</div>'
+    +'<div style="font-size:8.5px;color:#AAB2B8;margin-top:4px;">'+sub+'</div></div>';
+}
+function ejecDistribucion(bands, total){
+  if(!total) return '';
+  var order=[[5,matColor(5)],[4,matColor(4)],[3,matColor(3)],[2,matColor(2)],[1,matColor(1)],['na','#9AA4AC']];
+  var bar='<div style="display:flex;height:22px;border-radius:6px;overflow:hidden;border:1px solid #E8E8E8;">';
+  order.forEach(function(o){ var n=(o[0]==='na')?bands.na:bands[o[0]]; if(!n) return; var pct=(n/total*100);
+    bar+='<div title="'+(o[0]==='na'?'No aplica':SCORE_LABELS[o[0]])+': '+n+'" style="width:'+pct+'%;background:'+o[1]+';"></div>'; });
+  bar+='</div>';
+  var leg='<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:7px;">';
+  order.forEach(function(o){ var n=(o[0]==='na')?bands.na:bands[o[0]]; var lbl=(o[0]==='na')?'No aplica':SCORE_LABELS[o[0]];
+    leg+='<span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:#666;"><span style="width:10px;height:10px;border-radius:2px;background:'+o[1]+';"></span>'+lbl+' · <b>'+n+'</b></span>'; });
+  leg+='</div>';
+  return '<div class="dx-card" style="padding:12px 15px;"><div style="font-size:10px;font-weight:800;color:var(--ink);margin-bottom:7px;">Distribución de los '+total+' elementos evaluados por nivel de madurez (Analista)</div>'+bar+leg+'</div>';
+}
+function renderEjecutivo(){
+  var host=document.getElementById('ejecutivoContent'); if(!host) return;
+  var g1=globalAvg(), g3=topicMatAvg();
+  var s1=(g1>=1)?Math.min(5,Math.round(g1)):0, s3=(g3>=1)?Math.min(5,Math.round(g3)):0;
+  // Elementos con su global (Analista)
+  var elems=[]; var bands={1:0,2:0,3:0,4:0,5:0,na:0};
+  COMP_META.forEach(function(c,ci){
+    var lens=[(state.items[ci].corp||[]).length,(state.items[ci].col||[]).length,(state.items[ci].nic||[]).length];
+    var maxLen=Math.max.apply(null,lens);
+    for(var ii=0; ii<maxLen; ii++){
+      var it=(state.items[ci].corp&&state.items[ci].corp[ii])||(state.items[ci].col&&state.items[ci].col[ii])||(state.items[ci].nic&&state.items[ci].nic[ii]);
+      if(!it) continue;
+      var gv=itemGlobal(ci,ii);
+      if(gv>=1) bands[Math.min(5,Math.max(1,Math.round(gv)))]++; else bands.na++;
+      elems.push({ci:ci,ii:ii,eid:it.eid||'',label:it.label||'',cid:c.id,comp:c.name,g:gv});
+    }
+  });
+  var totalEl=elems.length, evalEl=elems.filter(function(e){return e.g>=1;}).length;
+  var critEl=elems.filter(function(e){return e.g>=1 && e.g<=2;}).length;
+  // Asuntos (Analista)
+  var topics=[]; getTopicsMeta().forEach(function(t,ti){ topics.push({ti:ti,name:t.name,type:t.type,g:topicGlobal(ti)}); });
+
+  var h='';
+  // KPI strip
+  h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px;">';
+  h+=ejecKpiCard('Madurez del modelo','Capa 1 · 12 componentes',g1,s1);
+  h+=ejecKpiCard('Madurez de asuntos','Capa 3 · '+topics.length+' asuntos',g3,s3);
+  h+=ejecKpiCardNum('Elementos evaluados', evalEl+' / '+totalEl, 'con calificación del Analista', '#093E5E');
+  h+=ejecKpiCardNum('En nivel crítico (≤2)', String(critEl), 'elementos que requieren atención', critEl>0?'#C62828':'#2E7D32');
+  h+='</div>';
+  // Distribución
+  h+=ejecDistribucion(bands, totalEl);
+  // Focos de atención
+  var weakEl=elems.filter(function(e){return e.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,8);
+  var weakTp=topics.filter(function(t){return t.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,6);
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;" class="ejec-focos">';
+  h+='<div class="dx-card" style="padding:13px 15px;border-top:3px solid #C62828;">';
+  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Elementos con menor madurez (Capa 1)</div>';
+  weakEl.forEach(function(e){ h+='<div onclick="ejecGoto('+e.ci+')" title="Ir al componente" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px dashed #EEE;">'
+    +ejecBadge(e.g,20)+'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8.5px;font-weight:800;color:#093E5E;background:#EEF3F6;border:1px solid #D6E2EA;border-radius:4px;padding:1px 5px;flex-shrink:0;">'+e.eid+'</span>'
+    +'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+e.label+'</span>'
+    +'<span style="font-size:8px;color:#AAB2B8;flex-shrink:0;">C'+e.cid+'</span></div>'; });
+  h+='</div>';
+  h+='<div class="dx-card" style="padding:13px 15px;border-top:3px solid #E64A19;">';
+  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Asuntos materiales con menor madurez (Capa 3)</div>';
+  weakTp.forEach(function(t){ h+='<div onclick="ejecTab3()" title="Ir a Materialidad" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px dashed #EEE;">'
+    +ejecBadge(t.g,20)+'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(t.ti+1)+'. '+t.name+'</span></div>'; });
+  h+='</div></div>';
+  // Capa 1 consolidado por elemento
+  h+='<div style="margin:18px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+mi('layers')
+    +'<h3 style="font-size:13px;font-weight:800;color:var(--ink);margin:0;">Capa 1 · Resultado por elemento y componente</h3>'
+    +'<span style="font-size:9px;color:#AAB2B8;">calificación del Analista · global ponderado por nivel</span></div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px;" class="ejec-c1">';
+  COMP_META.forEach(function(c,ci){
+    var cg=calcCompScoreGlobal(ci);
+    h+='<div class="dx-card" style="padding:12px 13px;">';
+    h+='<div onclick="ejecGoto('+ci+')" title="Ver componente" style="cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #F0F0F0;">'
+      +ejecBadge(cg,30)
+      +'<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">C'+c.id+' · '+c.name+'</div>'
+      +'<div style="font-size:8.5px;color:#AAB2B8;">'+ejecBandLabel(cg)+' · '+c.dim+'</div></div></div>';
+    var lens=[(state.items[ci].corp||[]).length,(state.items[ci].col||[]).length,(state.items[ci].nic||[]).length]; var maxLen=Math.max.apply(null,lens);
+    for(var ii=0; ii<maxLen; ii++){
+      var it=(state.items[ci].corp&&state.items[ci].corp[ii])||(state.items[ci].col&&state.items[ci].col[ii])||(state.items[ci].nic&&state.items[ci].nic[ii]); if(!it) continue;
+      var gv=itemGlobal(ci,ii); var col=(gv>=1)?matColor(gv):'#9AA4AC';
+      var tip='Corp '+ejecLv(itemLevelScore(ci,ii,'corp'))+' · Col '+ejecLv(itemLevelScore(ci,ii,'col'))+' · Nic '+ejecLv(itemLevelScore(ci,ii,'nic'));
+      h+='<div title="'+tip+'" style="display:flex;align-items:center;gap:6px;padding:3px 0 3px 6px;border-bottom:1px dashed #F3F3F3;border-left:3px solid '+col+';">'
+        +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#093E5E;flex-shrink:0;">'+(it.eid||'')+'</span>'
+        +'<span style="flex:1;min-width:0;font-size:9.5px;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.label||'')+'</span>'
+        +'<span style="font-size:10px;font-weight:800;color:'+col+';flex-shrink:0;">'+(gv>=1?gv.toFixed(1):'NA')+'</span></div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+  // Capa 3 consolidado
+  h+='<div style="margin:20px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+mi('center_focus_strong')
+    +'<h3 style="font-size:13px;font-weight:800;color:var(--ink);margin:0;">Capa 3 · Resultado por asunto material</h3>'
+    +'<span style="font-size:9px;color:#AAB2B8;">calificación del Analista · orden por ranking de materialidad</span></div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;" class="ejec-c3">';
+  topics.forEach(function(t){ var col=(t.g>=1)?matColor(t.g):'#9AA4AC'; var tt=TOPIC_TYPE_LABEL[t.type]||{label:t.type,bg:'#888',color:'#fff'};
+    h+='<div onclick="ejecTab3()" title="Ir a Materialidad" style="cursor:pointer;background:white;border:1px solid #ECECEC;border-left:4px solid '+col+';border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:9px;">'
+      +ejecBadge(t.g,28)
+      +'<div style="flex:1;min-width:0;"><div style="font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.2;">'+(t.ti+1)+'. '+t.name+'</div>'
+      +'<div style="margin-top:3px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:7.5px;font-weight:700;background:'+tt.bg+';color:'+tt.color+';border-radius:3px;padding:1px 5px;">'+tt.label+'</span>'
+      +'<span style="font-size:8px;color:#AAB2B8;">'+ejecBandLabel(t.g)+'</span></div></div></div>';
+  });
+  h+='</div>';
+  // Leyenda
+  h+='<div style="margin-top:16px;padding:10px 13px;background:#F7F9FC;border-radius:9px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
+    +'<span style="font-size:9px;font-weight:800;color:#6B7A86;text-transform:uppercase;">Escala de madurez</span>';
+  [1,2,3,4,5].forEach(function(v){ h+='<span style="display:inline-flex;align-items:center;gap:5px;">'+ejecBadge(v,18)+'<span style="font-size:9px;color:#666;">'+SCORE_LABELS[v]+'</span></span>'; });
+  h+='<span style="display:inline-flex;align-items:center;gap:5px;">'+ejecBadge(0,18)+'<span style="font-size:9px;color:#666;">No aplica</span></span>';
+  h+='</div>';
+  host.innerHTML=h;
+}
 function renderResumenFindings() {
   const el = document.getElementById('resumenFindings');
   if (!el) return;
@@ -2900,6 +3317,102 @@ function brechaAddAccion(i){ getBrechas()[i].acciones.push('Nueva acción'); bre
 function brechaDelAccion(i,ai){ getBrechas()[i].acciones.splice(ai,1); brechaRefresh(); }
 function brechaDelete(i){ if(!confirm('¿Eliminar esta brecha?')) return; getBrechas().splice(i,1); brechaRefresh(); }
 function brechaAdd(){ getBrechas().push({prioridad:'MEDIA',color:'#1565C0',horizonte:'M',titulo:'Nueva brecha',descripcion:'Describa la brecha identificada.',topics:[],iros:[],comps:[],acciones:['Acción propuesta'],fuente:'A definir por el analista'}); brechaRefresh(); }
+
+// ── Documentar brecha desde un elemento (Capa 1) o un asunto material (Capa 3) ──
+function brechaPrioridadFromScore(v){ v=Math.round(v||1); return v<=1?'CRÍTICA':(v===2?'ALTA':(v===3?'MEDIA':'PREPARACIÓN')); }
+function brechaHorizonteFromScore(v){ v=Math.round(v||1); return v<=2?'C':(v===3?'M':'L'); }
+// Extrae los bullets de «QUÉ DEBERÍA MEJORAR» de una sustentación (editada por el analista o sugerida por el modelo)
+function brechaMejorasFromRationale(txt){
+  if(!txt) return null;
+  var idx=txt.search(/QU[ÉE] DEBER[ÍI]A MEJORAR/i); if(idx<0) return null;
+  var after=txt.slice(idx).replace(/^[^\n]*\n/,'');
+  var stop=after.search(/\n\s*\n\s*(ALCANCE|MARCOS|EVIDENCIA|BASE DE|POR QU)/i);
+  if(stop>=0) after=after.slice(0,stop);
+  var bullets=after.split('\n').map(function(s){return s.trim();})
+    .filter(function(s){return s.charAt(0)==='•';})
+    .map(function(s){ s=s.replace(/^•\s*/,''); s=s.replace(/\.?\s*El analista debe CONFIRMAR[\s\S]*$/i,'.'); return s.trim(); })
+    .filter(function(s){return s.length>2;});
+  return bullets.length?bullets:null;
+}
+function brechaFromElemento(ci, ii){
+  var lv=(typeof activeLevel!=='undefined')?activeLevel:'corp';
+  var it=state.items[ci] && state.items[ci][lv] && state.items[ci][lv][ii];
+  if(!it){ alert('No se encontró el elemento.'); return; }
+  var comp=(typeof COMP_META!=='undefined'&&COMP_META[ci])?COMP_META[ci]:{id:ci+1,name:'Componente '+(ci+1)};
+  var lvMeta=(typeof LEVELS!=='undefined')?(LEVELS.find(function(l){return l.id===lv;})||LEVELS[0]):{label:lv};
+  var mv=it.score, ev=(it.expertScore!==undefined&&it.expertScore!==null)?it.expertScore:it.score;
+  var v=Math.round(((ev!==undefined&&ev!==null)?ev:mv)||1); var vc=Math.min(5,Math.max(1,v));
+  var label=(SCORE_LABELS[Math.min(5,Math.max(0,v))]||'');
+  var st=LEVEL_CRIT[vc]||LEVEL_CRIT[1], order=['efic','idon','form','auto','frec'];
+  var pend=order.filter(function(k){return st[k]!=='✓';});
+  var rat=it.rationale||suggestItemRationale(ci,ii,mv);
+  var acciones=brechaMejorasFromRationale(rat);
+  if(!acciones){
+    acciones=pend.map(function(k){var d=DISENO_CRIT[k]; return d.n+': implementar '+d.req+' (ref.: '+d.src+').';});
+    if(!acciones.length) acciones=['Sostener el diseño y reforzar aseguramiento independiente (ISAE 3000) y benchmarking externo.'];
+  }
+  var desc='Brecha de diseño en «'+(it.label||'elemento')+'» ('+comp.name+' · '+lvMeta.label+'). '
+    +'Madurez actual '+(v>=1?(v+'/5 · '+label):'N/A')+'. '+(LEVEL_READ[vc]||'')
+    +(pend.length?(' Criterios de diseño pendientes: '+pend.map(function(k){return DISENO_CRIT[k].n;}).join(', ')+'.'):'')
+    +(it.desc?(' Evidencia base del elemento: '+it.desc):'');
+  brechaDocumentar({
+    prioridad:brechaPrioridadFromScore(v), color:BRECHA_PRC[brechaPrioridadFromScore(v)]||'#1565C0',
+    horizonte:brechaHorizonteFromScore(v), titulo:'Brecha · '+comp.name+' — '+(it.label||''),
+    descripcion:desc, topics:[], iros:[], comps:[comp.id||(ci+1)], acciones:acciones,
+    fuente:'Diagnóstico Capa 1 · C'+(comp.id||(ci+1))+' '+comp.name+' — «'+(it.label||'')+'» · '+lvMeta.label
+      +' · ID '+(it.eid||'s/ID')+' · calificación Modelo '+(mv===0?'NA':mv)+' / Analista '+(ev===0?'NA':ev)+'. Base: sustentación del elemento (editable por el analista).'
+  });
+}
+function brechaFromAsunto(ti){
+  var meta=(typeof getTopicsMeta==='function')?getTopicsMeta()[ti]:null;
+  if(!meta){ alert('No se encontró el asunto material.'); return; }
+  var lv=(typeof activeLevel!=='undefined')?activeLevel:'corp';
+  var ts=state.topicScores[ti][lv];
+  var lvMeta=(typeof LEVELS!=='undefined')?(LEVELS.find(function(l){return l.id===lv;})||LEVELS[0]):{label:lv};
+  var mv=ts.score, ev=topicScoreEff(ti,lv);
+  var v=Math.round(((ev!==undefined&&ev!==null)?ev:mv)||1);
+  var label=(SCORE_LABELS[Math.min(5,Math.max(0,v))]||'');
+  var evalu=[['gov',meta.gov],['proc',meta.proc],['tech',meta.tech||'△'],['ind',meta.ind]];
+  var gaps=evalu.filter(function(c){return c[1]!=='✓';});
+  var rat=ts.rationale||suggestTopicRationale(ti,mv);
+  var acciones=brechaMejorasFromRationale(rat);
+  if(!acciones){
+    acciones=gaps.map(function(c){var m=CRIT_META[c[0]]; return m.n+': implementar '+m.req+' (ref.: '+m.src+').';});
+    if(!meta.rep) acciones.push(CRIT_META.rep.n+': '+CRIT_META.rep.req+' (ref.: '+CRIT_META.rep.src+').');
+    if(!acciones.length) acciones=['Sostener la gestión y reforzar aseguramiento independiente y benchmarking frente a '+(meta.marcos||'GRI/SASB')+'.'];
+  }
+  var num=ti+1;
+  var iros=(state.iroLinks && state.iroLinks[num])?state.iroLinks[num].slice():[];
+  var tlabel=((typeof TOPIC_TYPE_LABEL!=='undefined'&&TOPIC_TYPE_LABEL[meta.type])?TOPIC_TYPE_LABEL[meta.type].label:meta.type);
+  var desc='Brecha en el asunto material «'+meta.name+'» ('+tlabel+'). '
+    +'Madurez actual '+(v>=1?(v+'/5 · '+label):'N/A')+'. '
+    +(gaps.length?('Criterios no consolidados: '+gaps.map(function(c){return CRIT_META[c[0]].n+' ('+critWord(c[1])+')';}).join(', ')+'. '):'')
+    +'Responsable: '+(meta.roles||'—')+'. Divulgación: '+(meta.rep||'—')+'.';
+  brechaDocumentar({
+    prioridad:brechaPrioridadFromScore(v), color:BRECHA_PRC[brechaPrioridadFromScore(v)]||'#1565C0',
+    horizonte:brechaHorizonteFromScore(v), titulo:'Brecha · '+meta.name,
+    descripcion:desc, topics:[num], iros:iros, comps:[], acciones:acciones,
+    fuente:'Diagnóstico Capa 3 · asunto «'+meta.name+'» · '+lvMeta.label
+      +' · madurez Modelo '+(mv===0?'NA':mv)+' / Analista '+(ev===0?'NA':ev)+' · marcos: '+(meta.marcos||'—')+'. Base: sustentación del asunto (editable por el analista).'
+  });
+}
+function brechaDocumentar(b){
+  var arr=getBrechas(); arr.push(b); var newIdx=arr.length-1;
+  state.brechasEdit=true; saveState();
+  var tabBtn=document.querySelector('.tab-btn[onclick*="brechas"]');
+  showTab('brechas', tabBtn);
+  var l=document.getElementById('brechasEditLabel'),ic=document.getElementById('brechasEditIcon'),eb=document.getElementById('brechasEditBtn');
+  if(l) l.textContent='Edición activa'; if(ic) ic.textContent='lock_open';
+  if(eb){ eb.style.background='var(--orange)'; eb.style.color='white'; }
+  renderBrechas();
+  if(document.getElementById('panoramaIntegrado')) renderPanorama();
+  setTimeout(function(){
+    var card=document.getElementById('brecha-card-'+newIdx);
+    if(card){ card.scrollIntoView({behavior:'smooth',block:'center'});
+      var oc=card.style.boxShadow; card.style.transition='box-shadow .3s';
+      card.style.boxShadow='0 0 0 3px #F18446'; setTimeout(function(){ card.style.boxShadow=oc||''; },1900); }
+  },140);
+}
 function toggleBrechasEdit(){
   state.brechasEdit=!state.brechasEdit;
   var b=document.getElementById('brechasEditBtn'),l=document.getElementById('brechasEditLabel'),ic=document.getElementById('brechasEditIcon');
@@ -2949,7 +3462,7 @@ function renderBrechas(){
   var h='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="brechas-grid">';
   data.forEach(function(b,i){
     var color=brechaColor(b); var hz=HZ[b.horizonte]||HZ.M;
-    h+='<div class="dx-card" style="padding:14px 15px;border-left:4px solid '+color+';'+(ed?'outline:1px dashed #F0D6A8;outline-offset:1px;':'')+'">';
+    h+='<div id="brecha-card-'+i+'" class="dx-card" style="padding:14px 15px;border-left:4px solid '+color+';'+(ed?'outline:1px dashed #F0D6A8;outline-offset:1px;':'')+'">';
     if(ed){
       h+='<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px;">'
         +'<select onchange="brechaSetSel('+i+',\'prioridad\',this.value)" style="'+selCss+'font-weight:700;">'+selOpts(PR_OPTS,b.prioridad)+'</select>'
@@ -3048,8 +3561,9 @@ var ODS_CHAIN=[
 function computeElemVal(comps, topics){
   var cs=(comps||[]).map(function(id){ return calcCompScoreGlobal(id-1); });
   var ts=(topics||[]).map(function(n){ return topicGlobal(n-1); });
-  var compAvg=cs.length? Math.round(cs.reduce(function(a,b){return a+b;},0)/cs.length*10)/10 : null;
-  var topicAvg=ts.length? Math.round(ts.reduce(function(a,b){return a+b;},0)/ts.length*10)/10 : null;
+  var csA=cs.filter(function(v){return v>=1;}), tsA=ts.filter(function(v){return v>=1;});
+  var compAvg=csA.length? Math.round(csA.reduce(function(a,b){return a+b;},0)/csA.length*10)/10 : null;
+  var topicAvg=tsA.length? Math.round(tsA.reduce(function(a,b){return a+b;},0)/tsA.length*10)/10 : null;
   var parts=[]; if(compAvg!==null)parts.push(compAvg); if(topicAvg!==null)parts.push(topicAvg);
   var val=parts.length? Math.round(parts.reduce(function(a,b){return a+b;},0)/parts.length*10)/10 : 0;
   var byCode=iroByCode(), seen={}, iroTot=0, iroCrit=0, iroSug=0;
@@ -3063,7 +3577,7 @@ function computeElemVal(comps, topics){
 function buildChainCard(el, kind){
   var v=computeElemVal(el.comps, el.topics);
   var vc=matColor(v.val);
-  var lvl=SCORE_LABELS[Math.min(5,Math.max(1,Math.round(v.val)))];
+  var lvl=(v.val>=1)?SCORE_LABELS[Math.min(5,Math.max(1,Math.round(v.val)))]:'No aplica';
   var word=kind==='ideas'?'pilar':'frente';
   var compName={}; if(typeof COMP_META!=='undefined') COMP_META.forEach(function(cm){ compName[cm.id]=cm.name; });
   var navC1="showTab('capa1',document.querySelector('[onclick*=\\'capa1\\']'))";
@@ -3672,6 +4186,8 @@ function renderODS() {
 // Campos: name · type · gov · roles · proc · ind · rep · marcos
 // ═══════════════════════════════════════════════════════════════
 var TOPICS = [{"name": "Gobierno corporativo", "type": "dm", "gov": "✓", "roles": "Junta Directiva / Secretaría General", "proc": "✓", "ind": "✓", "rep": "Estructura de gobernanza", "marcos": "GRI 2-9 a 2-21 · Código País"}, {"name": "Materiales, residuos y relaves", "type": "dm", "gov": "✓", "roles": "VP HSEQ / Gestión Ambiental", "proc": "△", "ind": "✓", "rep": "Gestión ambiental y climática", "marcos": "GRI 306 · SASB EM-MM-150a"}, {"name": "Gestión de riesgos y crisis", "type": "dm", "gov": "✓", "roles": "Comité de Auditoría y Riesgos", "proc": "✓", "ind": "✓", "rep": "Estructura de gobernanza", "marcos": "GRI 2-25 · COSO ERM 2017 · ISO 31000"}, {"name": "Gestión de la energía", "type": "dm", "gov": "✓", "roles": "Gestión Ambiental y Climática", "proc": "✓", "ind": "✓", "rep": "Gestión ambiental y climática", "marcos": "GRI 302 · SASB EM-MM-130a"}, {"name": "Salud y seguridad en el trabajo", "type": "dm", "gov": "✓", "roles": "VP HSEQ", "proc": "✓", "ind": "✓", "rep": "Salud y seguridad en el trabajo", "marcos": "GRI 403 · ISO 45001 · SASB EM-MM-320a"}, {"name": "Gestión social con las comunidades", "type": "dm", "gov": "✓", "roles": "Gestión Social", "proc": "✓", "ind": "✓", "rep": "Gestión social", "marcos": "GRI 413 · ISO 26000"}, {"name": "Biodiversidad", "type": "dm", "gov": "✓", "roles": "Gestión Ambiental", "proc": "△", "ind": "✓", "rep": "Gestión ambiental y climática", "marcos": "GRI 304 · SASB EM-MM-160a · TNFD"}, {"name": "Gestión de la cadena de suministro", "type": "dm", "gov": "△", "roles": "Abastecimiento / Compras", "proc": "△", "ind": "△", "rep": "Desarrollo económico", "marcos": "GRI 204 · 308 · 414"}, {"name": "Minería artesanal y de pequeña escala", "type": "dm", "gov": "✓", "roles": "Gestión Social / Operaciones Nicaragua", "proc": "△", "ind": "✓", "rep": "Desarrollo económico", "marcos": "GRI Sectorial 14 · Swiss Better Gold"}, {"name": "Ética, transparencia e integridad", "type": "fin", "gov": "✓", "roles": "Ética y Cumplimiento / Auditoría Interna", "proc": "✓", "ind": "✓", "rep": "Estructura de gobernanza", "marcos": "GRI 205 · 206 · ISO 37001"}, {"name": "Innovación y competitividad", "type": "fin", "gov": "△", "roles": "Operaciones / Tecnología", "proc": "△", "ind": "△", "rep": "Desarrollo económico", "marcos": "GRI 3-3"}, {"name": "Sostenibilidad financiera", "type": "fin", "gov": "✓", "roles": "VP Financiera (CFO)", "proc": "✓", "ind": "✓", "rep": "Desarrollo económico", "marcos": "GRI 201 · 207"}, {"name": "Derechos humanos", "type": "fin", "gov": "△", "roles": "Jurídica / Gestión Humana", "proc": "△", "ind": "△", "rep": "Derechos humanos", "marcos": "GRI 408-411 · UNGPs"}, {"name": "Relaciones laborales", "type": "lp", "gov": "✓", "roles": "Gestión Humana / Talento", "proc": "✓", "ind": "✓", "rep": "Nuestro talento", "marcos": "GRI 401 · 402 · OIT"}, {"name": "Cambio climático", "type": "lp", "gov": "✓", "roles": "Gestión Ambiental y Climática", "proc": "△", "ind": "✓", "rep": "Gestión ambiental y climática", "marcos": "GRI 305 · TCFD · SASB EM-MM-110a"}, {"name": "Impactos económicos directos e indirectos", "type": "lp", "gov": "✓", "roles": "Desarrollo Económico / Financiera", "proc": "✓", "ind": "✓", "rep": "Desarrollo económico", "marcos": "GRI 201 · 203"}, {"name": "Agua", "type": "imp", "gov": "✓", "roles": "Gestión Ambiental", "proc": "✓", "ind": "✓", "rep": "Gestión ambiental y climática", "marcos": "GRI 303 · SASB EM-MM-140a"}, {"name": "Ciberseguridad", "type": "imp", "gov": "△", "roles": "Tecnología de la Información", "proc": "△", "ind": "✗", "rep": "Estructura de gobernanza", "marcos": "GRI 3-3 · No reportado formalmente"}];
+var TOPIC_TECH=['△','△','✓','✓','✓','△','△','✗','△','✓','✗','✓','✗','△','△','✓','✓','✗'];
+for(var _tti=0;_tti<TOPICS.length;_tti++){ if(TOPICS[_tti].tech===undefined) TOPICS[_tti].tech=TOPIC_TECH[_tti]; }
 
 var TOPIC_TYPE_LABEL = {
   'dm':  {label:'Doble materialidad',      bg:'var(--navy)',    color:'white'},
@@ -3694,8 +4210,9 @@ function topicGlobal(ti) {
 }
 function topicMatAvg() {
   if (!state.topicScores || !state.topicScores.length) return 0;
-  const sum = state.topicScores.reduce((s, _, ti) => s + topicGlobal(ti), 0);
-  return Math.round((sum / state.topicScores.length) * 10) / 10;
+  let sum = 0, nAp = 0;
+  state.topicScores.forEach(function(_, ti){ const g = topicGlobal(ti); if (g >= 1) { sum += g; nAp++; } });
+  return nAp > 0 ? Math.round((sum / nAp) * 10) / 10 : 0;
 }
 
 function onTopicScoreClick(e) {
@@ -3726,6 +4243,13 @@ function makeTopicPicker(ti, field) {
     btn.addEventListener('click', onTopicScoreClick);
     wrap.appendChild(btn);
   }
+  const naBtn = document.createElement('button');
+  naBtn.className = 'item-dot item-dot-na';
+  naBtn.dataset.ti = ti; naBtn.dataset.val = 0; naBtn.dataset.field = field; naBtn.dataset.lv = lv;
+  naBtn.textContent = 'NA';
+  naBtn.title = 'No aplica — el asunto no aplica en este nivel; se excluye del cálculo';
+  naBtn.addEventListener('click', onTopicScoreClick);
+  wrap.appendChild(naBtn);
   refreshItemPicker(wrap, state.topicScores[ti][lv][field]);
   return wrap;
 }
@@ -3750,7 +4274,7 @@ function buildTopicMaturityCard(ti) {
   const miniBadges = LEVELS.map(l => {
     const s = topicScoreEff(ti, l.id);
     return '<span style="display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;color:' + l.color + ';border:1px solid ' + l.color + '22;background:' + l.color + '11;border-radius:4px;padding:1px 5px;">' +
-      '<span style="font-size:8px;">' + l.flag + '</span>' + s + '</span>';
+      '<span style="font-size:8px;">' + l.flag + '</span>' + (s===0?'NA':s) + '</span>';
   }).join('');
 
   // Cabecera: número + nombre + global ponderado
@@ -3766,7 +4290,7 @@ function buildTopicMaturityCard(ti) {
     '</div></div>' +
     '<div style="flex-shrink:0;text-align:center;background:#FFF6EF;border:1px solid #F6D9C2;border-radius:8px;padding:4px 9px;">' +
       '<div style="font-size:8px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.03em;">Global</div>' +
-      '<div style="font-size:16px;font-weight:800;color:#F18446;line-height:1;">' + glob.toFixed(1) + '</div>' +
+      '<div style="font-size:16px;font-weight:800;color:#F18446;line-height:1;">' + (glob>=1?glob.toFixed(1):'N/A') + '</div>' +
       '<div style="font-size:7.5px;color:#C09A80;">ponderado</div>' +
     '</div>';
   card.appendChild(head);
@@ -3790,7 +4314,7 @@ function buildTopicMaturityCard(ti) {
   const mWrap = document.createElement('div');
   mWrap.style.cssText = 'display:flex;align-items:center;gap:6px;';
   mWrap.innerHTML = '<span style="font-size:8.5px;font-weight:800;color:#093E5E;text-transform:uppercase;letter-spacing:.04em;">Modelo</span>';
-  const mBadge = document.createElement('span'); mBadge.className = `item-badge ib${modelV}`; mBadge.textContent = modelV;
+  const mBadge = document.createElement('span'); mBadge.className = (modelV===0)?'item-badge ib-na':`item-badge ib${modelV}`; mBadge.textContent = (modelV===0)?'NA':modelV;
   mWrap.appendChild(mBadge); mWrap.appendChild(makeTopicPicker(ti, 'score'));
 
   const sep = document.createElement('span'); sep.style.cssText = 'width:1px;height:22px;background:#E2E6EA;';
@@ -3798,7 +4322,7 @@ function buildTopicMaturityCard(ti) {
   const aWrap = document.createElement('div');
   aWrap.style.cssText = 'display:flex;align-items:center;gap:6px;';
   aWrap.innerHTML = '<span style="font-size:8.5px;font-weight:800;color:#F18446;text-transform:uppercase;letter-spacing:.04em;">Analista</span>';
-  const aBadge = document.createElement('span'); aBadge.className = `item-badge ib${expertV}`; aBadge.textContent = expertV;
+  const aBadge = document.createElement('span'); aBadge.className = (expertV===0)?'item-badge ib-na':`item-badge ib${expertV}`; aBadge.textContent = (expertV===0)?'NA':expertV;
   aWrap.appendChild(aBadge); aWrap.appendChild(makeTopicPicker(ti, 'expertScore'));
 
   dual.appendChild(mWrap); dual.appendChild(sep); dual.appendChild(aWrap);
@@ -3811,8 +4335,8 @@ function buildTopicMaturityCard(ti) {
   ratLbl.innerHTML = '<span class="mi" style="font-size:12px;color:#F18446;">notes</span> Sustentación · ' + lvMeta.label + ' · sugerida por el modelo, editable';
   const ta = document.createElement('textarea');
   ta.className = 'notes-area';
-  ta.style.cssText = 'min-height:118px;font-size:10.5px;line-height:1.5;';
-  ta.value = ts.rationale || suggestRationale(modelV, tm.ev);
+  ta.style.cssText = 'min-height:210px;font-size:10.5px;line-height:1.55;';
+  ta.value = ts.rationale || suggestTopicRationale(ti, modelV);
   if (!state.editMode) ta.readOnly = true;
   ta.addEventListener('input', e => { state.topicScores[ti][activeLevel].rationale = e.target.value; saveState(); });
   card.appendChild(ratLbl);
@@ -3873,6 +4397,15 @@ function buildTopicMaturityCard(ti) {
     linkWrap.appendChild(hint);
   }
   card.appendChild(linkWrap);
+
+  // Botón: documentar brecha a partir de la sustentación de este asunto material
+  const brechaBtn = document.createElement('button');
+  brechaBtn.type = 'button'; brechaBtn.className = 'no-print';
+  brechaBtn.style.cssText = 'margin-top:9px;display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;padding:5px 11px;border-radius:7px;cursor:pointer;border:1.5px solid #E9711C;background:#FFF6EF;color:#C4631A;font-family:inherit;';
+  brechaBtn.innerHTML = '<span class="mi" style="font-size:14px;">flag</span> Documentar brecha en la hoja de Brechas';
+  brechaBtn.title = 'Crea una brecha en la pestaña Brechas con base en la sustentación de este asunto (incluye los IROs vinculados). El analista podrá complementarla y ajustarla.';
+  brechaBtn.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); brechaFromAsunto(ti); });
+  card.appendChild(brechaBtn);
 
   return card;
 }
@@ -4106,6 +4639,7 @@ function toggleKpiAnalysis() {
 
 // Color por nivel de madurez (escala 1..5)
 function matColor(v) {
+  if (!(v >= 1)) return '#9AA4AC';
   const map = {1:'#C62828', 2:'#E64A19', 3:'#B8860B', 4:'#2E7D32', 5:'#1B5E20'};
   return map[Math.min(5, Math.max(1, Math.round(v)))] || '#888';
 }
@@ -4117,8 +4651,8 @@ function topicGlobalCell(ti) {
   const tip = 'Ponderado — Corp ' + corp + ' · Col ' + colv + ' · Nic ' + nic;
   return '<td style="padding:6px 8px;text-align:center;" title="' + tip + '">' +
     '<span style="display:inline-flex;align-items:center;gap:4px;">' +
-      '<span style="width:22px;height:22px;border-radius:50%;background:' + col + ';color:white;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">' + Math.round(g) + '</span>' +
-      '<span style="font-size:11px;font-weight:800;color:' + col + ';">' + g.toFixed(1) + '</span>' +
+      '<span style="width:22px;height:22px;border-radius:50%;background:' + col + ';color:white;font-size:' + (g>=1?'10':'8.5') + 'px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">' + (g>=1?Math.round(g):'NA') + '</span>' +
+      '<span style="font-size:11px;font-weight:800;color:' + col + ';">' + (g>=1?g.toFixed(1):'') + '</span>' +
     '</span></td>';
 }
 
@@ -4149,12 +4683,13 @@ function getTopicsMeta(){
   if(!state.topicsMeta || !Array.isArray(state.topicsMeta) || state.topicsMeta.length!==TOPICS.length){
     state.topicsMeta = JSON.parse(JSON.stringify(TOPICS));
   }
+  state.topicsMeta.forEach(function(t,ti){ if(t.tech===undefined) t.tech=(TOPICS[ti]?TOPICS[ti].tech:'△'); });
   return state.topicsMeta;
 }
 function topicSetName(ti,el){ getTopicsMeta()[ti].name=(el.innerText||'').trim(); saveState(); renderMaterialityMap(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); }
 function topicSetType(ti,v){ getTopicsMeta()[ti].type=v; saveState(); renderTopicsTable(); renderMaterialityMap(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); }
-function topicSetText(ti,field,el){ getTopicsMeta()[ti][field]=(el.innerText||'').trim(); saveState(); }
-function topicCycleCrit(ti,field){ var C=['✗','△','✓']; var cur=getTopicsMeta()[ti][field]; var i=C.indexOf(cur); getTopicsMeta()[ti][field]=C[(i+1)%3]; saveState(); renderTopicsTable(); }
+function topicSetText(ti,field,el){ getTopicsMeta()[ti][field]=(el.innerText||'').trim(); saveState(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); }
+function topicCycleCrit(ti,field){ var C=['✗','△','✓']; var cur=getTopicsMeta()[ti][field]; var i=C.indexOf(cur); getTopicsMeta()[ti][field]=C[(i+1)%3]; saveState(); renderTopicsTable(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); }
 function toggleTopicsEdit(){ state.topicsEdit=!state.topicsEdit; var b=document.getElementById('topicsEditBtn'),l=document.getElementById('topicsEditLabel'),ic=document.getElementById('topicsEditIcon'); if(l)l.textContent=state.topicsEdit?'Edición activa':'Activar edición'; if(ic)ic.textContent=state.topicsEdit?'lock_open':'edit'; if(b){b.style.background=state.topicsEdit?'var(--orange)':'white';b.style.color=state.topicsEdit?'white':'var(--orange)';} saveState(); renderTopicsTable(); }
 
 function renderTopicsTable() {
@@ -4198,6 +4733,7 @@ function renderTopicsTable() {
       critCell(ti,'gov',t.gov) +
       txtCell(ti,'roles',t.roles,'font-size:9.5px;color:#444;') +
       critCell(ti,'proc',t.proc) +
+      critCell(ti,'tech',t.tech) +
       critCell(ti,'ind',t.ind) +
       txtCell(ti,'rep',t.rep,'font-size:9.5px;color:#666;') +
       txtCell(ti,'marcos',t.marcos,'font-size:9.5px;color:#888;');
@@ -4447,14 +4983,30 @@ function triggerDownload(blob, filename){
   document.body.appendChild(a); a.click();
   setTimeout(function(){ try{ document.body.removeChild(a); }catch(e){} URL.revokeObjectURL(url); }, 120);
 }
+// Guarda un Blob permitiendo elegir la ruta (File System Access API); si no está disponible, descarga clásica.
+async function saveBlobAs(blob, filename, pickerTypes){
+  if (window.showSaveFilePicker) {
+    try {
+      var handle = await window.showSaveFilePicker({ suggestedName: filename, types: pickerTypes || [] });
+      var w = await handle.createWritable();
+      await w.write(blob);
+      await w.close();
+      return 'saved';
+    } catch(err) {
+      if (err && err.name === 'AbortError') return 'cancelled';
+      // Otro error (sin activación de usuario, no permitido, etc.): usar descarga clásica.
+    }
+  }
+  triggerDownload(blob, filename);
+  return 'fallback';
+}
 function stamp(){ var d=new Date(); function p(n){return (n<10?'0':'')+n;} return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate()); }
 
 function downloadJson(){
   snapshotState();
   var payload={ _meta:{ app:'Diagnóstico de Sostenibilidad · Grupo Mineros S.A.', fuente:'Memoria de Sostenibilidad 2025', version:BACKUP_KEY, exportado:new Date().toISOString(), nota:'Respaldo editable del modelo. Use «Cargar JSON» en la herramienta para restaurarlo y continuar el trabajo.' }, state:state };
   var blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
-  triggerDownload(blob,'Modelo_Sostenibilidad_Mineros_'+stamp()+'.json');
-  markClean();
+  saveBlobAs(blob,'Modelo_Sostenibilidad_Mineros_'+stamp()+'.json',[{description:'Modelo de sostenibilidad (JSON)',accept:{'application/json':['.json']}}]).then(function(res){ if(res!=='cancelled') markClean(); });
 }
 function importJson(input){
   var file=input.files && input.files[0]; if(!file){ return; }
@@ -4463,9 +5015,32 @@ function importJson(input){
     try{
       var data=JSON.parse(e.target.result);
       var st=(data && data.state) ? data.state : data;
-      if(!st || !st.items || !Array.isArray(st.items)){ alert('El archivo no corresponde a un modelo válido (no se encontró «items»).'); input.value=''; return; }
-      if(!confirm('¿Cargar este modelo? Reemplazará los datos que hay ahora en pantalla.\n\nSugerencia: descargue antes un JSON de respaldo si desea conservar el estado actual.')){ input.value=''; return; }
-      localStorage.setItem(BACKUP_KEY, JSON.stringify(st)); markClean(); location.reload();
+      if(!st || !st.items || !Array.isArray(st.items) || st.items.length===0){
+        alert('El archivo no corresponde a un modelo válido (no se encontró «items»).'); input.value=''; return;
+      }
+      // Detectar el formato del respaldo para migrarlo hacia adelante al abrir (loadState aplica las migraciones)
+      var it0=st.items[0];
+      var isV5 = it0 && !Array.isArray(it0) && (it0.corp || it0.col || it0.nic);   // formato tripartito actual
+      var isV4 = Array.isArray(it0);                                               // formato antiguo (arrays planos por componente)
+      var verTxt=(data && data._meta && data._meta.version) ? (' · versión del respaldo: '+data._meta.version) : '';
+      if(!isV5 && !isV4){
+        alert('El archivo tiene un formato de «items» no reconocido; no se pudo cargar. Verifique que sea un respaldo exportado por esta herramienta.'); input.value=''; return;
+      }
+      var msg=isV5 ? '¿Cargar este modelo?'+verTxt+'\n\nSe complementará automáticamente con las novedades de la versión actual (IDs de trazabilidad, nuevas brechas, etc.).'
+                   : '¿Cargar este modelo (formato de una versión anterior)?'+verTxt+'\n\nSe migrará automáticamente al formato actual (calificación por nivel Corp/Col/Nic).';
+      msg+='\n\nReemplazará los datos que hay ahora en pantalla. Sugerencia: descargue antes un JSON de respaldo si desea conservar el estado actual.';
+      if(!confirm(msg)){ input.value=''; return; }
+      try{
+        if(isV5){
+          localStorage.setItem('mineros_dx_v5', JSON.stringify(st));
+          localStorage.removeItem('mineros_dx_v4');
+        } else {
+          // Formato antiguo: se escribe en la clave v4 para que loadState lo migre a la estructura tripartita actual
+          localStorage.setItem('mineros_dx_v4', JSON.stringify(st));
+          localStorage.removeItem('mineros_dx_v5');
+        }
+      }catch(setErr){ alert('No se pudo guardar el modelo importado (¿almacenamiento lleno?): '+setErr.message); input.value=''; return; }
+      markClean(); location.reload();
     }catch(err){ alert('No se pudo leer el archivo JSON: '+err.message); }
     input.value='';
   };
@@ -4525,14 +5100,22 @@ function xTxt(ws,r,c,v,opt){ opt=opt||{}; var cell=ws.getCell(r,c);
   cell.border=xBord(); if(opt.fill) cell.fill=xFill(opt.fill); return cell; }
 function xNum(ws,r,c,valOrFormula){ var cell=ws.getCell(r,c); cell.value=valOrFormula; cell.numFmt='0.0';
   cell.alignment={vertical:'middle',horizontal:'center'}; cell.font={name:'Calibri',size:10.5,bold:true,color:xArgb(XL.INK)}; cell.border=xBord(); return cell; }
-function xScoreInt(ws,r,c,v,validate){ var cell=ws.getCell(r,c); cell.value=v; cell.numFmt='0';
-  cell.alignment={vertical:'middle',horizontal:'center'}; cell.font={name:'Calibri',size:10.5,color:xArgb(XL.INK)}; cell.border=xBord();
-  if(validate){ cell.dataValidation={type:'whole',operator:'between',allowBlank:false,formulae:[1,5],showErrorMessage:true,errorStyle:'stop',errorTitle:'Valor inválido',error:'Ingrese un número entero de 1 a 5.'}; } return cell; }
+function xScoreInt(ws,r,c,v,validate){ var cell=ws.getCell(r,c); var na=(v===0);
+  cell.value = na ? 'N/A' : v; cell.numFmt = na ? '@' : '0';
+  cell.alignment={vertical:'middle',horizontal:'center'}; cell.font={name:'Calibri',size:10.5,italic:na,color:xArgb(na?'FF8A94A0':XL.INK)}; cell.border=xBord();
+  if(na) cell.fill=xFill('FFEFF1F3');
+  if(validate && !na){ cell.dataValidation={type:'whole',operator:'between',allowBlank:true,formulae:[1,5],showErrorMessage:true,errorStyle:'stop',errorTitle:'Valor inválido',error:'Ingrese un número entero de 1 a 5. Para «No aplica», deje la celda vacía (se excluye del promedio) o márquelo en la herramienta.'}; } return cell; }
+function naNum(ws,r,c,v){ if(v>=1) return xNum(ws,r,c,v); return xTxt(ws,r,c,'N/A',{h:'center',italic:true,color:'FF8A94A0'}); }
 function xColorScale(ws,ref){ ws.addConditionalFormatting({ref:ref,rules:[{type:'colorScale',cfvo:[{type:'num',value:1},{type:'num',value:3},{type:'num',value:5}],color:[xArgb('FFEF4444'),xArgb('FFEAB308'),xArgb('FF10B981')]}]}); }
 function xDataBar(ws,ref,color){ ws.addConditionalFormatting({ref:ref,rules:[{type:'dataBar',gradient:false,cfvo:[{type:'num',value:0},{type:'num',value:5}],color:xArgb(color||'FF1A5C80')}]}); }
 var XP='Parametros';
-function xGForm(corpA,colA,nicA){ return {formula:'IFERROR(ROUND(('+corpA+'*'+XP+'!$B$3+'+colA+'*'+XP+'!$B$4+'+nicA+'*'+XP+'!$B$5)/'+XP+'!$B$6,1),0)'}; }
-function xNivelForm(gAddr){ return {formula:'IFERROR(CHOOSE(MAX(1,MIN(5,ROUND('+gAddr+',0))),"Inicial","Básico","Definido","Gestionado","Optimizado"),"")'}; }
+function xGForm(corpA,colA,nicA){
+  var wc=XP+'!$B$3', wl=XP+'!$B$4', wn=XP+'!$B$5';
+  var num='(IF(ISNUMBER('+corpA+'),'+corpA+'*'+wc+',0)+IF(ISNUMBER('+colA+'),'+colA+'*'+wl+',0)+IF(ISNUMBER('+nicA+'),'+nicA+'*'+wn+',0))';
+  var den='(IF(ISNUMBER('+corpA+'),'+wc+',0)+IF(ISNUMBER('+colA+'),'+wl+',0)+IF(ISNUMBER('+nicA+'),'+wn+',0))';
+  return {formula:'IFERROR(ROUND('+num+'/'+den+',1),"N/A")'};
+}
+function xNivelForm(gAddr){ return {formula:'IFERROR(CHOOSE(MAX(1,MIN(5,ROUND('+gAddr+',0))),"Inicial","Básico","Definido","Gestionado","Optimizado"),"No aplica")'}; }
 function compName(id){ return (COMP_META[id-1]?('C'+id+' · '+COMP_META[id-1].name):('C'+id)); }
 function topicNm(num){ var tm=(typeof getTopicsMeta==='function')?getTopicsMeta():TOPICS; return tm[num-1]?('#'+num+' '+tm[num-1].name):('#'+num); }
 function lvl(v){ return XL_SLAB[Math.max(1,Math.min(5,Math.round(v||0)))]; }
@@ -4631,11 +5214,12 @@ function buildMatrixSvg(){
   svg+='</svg>'; return svg;
 }
 function collectMedia(){
-  var out={radar:null,heat:null,matrix:null};
+  var out={radar:null,heat:null,matrix:null,marco:null,marcoH:540};
   try{ out.radar=renderRadarPng(); }catch(e){}
   var tasks=[];
   tasks.push(domSvgToPng('#iroHeatmap svg',900,622).then(function(u){ out.heat=u; }).catch(function(){}));
   tasks.push(svgStrToPng(buildMatrixSvg(),1100,810).then(function(u){ out.matrix=u; }).catch(function(){}));
+  try{ var msvg=buildMarcoSummarySvg(); var mvb=msvg.match(/viewBox="0 0 (\d+) (\d+)"/); out.marcoH=mvb?(+mvb[2]):540; tasks.push(svgStrToPng(msvg, mvb?(+mvb[1]):1040, out.marcoH).then(function(u){ out.marco=u; }).catch(function(){})); }catch(e){}
   return Promise.all(tasks).then(function(){ return out; });
 }
 function placeImage(wb,ws,dataURL,r,w,h){
@@ -4657,8 +5241,7 @@ function downloadExcel(){
 function finalizeAndSave(wb){
   wb.xlsx.writeBuffer().then(function(buf){
     var blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-    triggerDownload(blob,'Modelo_Sostenibilidad_Mineros_'+stamp()+'.xlsx'); markClean();
-    var btn=document.getElementById('excelBtn'); if(btn){ btn.innerHTML='<span class="mi mi-sm">table_view</span>Excel'; btn.disabled=false; }
+    saveBlobAs(blob,'Modelo_Sostenibilidad_Mineros_'+stamp()+'.xlsx',[{description:'Libro de Excel',accept:{'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':['.xlsx']}}]).then(function(res){ if(res!=='cancelled') markClean(); resetExcelBtn(); });
   }).catch(function(e){ alert('Error al generar el Excel: '+e.message); var btn=document.getElementById('excelBtn'); if(btn){ btn.innerHTML='<span class="mi mi-sm">table_view</span>Excel'; btn.disabled=false; } });
 }
 
@@ -4745,8 +5328,8 @@ function buildResumen(wb){
   var cf=r;
   COMP_META.forEach(function(c,ci){
     xTxt(ws,r,1,'C'+c.id+' · '+c.name,{bold:true,size:9.5}); xAuto(ws,r,[[34,'C'+c.id+' · '+c.name]]);
-    xNum(ws,r,2,calcCompScore(ci,'corp')); xNum(ws,r,3,calcCompScore(ci,'col')); xNum(ws,r,4,calcCompScore(ci,'nic'));
-    xNum(ws,r,5,calcCompScoreGlobal(ci)); xTxt(ws,r,6,lvl(calcCompScoreGlobal(ci)),{h:'center',size:9.5,color:XL.NAVY});
+    naNum(ws,r,2,calcCompScore(ci,'corp')); naNum(ws,r,3,calcCompScore(ci,'col')); naNum(ws,r,4,calcCompScore(ci,'nic'));
+    var gcg=calcCompScoreGlobal(ci); naNum(ws,r,5,gcg); xTxt(ws,r,6,(gcg>=1?lvl(gcg):'No aplica'),{h:'center',size:9.5,color:XL.NAVY});
     ws.mergeCells(r,7,r,8); ws.getCell(r,7).border=xBord(); ws.getCell(r,8).border=xBord();
     r++;
   });
@@ -4775,34 +5358,35 @@ function buildParametros(wb){
 
 function buildCapa1(wb){
   var ws=wb.addWorksheet('Capa 1 · Modelo',{views:[{showGridLines:false,state:'frozen',ySplit:1}]});
-  xCols(ws,[34,46,9,9,9,9,9,9,13,13]);
-  xBanner(ws,1,1,10,'Capa 1 · Modelo de gestión — 12 componentes (calificación Modelo vs. Analista por nivel; el global usa la del Analista)',XL.NAVY,XL.WHITE,12);
+  xCols(ws,[10,32,44,9,9,9,9,9,9,13,13]);
+  xBanner(ws,1,1,11,'Capa 1 · Modelo de gestión — 12 componentes (ID de trazabilidad por elemento; calificación Modelo vs. Analista por nivel; el global usa la del Analista)',XL.NAVY,XL.WHITE,12);
   var r=2;
   COMP_META.forEach(function(c,ci){
-    xBanner(ws,r,1,10,'C'+c.id+' · '+c.name+'  —  '+c.dim,XL.TEAL,XL.WHITE,11); r++;
+    xBanner(ws,r,1,11,'C'+c.id+' · '+c.name+'  —  '+c.dim,XL.TEAL,XL.WHITE,11); r++;
     var gh=r;
-    ws.mergeCells(gh,3,gh,4); ws.getCell(gh,3).value='Corporativo'; ws.getCell(gh,3).fill=xFill(XL.NAVY);
-    ws.mergeCells(gh,5,gh,6); ws.getCell(gh,5).value='Colombia'; ws.getCell(gh,5).fill=xFill(XL.ORANGE2);
-    ws.mergeCells(gh,7,gh,8); ws.getCell(gh,7).value='Nicaragua'; ws.getCell(gh,7).fill=xFill(XL.GREEN);
-    [3,5,7].forEach(function(col){ var cc=ws.getCell(gh,col); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
-    [1,2,9,10].forEach(function(col){ ws.getCell(gh,col).border=xBord(); }); ws.getRow(gh).height=15; r++;
-    xHead(ws,r,['Elemento diagnóstico','Descripción / evidencia','Mod.','Anal.','Mod.','Anal.','Mod.','Anal.','Global pond.','Nivel'],{align:['left','left','center','center','center','center','center','center','center','center'],h:26}); r++;
+    ws.mergeCells(gh,4,gh,5); ws.getCell(gh,4).value='Corporativo'; ws.getCell(gh,4).fill=xFill(XL.NAVY);
+    ws.mergeCells(gh,6,gh,7); ws.getCell(gh,6).value='Colombia'; ws.getCell(gh,6).fill=xFill(XL.ORANGE2);
+    ws.mergeCells(gh,8,gh,9); ws.getCell(gh,8).value='Nicaragua'; ws.getCell(gh,8).fill=xFill(XL.GREEN);
+    [4,6,8].forEach(function(col){ var cc=ws.getCell(gh,col); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
+    [1,2,3,10,11].forEach(function(col){ ws.getCell(gh,col).border=xBord(); }); ws.getRow(gh).height=15; r++;
+    xHead(ws,r,['ID','Elemento diagnóstico','Descripción / evidencia','Mod.','Anal.','Mod.','Anal.','Mod.','Anal.','Global pond.','Nivel'],{align:['center','left','left','center','center','center','center','center','center','center','center'],h:26}); r++;
     var first=r, comp=state.items[ci];
     comp.corp.forEach(function(it,ii){
-      xTxt(ws,r,1,it.label,{bold:true,size:9.5}); xTxt(ws,r,2,it.desc,{size:9.5,color:XL.MUT});
-      xScoreInt(ws,r,3,comp.corp[ii].score,false); xScoreInt(ws,r,4,comp.corp[ii].expertScore,true);
-      xScoreInt(ws,r,5,comp.col[ii].score,false); xScoreInt(ws,r,6,comp.col[ii].expertScore,true);
-      xScoreInt(ws,r,7,comp.nic[ii].score,false); xScoreInt(ws,r,8,comp.nic[ii].expertScore,true);
-      xNum(ws,r,9,xGForm('D'+r,'F'+r,'H'+r));
-      var nv=ws.getCell(r,10); nv.value=xNivelForm('I'+r); nv.font={name:'Calibri',size:9,color:xArgb(XL.NAVY)}; nv.alignment={vertical:'middle',horizontal:'center',wrapText:true}; nv.border=xBord();
-      xAuto(ws,r,[[34,it.label],[46,it.desc]]); r++;
+      xTxt(ws,r,1,it.eid||'',{bold:true,size:9,h:'center',color:XL.NAVY});
+      xTxt(ws,r,2,it.label,{bold:true,size:9.5}); xTxt(ws,r,3,it.desc,{size:9.5,color:XL.MUT});
+      xScoreInt(ws,r,4,comp.corp[ii].score,false); xScoreInt(ws,r,5,comp.corp[ii].expertScore,true);
+      xScoreInt(ws,r,6,comp.col[ii].score,false); xScoreInt(ws,r,7,comp.col[ii].expertScore,true);
+      xScoreInt(ws,r,8,comp.nic[ii].score,false); xScoreInt(ws,r,9,comp.nic[ii].expertScore,true);
+      xNum(ws,r,10,xGForm('E'+r,'G'+r,'I'+r));
+      var nv=ws.getCell(r,11); nv.value=xNivelForm('J'+r); nv.font={name:'Calibri',size:9,color:xArgb(XL.NAVY)}; nv.alignment={vertical:'middle',horizontal:'center',wrapText:true}; nv.border=xBord();
+      xAuto(ws,r,[[32,it.label],[44,it.desc]]); r++;
     });
     var last=r-1;
-    xTxt(ws,r,1,'Puntaje del componente C'+c.id,{bold:true,fill:XL.BAND}); xTxt(ws,r,2,'Promedio de elementos (Analista) y global ponderado',{italic:true,size:9,color:XL.MUT,fill:XL.BAND});
-    [3,4,5,6,7,8].forEach(function(col){ var L=String.fromCharCode(64+col); var cell=xNum(ws,r,col,{formula:'IFERROR(ROUND(AVERAGE('+L+first+':'+L+last+'),1),0)'}); cell.fill=xFill(XL.BAND); });
-    var g=xNum(ws,r,9,xGForm('D'+r,'F'+r,'H'+r)); g.fill=xFill(XL.BAND); g.font={name:'Calibri',size:10.5,bold:true,color:xArgb(XL.NAVY)};
-    var nvs=ws.getCell(r,10); nvs.value=xNivelForm('I'+r); nvs.fill=xFill(XL.BAND); nvs.font={name:'Calibri',size:9,bold:true,color:xArgb(XL.NAVY)}; nvs.alignment={vertical:'middle',horizontal:'center'}; nvs.border=xBord();
-    xColorScale(ws,'C'+first+':I'+r); r+=2;
+    xTxt(ws,r,1,'',{bold:true,fill:XL.BAND}); xTxt(ws,r,2,'Puntaje del componente C'+c.id,{bold:true,fill:XL.BAND}); xTxt(ws,r,3,'Promedio de elementos (Analista) y global ponderado',{italic:true,size:9,color:XL.MUT,fill:XL.BAND});
+    [4,5,6,7,8,9].forEach(function(col){ var L=String.fromCharCode(64+col); var cell=xNum(ws,r,col,{formula:'IFERROR(ROUND(AVERAGE('+L+first+':'+L+last+'),1),"N/A")'}); cell.fill=xFill(XL.BAND); });
+    var g=xNum(ws,r,10,xGForm('E'+r,'G'+r,'I'+r)); g.fill=xFill(XL.BAND); g.font={name:'Calibri',size:10.5,bold:true,color:xArgb(XL.NAVY)};
+    var nvs=ws.getCell(r,11); nvs.value=xNivelForm('J'+r); nvs.fill=xFill(XL.BAND); nvs.font={name:'Calibri',size:9,bold:true,color:xArgb(XL.NAVY)}; nvs.alignment={vertical:'middle',horizontal:'center'}; nvs.border=xBord();
+    xColorScale(ws,'D'+first+':J'+r); r+=2;
   });
 }
 
@@ -4864,12 +5448,12 @@ function buildHeatmap(wb){
 
 function buildMaterialidad(wb){
   var ws=wb.addWorksheet('Capa 3 · Materialidad',{views:[{showGridLines:false,state:'frozen',ySplit:3}]});
-  xCols(ws,[5,30,20,8,8,8,8,8,8,12,12,6,6,6,26,22,30,24]);
-  xBanner(ws,1,1,18,'Capa 3 · Materialidad — 18 asuntos materiales (madurez por nivel, criterios y vínculos IRO)',XL.NAVY,XL.WHITE,12);
+  xCols(ws,[5,30,20,8,8,8,8,8,8,12,12,6,6,6,6,26,22,30,24]);
+  xBanner(ws,1,1,19,'Capa 3 · Materialidad — 18 asuntos materiales (madurez por nivel, criterios y vínculos IRO)',XL.NAVY,XL.WHITE,12);
   var gh=2;
   [[4,5,'Corporativo',XL.NAVY],[6,7,'Colombia',XL.ORANGE2],[8,9,'Nicaragua',XL.GREEN]].forEach(function(g){ ws.mergeCells(gh,g[0],gh,g[1]); var cc=ws.getCell(gh,g[0]); cc.value=g[2]; cc.fill=xFill(g[3]); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
-  [1,2,3,10,11,12,13,14,15,16,17,18].forEach(function(col){ ws.getCell(gh,col).border=xBord(); }); ws.getRow(gh).height=14;
-  xHead(ws,3,['#','Asunto material','Tipo','Mod.','Anal.','Mod.','Anal.','Mod.','Anal.','Global','Nivel','Gob.','Proc.','Ind.','Roles / área','Reporte','Marcos','IROs vinculados'],{align:['center','left','left','center','center','center','center','center','center','center','center','center','center','center','left','left','left','left']});
+  [1,2,3,10,11,12,13,14,15,16,17,18,19].forEach(function(col){ ws.getCell(gh,col).border=xBord(); }); ws.getRow(gh).height=14;
+  xHead(ws,3,['#','Asunto material','Tipo','Mod.','Anal.','Mod.','Anal.','Mod.','Anal.','Global','Nivel','Gob.','Proc.','Tec.','Ind.','Roles / área','Reporte','Marcos','IROs vinculados'],{align:['center','left','left','center','center','center','center','center','center','center','center','center','center','center','center','left','left','left','left']});
   var r=4, meta=(typeof getTopicsMeta==='function')?getTopicsMeta():TOPICS, links=(state.iroLinks||{});
   meta.forEach(function(tp,ti){
     var sc=state.topicScores[ti]||{corp:{},col:{},nic:{}};
@@ -4880,9 +5464,9 @@ function buildMaterialidad(wb){
     xScoreInt(ws,r,8,sc.nic.score,false); xScoreInt(ws,r,9,sc.nic.expertScore,true);
     xNum(ws,r,10,xGForm('E'+r,'G'+r,'I'+r));
     var nv=ws.getCell(r,11); nv.value=xNivelForm('J'+r); nv.font={name:'Calibri',size:9,color:xArgb(XL.NAVY)}; nv.alignment={vertical:'middle',horizontal:'center',wrapText:true}; nv.border=xBord();
-    xTxt(ws,r,12,tp.gov,{h:'center'}); xTxt(ws,r,13,tp.proc,{h:'center'}); xTxt(ws,r,14,tp.ind,{h:'center'});
-    xTxt(ws,r,15,tp.roles,{size:9.5,color:XL.MUT}); xTxt(ws,r,16,tp.rep,{size:9.5,color:XL.MUT}); xTxt(ws,r,17,tp.marcos,{size:9.5,color:XL.MUT});
-    var lk=(links[ti+1]||[]).join(', '); xTxt(ws,r,18,lk,{size:9.5,color:XL.NAVY});
+    xTxt(ws,r,12,tp.gov,{h:'center'}); xTxt(ws,r,13,tp.proc,{h:'center'}); xTxt(ws,r,14,tp.tech,{h:'center'}); xTxt(ws,r,15,tp.ind,{h:'center'});
+    xTxt(ws,r,16,tp.roles,{size:9.5,color:XL.MUT}); xTxt(ws,r,17,tp.rep,{size:9.5,color:XL.MUT}); xTxt(ws,r,18,tp.marcos,{size:9.5,color:XL.MUT});
+    var lk=(links[ti+1]||[]).join(', '); xTxt(ws,r,19,lk,{size:9.5,color:XL.NAVY});
     xAuto(ws,r,[[30,tp.name],[26,tp.roles],[22,tp.rep],[30,tp.marcos],[24,lk]]); r++;
   });
   xColorScale(ws,'D4:J'+(r-1));
@@ -4987,19 +5571,37 @@ function buildKPIs(wb){
 
 function buildMarco(wb){
   var ws=wb.addWorksheet('Marco de referencia',{views:[{showGridLines:false}]});
-  xCols(ws,[18,42,46,20]);
-  xBanner(ws,1,1,4,'Marco de referencia — estándares activos y regulación por país',XL.NAVY,XL.WHITE,12);
-  var r=3;
-  xBanner(ws,r,1,4,'Marcos y estándares activos en el modelo',XL.TEAL,XL.WHITE,11); r++;
-  xHead(ws,r,['Marco','Descripción','Estado'],{align:['left','left','center']}); ws.mergeCells(r,3,r,4); r++;
-  MARCO_FW.forEach(function(f){ xTxt(ws,r,1,f.n,{bold:true,color:XL.NAVY}); xTxt(ws,r,2,f.d,{size:9.5,color:XL.INK}); var st=xTxt(ws,r,3,f.s,{h:'center',bold:true,size:9.5,color:XL.WHITE}); ws.mergeCells(r,3,r,4); var col=(f.s==='Marco futuro')?XL.NAVY:(f.s==='En implementación'?XL.ORANGE2:XL.GREEN); st.fill=xFill(col); ws.getCell(r,4).border=xBord(); xAuto(ws,r,[[18,f.n],[42,f.d]]); r++; });
-  r++;
-  xBanner(ws,r,1,4,'Marco normativo · regulación por país',XL.ORANGE2,XL.WHITE,11); r++;
-  xHead(ws,r,['País','Norma / instrumento','Descripción','Etiqueta'],{align:['left','left','left','left']}); r++;
-  MARCO_NORM.forEach(function(nm){ var pc=(nm.pais==='Colombia')?XL.NAVY:XL.GREEN; var pcell=xTxt(ws,r,1,nm.pais,{bold:true,color:XL.WHITE}); pcell.fill=xFill(pc); xTxt(ws,r,2,nm.norma,{bold:true,size:9.5,color:XL.NAVY}); xTxt(ws,r,3,nm.desc,{size:9.5,color:XL.INK}); xTxt(ws,r,4,nm.tag,{size:9.5,color:XL.MUT}); xAuto(ws,r,[[42,nm.norma],[46,nm.desc]]); r++; });
-  r++; ws.mergeCells(r,1,r,4); var note=ws.getCell(r,1); note.value='Nota: '+MARCO_NOTE; note.font={name:'Calibri',italic:true,size:9.5,color:xArgb('FFB45309')}; note.alignment={wrapText:true,vertical:'top'}; note.fill=xFill('FFFDF6EE'); xAuto(ws,r,[[120,note.value]],{lh:14});
+  xCols(ws,[42,20,58,18]);
+  xBanner(ws,1,1,4,'Marco de referencia — normas y estándares en 4 capas',XL.NAVY,XL.WHITE,12);
+  xTxt(ws,2,1,'Validado con la Memoria 2025, el Annual Information Form (FYE2025) y el Código País. Editable por el analista experto.',{italic:true,size:9.5,color:XL.MUT}); ws.mergeCells(2,1,2,4); ws.getRow(2).height=24;
+  if(XLMEDIA && XLMEDIA.marco){ var mh=XLMEDIA.marcoH?Math.round(740*XLMEDIA.marcoH/1040):400; var plm=placeImage(wb,ws,XLMEDIA.marco,3,740,mh); }
+  var startR=(XLMEDIA && XLMEDIA.marco)?( (typeof plm!=='undefined'&&plm.ok)?plm.r+1:3 ):3;
+  var data=(typeof getMarco==='function')?getMarco():[];
+  var layers=[{id:1,t:'1 · Legal obligatoria (Colombia y Nicaragua)',c:XL.NAVY},{id:2,t:'2 · Estándares internacionales de desempeño',c:XL.TEAL},{id:3,t:'3 · Estándares específicos de minería y oro',c:'FFB45309'},{id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',c:XL.GREEN}];
+  var r=startR;
+  layers.forEach(function(L){
+    xBanner(ws,r,1,4,L.t,L.c,XL.WHITE,11); r++;
+    xHead(ws,r,['Norma / estándar','Ámbito','Descripción','Estado'],{align:['left','left','left','center']}); r++;
+    var items=data.filter(function(m){return m.capa===L.id;});
+    function drawRow(m){
+      xTxt(ws,r,1,m.nombre,{bold:true,color:XL.NAVY}); xTxt(ws,r,2,m.ambito,{size:9.5,color:XL.MUT}); xTxt(ws,r,3,m.desc,{size:9.5,color:XL.INK});
+      var ec=/(desarrollo|preparaci|implementaci)/i.test(m.estado)?XL.ORANGE2:(/(referencia|futuro)/i.test(m.estado)?XL.TEAL:XL.GREEN);
+      var st=xTxt(ws,r,4,m.estado,{h:'center',bold:true,size:9,color:XL.WHITE}); st.fill=xFill(ec);
+      xAuto(ws,r,[[42,m.nombre],[58,m.desc]]); r++;
+    }
+    if(!items.length){ xTxt(ws,r,1,'Sin normas registradas en esta capa.',{italic:true,color:XL.MUT}); ws.mergeCells(r,1,r,4); r++; }
+    else if(L.id===1 && typeof marcoPais==='function'){
+      [['colombia','🇨🇴 Colombia'],['nicaragua','🇳🇮 Nicaragua'],['canada','🇨🇦 Canadá (emisor TSX) — cascada a operaciones'],['ambos','🌐 Ambos países / transversal']].forEach(function(g){
+        var gi=items.filter(function(m){return marcoPais(m)===g[0];});
+        if(!gi.length) return;
+        ws.mergeCells(r,1,r,4); var sc=ws.getCell(r,1); sc.value=g[1]+'  ('+gi.length+')'; sc.font={name:'Calibri',bold:true,size:9.5,color:xArgb(XL.NAVY)}; sc.fill=xFill('FFEFF3F7'); sc.alignment={vertical:'middle',horizontal:'left',indent:1}; for(var cc=1;cc<=4;cc++){ ws.getCell(r,cc).border=xBord(); } r++;
+        gi.forEach(drawRow);
+      });
+    } else { items.forEach(drawRow); }
+    r++;
+  });
+  ws.mergeCells(r,1,r,4); var note=ws.getCell(r,1); note.value='Nota: Nicaragua no cuenta con una circular de divulgación ASG tipo ISSB/IFRS S1-S2; su deber se ancla en el marco ambiental-minero y en los permisos. El analista puede agregar, editar o eliminar normas.'; note.font={name:'Calibri',italic:true,size:9,color:xArgb('FFB45309')}; note.alignment={wrapText:true,vertical:'top'}; note.fill=xFill('FFFDF6EE'); xAuto(ws,r,[[130,note.value]],{lh:14});
 }
-
 function buildMatrixMateriality(wb){
   var ws=wb.addWorksheet('Matriz de materialidad',{views:[{showGridLines:false}]});
   xCols(ws,[22,8,46,20]);
@@ -5021,6 +5623,205 @@ function buildMatrixMateriality(wb){
 }
 
 
+// ═══════════════════════════════════════════════════════════════
+// MARCO DE REFERENCIA — 4 capas, editable (validado con Memoria 2025 · AIF · Código País)
+// ═══════════════════════════════════════════════════════════════
+var MARCO_LAYERS=[
+  {id:1,t:'1 · Legal obligatoria',sub:'Colombia · Nicaragua · Canadá (cascada)',ic:'gavel',col:'#093E5E'},
+  {id:2,t:'2 · Estándares internacionales de desempeño',sub:'ISO · ONU · gestión de riesgo',ic:'verified',col:'#1A5C80'},
+  {id:3,t:'3 · Estándares específicos de minería y oro',sub:'WGC · TSM · ICMM · reservas · relaves',ic:'diamond',col:'#B45309'},
+  {id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',sub:'GRI · SASB · TCFD · ISSB · ODS',ic:'assessment',col:'#2E7D32'}
+];
+var MARCO_DEFAULT=[
+  {capa:1,nombre:'Código de Minas — Ley 685 de 2001',ambito:'Colombia',desc:'Régimen de títulos, concesiones y obligaciones mineras (con modificaciones de 2018). Autoridades: MinMinas / ANM.',estado:'Vigente'},
+  {capa:1,nombre:'Ley 99 de 1993 · SINA',ambito:'Colombia',desc:'Marco ambiental nacional y licenciamiento ambiental (ANLA / autoridades regionales).',estado:'Vigente'},
+  {capa:1,nombre:'Decreto 1076 de 2015',ambito:'Colombia',desc:'Decreto Único Reglamentario del sector ambiente: permisos y licencias ambientales.',estado:'Vigente'},
+  {capa:1,nombre:'Decreto 1072 de 2015 · SG-SST',ambito:'Colombia',desc:'Sistema de Gestión de Seguridad y Salud en el Trabajo obligatorio.',estado:'Vigente'},
+  {capa:1,nombre:'CE 031 de 2021 · Superintendencia Financiera',ambito:'Colombia',desc:'Revelación de información ASG para entidades vigiladas / emisores en la BVC.',estado:'Vigente'},
+  {capa:1,nombre:'CE 100-000010 de 2023 · Supersociedades',ambito:'Colombia',desc:'Capítulo XV del Código de Buen Gobierno: revelación voluntaria progresiva de sostenibilidad.',estado:'Vigente'},
+  {capa:1,nombre:'CE 100-000002 de 2025 · Supersociedades',ambito:'Colombia',desc:'Información no financiera obligatoria para sociedades vigiladas; alineada con ISSB y GRI.',estado:'Vigente 2025'},
+  {capa:1,nombre:'Ley 387 de 2001 · Ley Especial de Minas',ambito:'Nicaragua',desc:'Exploración y explotación minera (Reglamento 2002): concesiones y obligaciones. Autoridad: Ministerio de Energía y Minas (MEM).',estado:'Vigente'},
+  {capa:1,nombre:'Ley 217 de 1996 · Medio Ambiente y Recursos Naturales',ambito:'Nicaragua',desc:'Marco ambiental: evaluación de impacto ambiental, permisos y uso sostenible de recursos. Autoridad: MARENA / SERENA.',estado:'Vigente'},
+  {capa:1,nombre:'Autoridades y permisos por país',ambito:'Colombia · Nicaragua',desc:'MEM (minería) y MARENA/SERENA (ambiental) en Nicaragua; ANM y ANLA/autoridades regionales en Colombia. Permisos, EIA y monitoreo.',estado:'Aplicable'},
+
+  {capa:2,nombre:'ISO 45001 · SGSST',ambito:'Internacional',desc:'Sistema de gestión de seguridad y salud en el trabajo; certificado en Colombia y Nicaragua.',estado:'Certificado'},
+  {capa:2,nombre:'ISO 14001:2015 · Gestión ambiental',ambito:'Internacional',desc:'Sistema de gestión ambiental aplicado en las operaciones.',estado:'Activo'},
+  {capa:2,nombre:'ISO 14046:2014 · Huella hídrica',ambito:'Internacional',desc:'Evaluación de la huella de agua de las operaciones.',estado:'Activo'},
+  {capa:2,nombre:'ISO 31000 · Gestión del riesgo',ambito:'Internacional',desc:'Principios y directrices de gestión de riesgos, integrada en el SGIR.',estado:'Activo'},
+  {capa:2,nombre:'COSO ERM 2017',ambito:'Internacional',desc:'Marco de gestión de riesgos empresariales; base del SGIR junto con ISO 31000.',estado:'Activo'},
+  {capa:2,nombre:'Pacto Global de las Naciones Unidas',ambito:'Internacional',desc:'Adhesión a los 10 Principios (derechos humanos, laboral, ambiente y anticorrupción).',estado:'Adherido'},
+  {capa:2,nombre:'Principios Rectores ONU sobre Empresas y DDHH (UNGP)',ambito:'Internacional',desc:'Debida diligencia en derechos humanos y mecanismos de reclamación.',estado:'Activo'},
+  {capa:2,nombre:'OIT · Convenios fundamentales',ambito:'Internacional',desc:'Referencia en relaciones laborales y trabajo decente.',estado:'Referencia'},
+  {capa:2,nombre:'TNFD · Naturaleza y biodiversidad',ambito:'Internacional',desc:'Marco de divulgación relacionada con la naturaleza (en adopción).',estado:'En preparación'},
+
+  {capa:3,nombre:'WGC · Principios de Minería Responsable del Oro (RGMP)',ambito:'Oro / Minería',desc:'Principios del World Gold Council para una minería de oro responsable.',estado:'Activo'},
+  {capa:3,nombre:'TSM · Towards Sustainable Mining',ambito:'Minería',desc:'Protocolos de minería sostenible (Mining Association of Canada).',estado:'En implementación'},
+  {capa:3,nombre:'ICMM · Minería y metales',ambito:'Minería',desc:'Principios del International Council on Mining and Metals (referencia).',estado:'Referencia'},
+  {capa:3,nombre:'Swiss Better Gold (SBG)',ambito:'Oro / Nicaragua',desc:'Cadena de custodia y trazabilidad con minería artesanal y de pequeña escala.',estado:'Activo'},
+  {capa:3,nombre:'NI 43-101 · Estándares CIM',ambito:'Minería · TSX',desc:'Estándar de reporte de reservas y recursos minerales (divulgación técnica).',estado:'Activo'},
+  {capa:3,nombre:'Gestión de relaves · estándar corporativo',ambito:'Minería',desc:'Estándar corporativo de gestión de relaves en desarrollo; referencia internacional GISTM. Primer ejercicio formal de riesgo en la presa San José (2025).',estado:'En desarrollo'},
+
+  {capa:4,nombre:'GRI · Universales + Sectorial 14 (Minería)',ambito:'Internacional',desc:'Estándar principal de reporte de sostenibilidad, incluye el estándar sectorial de minería (GRI 14).',estado:'Activo'},
+  {capa:4,nombre:'SASB · Metals & Mining (EM-MM)',ambito:'Internacional',desc:'Métricas de divulgación financieramente materiales del sector metales y minería.',estado:'Activo'},
+  {capa:4,nombre:'TCFD · Divulgaciones climáticas',ambito:'Internacional',desc:'Gobernanza, estrategia, gestión de riesgos y métricas climáticas (4 pilares).',estado:'Activo'},
+  {capa:4,nombre:'ISSB · IFRS S1-S2',ambito:'Internacional',desc:'Normas de divulgación de sostenibilidad y clima (en preparación / convergencia).',estado:'En preparación'},
+  {capa:4,nombre:'ODS · Agenda 2030',ambito:'Internacional',desc:'Alineación y contribución a los Objetivos de Desarrollo Sostenible.',estado:'Activo'},
+  {capa:4,nombre:'Mercados de valores · TSX / BVC / OTCQX',ambito:'TSX:MSA · BVC · OTCQX',desc:'Reporte y divulgación a mercados (SEDAR+); designación TSX30. Revisor fiscal: Deloitte & Touche.',estado:'Activo'}
+];
+var MARCO_CANADA=[
+  {capa:1,nombre:'Leyes de valores canadienses (CSA) · emisor informante',ambito:'Canadá (emisor TSX)',desc:'Como emisor listado en la Bolsa de Valores de Toronto (TSX:MSA), la Compañía es reporting issuer sujeto a las autoridades de valores canadienses (Canadian Securities Administrators) y a SEDAR+.',estado:'Vigente'},
+  {capa:1,nombre:'NI 51-102 · Divulgación continua',ambito:'Canadá (emisor TSX)',desc:'Obligaciones de divulgación continua: Annual Information Form (AIF), MD&A y estados financieros; base de la información periódica presentada.',estado:'Vigente'},
+  {capa:1,nombre:'NI 52-110 · Comités de Auditoría',ambito:'Canadá (emisor TSX)',desc:'Requisitos de independencia, composición y funciones del Comité de Auditoría.',estado:'Vigente'},
+  {capa:1,nombre:'NI 58-101 / NP 58-201 · Gobierno corporativo',ambito:'Canadá (emisor TSX)',desc:'Divulgación de prácticas de gobierno corporativo y directrices asociadas para emisores en la TSX.',estado:'Vigente'},
+  {capa:1,nombre:'ESTMA · Transparencia de pagos a gobiernos',ambito:'Canadá (emisor TSX)',desc:'Extractive Sector Transparency Measures Act: reporte de pagos a gobiernos (impuestos, regalías, tasas) por proyecto y país. Desciende a las operaciones de Colombia y Nicaragua.',estado:'Vigente'},
+  {capa:1,nombre:'Ley S-211 · Trabajo forzoso e infantil en cadenas de suministro',ambito:'Canadá (emisor TSX)',desc:'Reporte anual sobre medidas para prevenir el trabajo forzoso e infantil en la cadena de suministro. Relevante para la minería artesanal en Nicaragua y Colombia.',estado:'Vigente 2024'},
+  {capa:1,nombre:'CFPOA · Anticorrupción (alcance extraterritorial)',ambito:'Canadá (emisor TSX)',desc:'Corruption of Foreign Public Officials Act: prohíbe el soborno de funcionarios públicos extranjeros; aplica a la conducta en las operaciones de Colombia y Nicaragua.',estado:'Vigente'},
+  {capa:1,nombre:'TSX Company Manual · reglas de listado',ambito:'Canadá (emisor TSX)',desc:'Requisitos de listado, gobierno corporativo y aprobación de ciertas operaciones de la Bolsa de Valores de Toronto.',estado:'Vigente'}
+];
+MARCO_DEFAULT=MARCO_DEFAULT.concat(MARCO_CANADA);
+function getMarco(){
+  if(!state.marcoData || !Array.isArray(state.marcoData)){ state.marcoData=JSON.parse(JSON.stringify(MARCO_DEFAULT)); state.marcoCanadaAdded=true; }
+  else if(!state.marcoCanadaAdded){ MARCO_CANADA.forEach(function(m){ state.marcoData.push(JSON.parse(JSON.stringify(m))); }); state.marcoCanadaAdded=true; }
+  return state.marcoData;
+}
+function marcoEstadoColor(e){ e=(e||'').toLowerCase();
+  if(e.indexOf('desarrollo')>=0||e.indexOf('preparaci')>=0||e.indexOf('implementaci')>=0) return '#B45309';
+  if(e.indexOf('referencia')>=0||e.indexOf('futuro')>=0) return '#1A5C80';
+  return '#2E7D32';
+}
+function marcoCard(m,idx,ed){
+  var ec=marcoEstadoColor(m.estado);
+  var del=ed?'<button onclick="marcoDelete('+idx+')" title="Eliminar norma" style="position:absolute;top:6px;right:7px;background:none;border:none;color:#C62828;font-size:15px;cursor:pointer;line-height:1;z-index:2;">&times;</button>':'';
+  function fld(field,val,style){ var eattr=ed?(' contenteditable="true" onblur="marcoSet('+idx+',\''+field+'\',this)"'):''; var ebg=ed?'background:#FFF9F2;border-radius:4px;padding:0 2px;':''; return '<'+ 'span'+eattr+' style="'+style+ebg+'">'+val+'</span>'; }
+  return '<div style="position:relative;border:1px solid #EBEBEB;border-radius:8px;padding:11px 12px;background:white;">'+del
+    +'<p style="margin:0 0 2px;">'+fld('nombre',m.nombre,'font-size:12px;font-weight:800;color:var(--navy);font-family:\'Space Grotesk\',sans-serif;display:inline-block;')+'</p>'
+    +'<p style="margin:0 0 4px;">'+fld('ambito',m.ambito,'font-size:9px;font-weight:700;color:'+ec+';display:inline-block;')+'</p>'
+    +'<p style="margin:0 0 7px;">'+fld('desc',m.desc,'font-size:10px;color:#777;line-height:1.45;display:inline-block;')+'</p>'
+    +'<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="display:inline-flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;background:'+ec+';border-radius:50%;display:inline-block;flex-shrink:0;"></span>'
+    +fld('estado',m.estado,'font-size:10px;font-weight:700;color:'+ec+';display:inline-block;')+'</span>'
+    +(marcoPais(m)==='canada'?'<span style="font-size:8px;font-weight:800;color:#C8102E;background:#C8102E14;border:1px solid #C8102E33;border-radius:5px;padding:1px 6px;white-space:nowrap;">&darr; cascada a operaciones</span>':'')+'</div>'
+    +'</div>';
+}
+function marcoPais(m){ var a=(m.ambito||'').toLowerCase(); if(a.indexOf('canad')>=0) return 'canada'; var col=a.indexOf('colombia')>=0, nic=a.indexOf('nicaragua')>=0; if(col&&nic) return 'ambos'; if(nic) return 'nicaragua'; if(col) return 'colombia'; return 'otro'; }
+function marcoLayer1Subs(){ return [
+  {k:'colombia',t:'Colombia',flag:'🇨🇴',col:'#F18446',amb:'Colombia'},
+  {k:'nicaragua',t:'Nicaragua',flag:'🇳🇮',col:'#2E7D32',amb:'Nicaragua'},
+  {k:'canada',t:'Canadá (emisor TSX) — aplica en cascada a las operaciones',flag:'🇨🇦',col:'#C8102E',amb:'Canadá (emisor TSX)'},
+  {k:'ambos',t:'Ambos países / transversal',flag:'🌐',col:'#1A5C80',amb:'Colombia · Nicaragua'},
+  {k:'otro',t:'Sin país asignado',flag:'•',col:'#8A96A0',amb:'Ámbito'}
+]; }
+function renderMarco(){
+  var host=document.getElementById('marcoContent'); if(!host) return;
+  var ed=!!state.marcoEdit, data=getMarco(), h='';
+  h+='<div style="margin-bottom:16px;border:1px solid #E8E8E8;border-radius:12px;padding:14px 16px;background:white;">';
+  h+='<div style="font-size:12px;font-weight:800;color:var(--ink);font-family:\'Gotu\',\'Space Grotesk\',sans-serif;margin-bottom:10px;display:flex;align-items:center;gap:7px;"><span class="mi" style="color:var(--orange);font-size:17px;">stacked_bar_chart</span>Vista resumen · las 4 capas del marco</div>';
+  h+='<div style="width:100%;overflow-x:auto;">'+buildMarcoSummarySvg()+'</div>';
+  h+='</div>';
+  MARCO_LAYERS.forEach(function(L){
+    var items=data.map(function(m,idx){return {m:m,idx:idx};}).filter(function(x){return x.m.capa===L.id;});
+    h+='<div style="margin-bottom:16px;border:1px solid #E8E8E8;border-radius:12px;overflow:hidden;">';
+    h+='<div style="display:flex;align-items:center;gap:10px;padding:11px 16px;background:'+L.col+';color:white;">'
+      +'<span class="mi" style="font-size:19px;">'+L.ic+'</span>'
+      +'<div style="min-width:0;"><div style="font-size:12.5px;font-weight:800;font-family:\'Gotu\',sans-serif;line-height:1.15;">'+L.t+'</div>'
+      +'<div style="font-size:9.5px;opacity:.85;">'+L.sub+'</div></div>'
+      +'<span style="margin-left:auto;font-size:10px;font-weight:800;background:rgba(255,255,255,.18);border-radius:20px;padding:2px 10px;flex-shrink:0;">'+items.length+' norma'+(items.length===1?'':'s')+'</span></div>';
+    if(L.id===1){
+      marcoLayer1Subs().forEach(function(S){
+        var sit=items.filter(function(x){return marcoPais(x.m)===S.k;});
+        if(!sit.length && (!ed || S.k==='otro')) return;
+        h+='<div style="padding:12px 14px 2px;">'
+          +'<div style="display:flex;align-items:center;gap:7px;margin:0 0 9px;">'
+          +'<span style="font-size:15px;">'+S.flag+'</span>'
+          +'<span style="font-size:11px;font-weight:800;color:'+S.col+';text-transform:uppercase;letter-spacing:.03em;">'+S.t+'</span>'
+          +'<span style="height:1px;flex:1;background:'+S.col+'2E;"></span>'
+          +'<span style="font-size:9px;font-weight:800;color:'+S.col+';">'+sit.length+'</span></div>'
+          +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" class="marco-grid">';
+        sit.forEach(function(x){ h+=marcoCard(x.m,x.idx,ed); });
+        if(ed && S.k!=='otro') h+='<button onclick="marcoAdd(1,\''+S.amb+'\')" style="border:1.5px dashed '+S.col+';background:'+S.col+'12;color:'+S.col+';border-radius:8px;padding:9px;font-size:10.5px;font-weight:800;cursor:pointer;">+ Agregar norma ('+S.t+')</button>';
+        h+='</div></div>';
+      });
+      h+='<div style="height:12px;"></div>';
+    } else {
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px;" class="marco-grid">';
+      items.forEach(function(x){ h+=marcoCard(x.m,x.idx,ed); });
+      if(ed) h+='<button onclick="marcoAdd('+L.id+')" style="border:1.5px dashed '+L.col+';background:'+L.col+'0D;color:'+L.col+';border-radius:8px;padding:10px;font-size:11px;font-weight:800;cursor:pointer;">+ Agregar norma a esta capa</button>';
+      else if(!items.length) h+='<div style="grid-column:1/-1;font-size:10px;color:#AAA;font-style:italic;padding:4px;">Sin normas registradas en esta capa.</div>';
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  h+='<div style="border:1px dashed #E0E0E0;border-radius:8px;padding:9px 12px;background:#FAFAFA;"><p style="font-size:9.5px;color:#777;line-height:1.5;margin:0;"><strong style="color:#B45309;">Nota:</strong> lista validada contra la Memoria de Sostenibilidad 2025, el Annual Information Form (FYE2025) y el Código País. A diferencia de Colombia, Nicaragua no cuenta con una circular de divulgación ASG tipo ISSB/IFRS S1-S2; su deber se ancla en el marco ambiental-minero. El analista experto puede agregar, editar o eliminar normas según el trabajo directo con la compañía.</p></div>';
+  host.innerHTML=h;
+}
+function marcoSet(idx,field,el){ getMarco()[idx][field]=(el.innerText||'').trim(); saveState(); if(field==='estado'||field==='ambito') renderMarco(); }
+function marcoAdd(capa,ambito){ getMarco().push({capa:capa,nombre:'Nueva norma / estándar',ambito:(ambito||'Ámbito'),desc:'Descripción de la norma o estándar (editable).',estado:'Vigente'}); saveState(); renderMarco(); }
+function marcoDelete(idx){ if(!confirm('¿Eliminar esta norma del marco de referencia?')) return; getMarco().splice(idx,1); saveState(); renderMarco(); }
+function toggleMarcoEdit(){
+  state.marcoEdit=!state.marcoEdit;
+  var b=document.getElementById('marcoEditBtn'),l=document.getElementById('marcoEditLabel'),ic=document.getElementById('marcoEditIcon');
+  if(l) l.textContent=state.marcoEdit?'Edición activa':'Activar edición';
+  if(ic) ic.textContent=state.marcoEdit?'lock_open':'edit';
+  if(b){ b.style.background=state.marcoEdit?'var(--orange)':'white'; b.style.color=state.marcoEdit?'white':'var(--orange)'; }
+  saveState(); renderMarco();
+}
+
+// ---- Marco · vista resumen (SVG) ----
+function marcoAbbr(m){
+  if(m && m.abbr) return m.abbr;
+  var full=((m&&m.nombre)||'').trim();
+  var low=full.toLowerCase();
+  var map=[['código de minas','Código de Minas'],['pacto global','Pacto Global'],['principios rectores','Ppios. Rectores ONU'],['leyes de valores','Valores CSA'],['mercados de valores','TSX/BVC/OTCQX'],['gestión de relaves','Relaves · GISTM'],['autoridades y permisos','Permisos país'],['towards sustainable','TSM'],['ni 58-101','NI 58-101/201'],['ley s-211','Ley S-211'],['company manual','TSX Manual'],['corruption of foreign','CFPOA'],['universales','GRI Sector 14']];
+  for(var i=0;i<map.length;i++){ if(low.indexOf(map[i][0])>=0) return map[i][1]; }
+  var s=full.split(' · ')[0].split(' — ')[0].split(' (')[0].trim();
+  if(s.length>20) s=s.slice(0,19)+'…';
+  return s;
+}
+function xmlEscM(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function marcoWrapT(txt,max){ var w=(txt||'').split(' '),lines=[],cur=''; w.forEach(function(x){ if((cur+' '+x).trim().length>max){ if(cur)lines.push(cur); cur=x; } else cur=(cur+' '+x).trim(); }); if(cur)lines.push(cur); return lines; }
+function buildMarcoSummarySvg(){
+  var data=getMarco();
+  var W=1040,M=16,TITLE=48,GAP=12,LBLW=210,PAD=13,chipH=23,chipGap=7,rowGap=7,fs=11.5;
+  var countryCol={colombia:'#F18446',nicaragua:'#2E7D32',canada:'#C8102E',ambos:'#1A5C80',otro:'#8A96A0'};
+  var y=TITLE, bands=[];
+  MARCO_LAYERS.forEach(function(L){
+    var items=data.filter(function(m){return m.capa===L.id;});
+    if(L.id===1){ var ord={colombia:0,nicaragua:1,canada:2,ambos:3,otro:4}; items=items.slice().sort(function(a,b){return (ord[marcoPais(a)]||0)-(ord[marcoPais(b)]||0);}); }
+    var cx0=M+LBLW+PAD, availW=W-M-PAD-cx0;
+    var cx=cx0, cy=0, rows=1;
+    var chips=items.map(function(m){
+      var lab=marcoAbbr(m), w=Math.max(30, Math.round(lab.length*fs*0.56)+16);
+      if(cx+w>cx0+availW){ cx=cx0; cy+=chipH+rowGap; rows++; }
+      var ch={x:cx,y:cy,w:w,lab:lab,col:(L.id===1?(countryCol[marcoPais(m)]||L.col):L.col)};
+      cx+=w+chipGap; return ch;
+    });
+    var titleLines=marcoWrapT(L.t,23), subLines=marcoWrapT(L.sub,28);
+    var labelH=14 + titleLines.length*14 + 5 + subLines.length*11 + 6 + 12 + 10;
+    var chipBlockH=rows*chipH+(rows-1)*rowGap+PAD*2;
+    var bandH=Math.max(chipBlockH,labelH);
+    bands.push({L:L,y:y,h:bandH,chips:chips,titleLines:titleLines,subLines:subLines,n:items.length}); y+=bandH+GAP;
+  });
+  var H=y-GAP+M;
+  var s='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;" font-family="Inter,Segoe UI,Arial,sans-serif">';
+  s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#FFFFFF"/>';
+  s+='<text x="'+M+'" y="26" font-size="18" font-weight="800" fill="#093E5E">Marco de referencia · síntesis de las 4 capas</text>';
+  s+='<text x="'+M+'" y="42" font-size="11" fill="#8A97A0">Nombres abreviados de las normas y estándares por capa · Capa 1 diferenciada por país (color)</text>';
+  bands.forEach(function(b){
+    var L=b.L;
+    s+='<rect x="'+M+'" y="'+b.y+'" width="'+(W-2*M)+'" height="'+b.h+'" rx="12" fill="'+L.col+'" fill-opacity="0.06" stroke="'+L.col+'" stroke-opacity="0.5" stroke-width="1.3"/>';
+    s+='<path d="M'+(M+12)+','+b.y+' h'+(LBLW-12)+' v'+b.h+' h-'+(LBLW-12)+' a12,12 0 0 1 -12,-12 v-'+(b.h-24)+' a12,12 0 0 1 12,-12 z" fill="'+L.col+'"/>';
+    var ty=b.y+21;
+    b.titleLines.forEach(function(ln){ s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="12" font-weight="800" fill="#FFFFFF">'+xmlEscM(ln)+'</text>'; ty+=14; });
+    ty+=3;
+    b.subLines.forEach(function(ln){ s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="9" fill="#FFFFFF" opacity="0.82">'+xmlEscM(ln)+'</text>'; ty+=11; });
+    ty+=4; s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="9" font-weight="800" fill="#FFFFFF" opacity="0.9">'+b.n+' normas</text>';
+    b.chips.forEach(function(c){ var yy=b.y+PAD+c.y;
+      s+='<rect x="'+c.x+'" y="'+yy+'" width="'+c.w+'" height="'+chipH+'" rx="6" fill="'+c.col+'" fill-opacity="0.12" stroke="'+c.col+'" stroke-opacity="0.45" stroke-width="1"/>';
+      s+='<text x="'+(c.x+c.w/2)+'" y="'+(yy+15.5)+'" font-size="'+fs+'" font-weight="700" fill="'+c.col+'" text-anchor="middle">'+xmlEscM(c.lab)+'</text>';
+    });
+  });
+  s+='</svg>'; return s;
+}
+
 (function init(){
   updateEditUI();
   renderComponents();
@@ -5039,6 +5840,8 @@ function buildMatrixMateriality(wb){
   renderPanorama();
   renderBrechas();
   renderStrategyChains();
+  renderMarco();
+  renderEjecutivo();
   updateTabArrows();
   initLevelSelector();
   if (typeof refreshAutosaveBtn === "function") refreshAutosaveBtn();
