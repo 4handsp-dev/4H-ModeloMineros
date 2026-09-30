@@ -3869,22 +3869,22 @@ function renderBrechas(){
 // ═══════════════════════════════════════════════════════════════
 var IDEAS_CHAIN=[
   {key:'I', name:'Incrementar producción', color:'#F18446', comps:[1,5,6], topics:[12,16,9,4]},
-  {key:'D', name:'Desarrollar territorio', color:'#1A5C80', comps:[2,5],   topics:[6,16,13,8]},
-  {key:'E', name:'Excelencia operacional', color:'#2E7D32', comps:[8,9,10,11], topics:[5,2,4,17,7]},
-  {key:'A', name:'Alto desempeño',         color:'#093E5E', comps:[4,8,11,12], topics:[1,10,3,14,18]},
+  {key:'D', name:'Desarrollar territorio', color:'#1A5C80', comps:[6,2,5],   topics:[6,16,13,8]},
+  {key:'E', name:'Excelencia operacional', color:'#2E7D32', comps:[6,8,9,10,11], topics:[5,2,4,17,7]},
+  {key:'A', name:'Alto desempeño',         color:'#093E5E', comps:[4,7,8,11,12], topics:[1,10,3,14,18]},
   {key:'S', name:'Shareholder’s Value',    color:'#7C3AED', comps:[1,3,12], topics:[12,11,1,15]}
 ];
 var ODS_CHAIN=[
-  {name:'Desarrollo económico', ods:[8,10,12,16], comps:[5,1],  topics:[16,8,9,12]},
-  {name:'Derechos humanos',     ods:[8,10,16],    comps:[4,2],  topics:[13]},
-  {name:'Gestión social',       ods:[1,10,16],    comps:[2],    topics:[6]},
+  {name:'Desarrollo económico', ods:[8,10,12,16], comps:[6,5,1],  topics:[16,8,9,12]},
+  {name:'Derechos humanos',     ods:[8,10,16],    comps:[6,4],  topics:[13]},
+  {name:'Gestión social',       ods:[1,10,16],    comps:[6,2],    topics:[6]},
   {name:'Salud y seguridad en el trabajo', ods:[3,8], comps:[9], topics:[5]},
-  {name:'Agua',                 ods:[6,12],       comps:[11],   topics:[17]},
+  {name:'Agua',                 ods:[6,12],       comps:[6],   topics:[17]},
   {name:'Biodiversidad',        ods:[6,12,15],    comps:[6],    topics:[7]},
-  {name:'Materiales y relaves', ods:[12],         comps:[8,9],  topics:[2]},
-  {name:'Gestión climática',    ods:[7,13],       comps:[3,8],  topics:[15,4]},
+  {name:'Materiales y relaves', ods:[12],         comps:[6,8],  topics:[2]},
+  {name:'Gestión climática',    ods:[7,13],       comps:[6,3,8],  topics:[15,4]},
   {name:'Gobierno corporativo', ods:[8,12,16],    comps:[4],    topics:[1,10,3]},
-  {name:'Nuestro talento',      ods:[4,8,10,16],  comps:[2],    topics:[14]},
+  {name:'Nuestro talento',      ods:[4,8,10,16],  comps:[4,9],    topics:[14]},
   {name:'Temas transversales',  ods:[9,16],       comps:[10,3], topics:[11,18]}
 ];
 
@@ -5383,6 +5383,10 @@ function importJson(input){
 // ═══════════════════════════════════════════════════════════════
 var __insumo=null;
 function _insEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function _insNorm(s){ return String(s==null?'':s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+function _insBrechaExiste(t){ try{ var bd=(typeof getBrechas==='function')?getBrechas():(state.brechasData||[]); var n=_insNorm(t); return bd.some(function(x){return x&&_insNorm(x.titulo)===n;}); }catch(e){ return false; } }
+function _insCur(eid,lv){ try{ var ix=_insEidIndex()[eid]; if(!ix) return null; var it=state.items[ix.ci][lv][ix.ii]; if(!it) return null; return {base:it.score}; }catch(e){ return null; } }
+function _insCell(eid,lv,o){ if(!o||o.score===undefined||o.score===null) return '<span style="color:#bbb;">—</span>'; var c=_insCur(eid,lv); return '<span style="color:#9aa;">base '+((c&&c.base!=null)?c.base:'—')+' →</span> <b style="color:#093E5E;">'+o.score+'</b>'; }
 function _insEidIndex(){
   var idx={};
   (state.items||[]).forEach(function(comp,ci){ if(!comp)return;
@@ -5441,7 +5445,7 @@ function showInsumoModal(){
   // validación
   if(rep.errs.length){ h+='<div style="background:#FDECEA;border:1px solid #E74C3C;border-radius:10px;padding:10px 12px;margin-bottom:12px;"><div style="font-weight:800;color:#C0392B;font-size:12px;">⛔ '+rep.errs.length+' error(es) — corríjalos en el JSON antes de aplicar:</div><ul style="margin:6px 0 0 16px;font-size:11px;color:#943126;">'+rep.errs.slice(0,20).map(function(x){return '<li>'+_insEsc(x)+'</li>';}).join('')+'</ul></div>'; }
   if(rep.warns.length){ h+='<div style="background:#FEF9E7;border:1px solid #F1C40F;border-radius:10px;padding:10px 12px;margin-bottom:12px;"><div style="font-weight:800;color:#B7950B;font-size:12px;">⚠ '+rep.warns.length+' advertencia(s):</div><ul style="margin:6px 0 0 16px;font-size:11px;color:#9A7D0A;">'+rep.warns.slice(0,20).map(function(x){return '<li>'+_insEsc(x)+'</li>';}).join('')+'</ul></div>'; }
-  h+='<div style="font-size:11px;color:#555;margin-bottom:10px;">Resumen del insumo: <b>'+rep.stats.elem+'</b> elemento(s) con calificación · <b>'+rep.stats.topics+'</b> asunto(s) · <b>'+rep.stats.brechas+'</b> brecha(s) sugerida(s). El insumo alimenta la <b>calificación del analista (expertScore)</b> y el <b>sustento</b>; la calificación base del modelo se conserva. Nada se aplica hasta que pulse «Aplicar seleccionados».</div>';
+  h+='<div style="font-size:11px;color:#555;margin-bottom:10px;">Resumen del insumo: <b>'+rep.stats.elem+'</b> elemento(s) con calificación · <b>'+rep.stats.topics+'</b> asunto(s) · <b>'+rep.stats.brechas+'</b> brecha(s) sugerida(s). <b>INTEGRA, no reemplaza:</b> solo cambia los elementos incluidos en el insumo; el resto del diagnóstico base se conserva. Alimenta la <b>calificación del analista (expertScore)</b> y <b>suma</b> el sustento; la calificación <b>base</b> del modelo se mantiene (columnas «base → propuesto»). Las brechas que <b>ya existen</b> se marcan y no se vuelven a crear. Nada se aplica hasta que pulse «Aplicar seleccionados».</div>';
   // elementos
   h+='<div style="font-weight:800;font-size:12px;color:#093E5E;margin:14px 0 6px;">Calificaciones por elemento</div>';
   h+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#F4F6F8;color:#093E5E;text-align:left;">';
@@ -5452,7 +5456,7 @@ function showInsumoModal(){
     h+='<td style="padding:5px 6px;"><input type="checkbox" class="insEl" data-k="'+k+'" checked></td>';
     h+='<td style="padding:5px 6px;font-weight:700;color:#093E5E;">'+_insEsc(el.eid)+'</td>';
     h+='<td style="padding:5px 6px;">'+_insEsc(idx[el.eid].label)+'</td>';
-    h+='<td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.corp))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.col))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.nic))+'</td>';
+    h+='<td style="padding:5px 6px;white-space:nowrap;">'+_insCell(el.eid,'corp',nv.corp)+'</td><td style="padding:5px 6px;white-space:nowrap;">'+_insCell(el.eid,'col',nv.col)+'</td><td style="padding:5px 6px;white-space:nowrap;">'+_insCell(el.eid,'nic',nv.nic)+'</td>';
     h+='<td style="padding:5px 6px;color:#555;">'+_insEsc(String(rat).slice(0,90))+(rat.length>90?'…':'')+'</td></tr>';
   });
   h+='</tbody></table>';
@@ -5465,7 +5469,8 @@ function showInsumoModal(){
   // brechas
   if((data.brechas_sugeridas||[]).length){ h+='<div style="font-weight:800;font-size:12px;color:#093E5E;margin:16px 0 6px;">Brechas sugeridas</div>';
     (data.brechas_sugeridas||[]).forEach(function(b,k){ if(!b||!b.titulo) return;
-      h+='<div style="border:1px solid #eee;border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:11px;"><label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;"><input type="checkbox" class="insBr" data-k="'+k+'" checked style="margin-top:2px;"><span><b>'+_insEsc(b.titulo)+'</b> <span style="color:#888;">['+_insEsc(b.prioridad||'MEDIA')+' · '+_insEsc(b.horizonte||'M')+' · comps '+_insEsc((b.comps||[]).join(','))+']</span><br><span style="color:#555;">'+_insEsc(String(b.descripcion||'').slice(0,160))+(String(b.descripcion||'').length>160?'…':'')+'</span></span></label></div>';
+      var _ex=_insBrechaExiste(b.titulo);
+      h+='<div style="border:1px solid '+(_ex?'#F1C40F':'#eee')+';border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:11px;background:'+(_ex?'#FEFBEA':'#fff')+';"><label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer;"><input type="checkbox" class="insBr" data-k="'+k+'"'+(_ex?'':' checked')+' style="margin-top:2px;"><span><b>'+_insEsc(b.titulo)+'</b> '+(_ex?'<span style="color:#B7950B;font-weight:800;">· YA EXISTE (no se re-crea)</span> ':'')+'<span style="color:#888;">['+_insEsc(b.prioridad||'MEDIA')+' · '+_insEsc(b.horizonte||'M')+' · comps '+_insEsc((b.comps||[]).join(','))+']</span><br><span style="color:#555;">'+_insEsc(String(b.descripcion||'').slice(0,160))+(String(b.descripcion||'').length>160?'…':'')+'</span></span></label></div>';
     }); }
   h+='</div>';
   // footer
@@ -5489,7 +5494,7 @@ function applyInsumo(){
       it.expertScore=o.score;
       var evs=(o.evidencias||[]).map(function(ev){ return '['+(ev.fuente||'fuente')+'] '+(ev.cita||''); }).join(' | ');
       var rat=(o.rationale||''); if(evs) rat+=(rat?'  ':'')+'Evidencia: '+evs;
-      if(rat) it.rationale=rat;
+      if(rat){ var _cur=(it.rationale||'').trim(); var _tag='[Análisis de campo'+((data.meta&&data.meta.fecha)?(' '+data.meta.fecha):'')+'] '+rat; if(!_cur){ it.rationale=_tag; } else if(_cur.indexOf(rat)===-1){ it.rationale=_cur+'\n'+_tag; } }
       nEl++;
     });
   });
@@ -5506,7 +5511,7 @@ function applyInsumo(){
   var bd=(typeof getBrechas==='function')?getBrechas():(state.brechasData||(state.brechasData=[]));
   document.querySelectorAll('input.insBr:checked').forEach(function(cb){
     var b=(data.brechas_sugeridas||[])[+cb.dataset.k]; if(!b||!b.titulo) return;
-    if(bd.some(function(x){return x&&x.titulo===b.titulo;})) return;
+    var _bn=_insNorm(b.titulo); if(bd.some(function(x){return x&&_insNorm(x.titulo)===_bn;})) return;
     bd.push({prioridad:(b.prioridad||'MEDIA'),color:(BRECHA_PRC[b.prioridad]||'#1565C0'),horizonte:(b.horizonte||'M'),titulo:b.titulo,descripcion:(b.descripcion||''),topics:(b.topics||[]),iros:(b.iros||[]),comps:(b.comps||[]),acciones:(b.acciones||[]),fuente:(b.fuente||('Insumo de análisis'+((data.meta&&data.meta.fecha)?(' '+data.meta.fecha):'')))});
     nBr++;
   });
