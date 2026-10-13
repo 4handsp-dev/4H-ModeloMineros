@@ -1433,11 +1433,10 @@ const DEFAULT_ITEMS = [
 // C6 — Productos y Servicios
 [
   {label:'Portafolio con criterio de sostenibilidad',desc:'Portafolio (productos, servicios y relacionamiento) diseñado con criterio de sostenibilidad: evalúa si los procesos más relevantes del negocio incorporan el análisis de criterios de sostenibilidad y si ese análisis se traduce en acciones de gestión en el desarrollo del modelo de negocio. Evidencia: Negocios Agroforestales (NAF), Swiss Better Gold (SBG) y legalización de minería en Colombia. Idoneidad: no se evidencia un líder que direccione el diseño del portafolio con este criterio, lo que limita la calificación.',score:2},
-  {label:'Gestión sostenible de cadena de abastecimiento',desc:'Modelo de gestión de abastecimiento que define cómo se contrata y qué se exige a proveedores y contratistas: integra insumos de los grupos de interés, gestión de riesgos y materialidad, y se conecta con gobierno y estrategia. Hoy se gestionan 2.670 contratistas con lineamientos SST y éticos, con gestión formal en SST (matrices de riesgo, auditorías, interventorías y Análisis de Trabajo Seguro/ATS), pero no se incorporan integralmente criterios de sostenibilidad en la contratación/abastecimiento.',score:3},
-  {label:'Formalización y legalización minera artesanal',desc:'Formalización y legalización de la minería artesanal y de pequeña escala como parte de la operación responsable. Evidencia: formalización con mineros artesanales en Nicaragua (Swiss Better Gold: alianzas, reforestación y custodia con mineros asociados, GRI Sectorial 14.x) y legalización de mineros en El Bagre (Colombia). Habilita el acceso a cadenas de oro responsable y reduce riesgos de origen.',score:4},
+  {label:'Gestión sostenible de cadena de abastecimiento',desc:'Modelo de gestión de abastecimiento que define cómo se contrata y qué se exige a proveedores y contratistas: integra insumos de los grupos de interés, gestión de riesgos y materialidad, y se conecta con gobierno y estrategia. Hoy se gestionan 2.670 contratistas con lineamientos SST y éticos, con gestión formal en SST (matrices de riesgo, auditorías, interventorías y Análisis de Trabajo Seguro/ATS), pero no se incorporan integralmente criterios de sostenibilidad en la contratación/abastecimiento. Incluye la trazabilidad y la debida diligencia de la cadena del oro (de la mina al destino, diferenciando oro propio, legalizado y artesanal) como parte del abastecimiento responsable: la debida diligencia OCDE (Guía + Suplemento de Oro) es el piso aplicable al productor, y la LBMA/RMI son estándares de refinería —no vinculantes para el productor— estratégicos por el acceso a mercados de oro responsable; hoy no existe un sistema de trazabilidad end-to-end ni se publica el % de onzas bajo certificación de cadena de custodia.',score:3},
+  {label:'Formalización y legalización minera artesanal',desc:'Formalización y legalización de la minería artesanal y de pequeña escala como parte de la operación responsable. Evidencia: formalización con mineros artesanales en Nicaragua (Swiss Better Gold: alianzas, reforestación y custodia con mineros asociados, GRI Sectorial 14.x) y legalización de mineros en El Bagre (Colombia). Habilita el acceso a cadenas de oro responsable y reduce riesgos de origen. Integra la trazabilidad y la cadena de custodia del oro artesanal y legalizado (Hemco, El Bagre) como instrumento de la formalización y del acceso a cadenas de oro responsable (canal Swiss Better Gold).',score:4},
   {label:'Inversión e impacto social',desc:'Iniciativas obligatorias y voluntarias orientadas a construir tejido social y económico en el territorio (infraestructura social y proyectos productivos). Se cumple el criterio de ejecución, pero falta claridad en el direccionamiento hacia el impacto real, la transformación, la gestión del cambio y el liderazgo integral, así como en la visión, la medición de impacto y la sostenibilidad/autonomía de las iniciativas. Riesgo de continuidad por dependencia del acompañamiento y los recursos del Grupo (ej. proyecto piscícola Asoagrollana).',score:3},
   {label:'Gestión de impacto ambiental, climático y biodiversidad',desc:'Gestión contundente del impacto ambiental propio con definición de metas: medición y control de consumos (agua, energía), emisiones (Alcance 1 y 2), residuos y relaves, biodiversidad y restauración, y contribuciones a reducir el riesgo de cambio climático (compensación agroforestal, mix renovable). Incluye el Plan de Gestión Ambiental con componente de biodiversidad (planes de reposición forestal y compensación, activo en Nicaragua) y la gestión ambiental de relaves (estándar corporativo en desarrollo, referencia GISTM; primer ejercicio de riesgo en la Presa San José 2025). Fortaleza del modelo. Pendiente: la medición de Alcance 3 (cadena de valor) —planteada como buena práctica para madurar el nivel hacia 5, no como incumplimiento normativo vinculante— y el análisis de dependencias del capital natural (TNFD/ENCORE), que se complementa en el componente de gestión de riesgos.',score:4},
-  {label:'Trazabilidad del oro',desc:'Trazabilidad y debida diligencia de la cadena del oro, de la mina al destino, diferenciando oro propio, legalizado y artesanal. Marco de exigencia: la debida diligencia OCDE (Guía + Suplemento de Oro) es el piso aplicable a todo productor; la LBMA Responsible Gold Guidance y RMI/RMAP son estándares de refinería —no vinculantes para el productor— pero estratégicos por el acceso a mercados de oro responsable (cascada vía refinería; canal Swiss Better Gold). La exigencia es mayor para el oro artesanal/legalizado (Hemco, El Bagre) por su condición ASGM. Hoy no existe un sistema de trazabilidad end-to-end ni se publica el % de onzas bajo certificación de cadena de custodia.',score:1},
   {label:'Gestión de derechos humanos, laborales y conflicto',desc:'Gestión integral de los derechos humanos, laborales y de la conflictividad, bajo el deber ser (Principios Rectores/UNGP y debida diligencia en DDHH) y las mejores prácticas. Hoy la gestión de DDHH no está madura sistémicamente: existen iniciativas de medición y elementos como la política DEI, el proyecto de mujeres en minería y el trabajo de exigencia de cumplimiento de derechos laborales en la relación con la comunidad, pero falta estructurarlo integralmente (debida diligencia UNGP, mecanismos de reclamación y remediación, y gestión de la conflictividad).',score:2}
 ],
 // C7 — Doble materialidad
@@ -1595,7 +1594,7 @@ const brechas = [
    descripcion:'Los Principios Rectores (UNGP) esperan una debida diligencia en DDHH intencional, con gobierno, mecanismos de reclamación y remediación y gestión de la conflictividad; en el diseño actual la gestión de DDHH no está estructurada integralmente —existen iniciativas (política DEI, mujeres en minería, exigencia de derechos laborales en la comunidad) pero sin un marco sistémico—. Esto expone a impactos y conflictos en derechos humanos no gestionados, con riesgo para las comunidades, la licencia social y la reputación.',
    topics:[13,6,14,9], iros:[], comps:[6],
    acciones:['Estructurar una debida diligencia en DDHH bajo los Principios Rectores (UNGP)','Integrar DEI, mujeres en minería y derechos laborales en un marco único de DDHH','Implementar mecanismos de reclamación/remediación y gestión de la conflictividad'],
-   fuente:'Reestructuración Capa 6 (2026-09) · gestión de derechos humanos, laborales y conflicto (C6-07)'},
+   fuente:'Reestructuración Capa 6 (2026-09) · gestión de derechos humanos, laborales y conflicto (C6-06)'},
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Continuidad y transformación de la inversión social en el territorio',
    descripcion:'La inversión social espera orientarse al impacto real, la transformación y la autonomía o sostenibilidad de las iniciativas, con medición de impacto social; en el diseño actual existe riesgo de continuidad por dependencia del acompañamiento y los recursos del Grupo (p. ej. el proyecto piscícola Asoagrollana) y falta direccionamiento hacia la autonomía. Esto implica que el valor social generado puede no sostenerse en el tiempo ni evidenciar impacto transformador.',
@@ -1666,7 +1665,7 @@ const DEFAULT_SCORES_COL = [
   [4,4,2],             // C3 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
   [4,5,5,5,5],         // C4 Gobernanza sostenible — Junta+composición, 3 líneas, comp., ética, fiscal
   [3,2,3],             // C5 — Cadena de valor + Modelo operativo + Gestión de proyectos
-  [2,3,3,3,4,1,2],     // C6 — 7 requisitos reestructurados (operación responsable)
+  [2,3,3,3,4,2],       // C6 — 6 requisitos (operación responsable; trazabilidad integrada en C6-02/C6-03)
   [5,5,2],             // C7 — Análisis DM, Integración continua, Escucha sistémica
   [3,3,1],             // C8 — Marco, Integración (IROs+relaves), escenarios LP
   [4,3,2,2],           // C9 — Políticas, Procesos, Roles, Conocimiento crítico
@@ -1684,7 +1683,7 @@ const DEFAULT_SCORES_NIC = [
   [3,3,1],             // C3 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
   [3,4,4,4,4],         // C4 Gobernanza sostenible — gov local menos maduro
   [3,2,3],             // C5 — Cadena de valor + Modelo operativo + Gestión de proyectos
-  [2,3,5,3,4,1,2],     // C6 — 7 requisitos reestructurados (operación responsable)
+  [2,3,5,3,4,2],       // C6 — 6 requisitos (operación responsable; trazabilidad integrada en C6-02/C6-03)
   [4,4,2],             // C7 — Análisis DM, Integración continua, Escucha sistémica
   [3,3,1],             // C8 — Marco, Integración (IROs+relaves), escenarios LP
   [4,3,2,1],           // C9 — Políticas, Procesos, Roles, Conocimiento crítico
@@ -1702,7 +1701,7 @@ const LS_KEY = 'mineros_dx_v5';
 // migración idempotente guardada por bandera (if(!s.flagX){...; s.flagX=true;}) DENTRO del
 // bloque try de migraciones de loadState (antes de DEFAULT_ITEMS.forEach). Así, cualquier
 // JSON de una versión anterior se transforma al abrirlo sin perder datos.
-const MODEL_REV = 20261012;
+const MODEL_REV = 20261013;
 
 function defaultState() {
   function mkItems(ci, scores) {
@@ -1941,11 +1940,10 @@ function loadState() {
         try { assignItemIds(s); } catch(_e){}
         var _n6=[
           ['Portafolio con criterio de sostenibilidad','Portafolio (productos, servicios y relacionamiento) diseñado con criterio de sostenibilidad: evalúa si los procesos más relevantes del negocio incorporan el análisis de criterios de sostenibilidad y si ese análisis se traduce en acciones de gestión en el desarrollo del modelo de negocio. Evidencia: Negocios Agroforestales (NAF), Swiss Better Gold (SBG) y legalización de minería en Colombia. Idoneidad: no se evidencia un líder que direccione el diseño del portafolio con este criterio, lo que limita la calificación.',2,2,2],
-          ['Gestión sostenible de cadena de abastecimiento','Modelo de gestión de abastecimiento que define cómo se contrata y qué se exige a proveedores y contratistas: integra insumos de los grupos de interés, gestión de riesgos y materialidad, y se conecta con gobierno y estrategia. Hoy se gestionan 2.670 contratistas con lineamientos SST y éticos y auditorías/interventorías, pero no se incorporan integralmente criterios de sostenibilidad en la contratación/abastecimiento.',3,3,3],
-          ['Formalización y legalización minera artesanal','Formalización y legalización de la minería artesanal y de pequeña escala como parte de la operación responsable. Evidencia: formalización con mineros artesanales en Nicaragua (Swiss Better Gold: alianzas, reforestación y custodia con mineros asociados, GRI Sectorial 14.x) y legalización de mineros en El Bagre (Colombia). Habilita el acceso a cadenas de oro responsable y reduce riesgos de origen.',4,3,5],
+          ['Gestión sostenible de cadena de abastecimiento','Modelo de gestión de abastecimiento que define cómo se contrata y qué se exige a proveedores y contratistas: integra insumos de los grupos de interés, gestión de riesgos y materialidad, y se conecta con gobierno y estrategia. Hoy se gestionan 2.670 contratistas con lineamientos SST y éticos y auditorías/interventorías, pero no se incorporan integralmente criterios de sostenibilidad en la contratación/abastecimiento. Incluye la trazabilidad y la debida diligencia de la cadena del oro (de la mina al destino, diferenciando oro propio, legalizado y artesanal) como parte del abastecimiento responsable: la debida diligencia OCDE (Guía + Suplemento de Oro) es el piso aplicable al productor, y la LBMA/RMI son estándares de refinería —no vinculantes para el productor— estratégicos por el acceso a mercados de oro responsable; hoy no existe un sistema de trazabilidad end-to-end ni se publica el % de onzas bajo certificación de cadena de custodia.',3,3,3],
+          ['Formalización y legalización minera artesanal','Formalización y legalización de la minería artesanal y de pequeña escala como parte de la operación responsable. Evidencia: formalización con mineros artesanales en Nicaragua (Swiss Better Gold: alianzas, reforestación y custodia con mineros asociados, GRI Sectorial 14.x) y legalización de mineros en El Bagre (Colombia). Habilita el acceso a cadenas de oro responsable y reduce riesgos de origen. Integra la trazabilidad y la cadena de custodia del oro artesanal y legalizado (Hemco, El Bagre) como instrumento de la formalización y del acceso a cadenas de oro responsable (canal Swiss Better Gold).',4,3,5],
           ['Inversión e impacto social','Iniciativas obligatorias y voluntarias orientadas a construir tejido social y económico en el territorio (infraestructura social y proyectos productivos). Se cumple el criterio de ejecución, pero falta claridad en el direccionamiento hacia el impacto real, la transformación, la gestión del cambio y el liderazgo integral, así como en la visión, la medición de impacto y la sostenibilidad/autonomía de las iniciativas. Riesgo de continuidad por dependencia del acompañamiento y los recursos del Grupo (ej. proyecto piscícola Asoagrollana).',3,3,3],
           ['Gestión de impacto ambiental, climático y biodiversidad','Gestión contundente del impacto ambiental propio con definición de metas: medición y control de consumos (agua, energía), emisiones (Alcance 1 y 2), residuos y relaves, biodiversidad y restauración, y contribuciones a reducir el riesgo de cambio climático (compensación agroforestal, mix renovable). Fortaleza del modelo. Pendiente: la medición de Alcance 3 (cadena de valor) —planteada como buena práctica para madurar el nivel hacia 5, no como incumplimiento normativo vinculante— y el análisis de dependencias del capital natural (TNFD/ENCORE), que se complementa en el componente de gestión de riesgos.',4,4,4],
-          ['Trazabilidad del oro','Trazabilidad y debida diligencia de la cadena del oro, de la mina al destino, diferenciando oro propio, legalizado y artesanal. Marco de exigencia: la debida diligencia OCDE (Guía + Suplemento de Oro) es el piso aplicable a todo productor; la LBMA Responsible Gold Guidance y RMI/RMAP son estándares de refinería —no vinculantes para el productor— pero estratégicos por el acceso a mercados de oro responsable (cascada vía refinería; canal Swiss Better Gold). La exigencia es mayor para el oro artesanal/legalizado (Hemco, El Bagre) por su condición ASGM. Hoy no existe un sistema de trazabilidad end-to-end ni se publica el % de onzas bajo certificación de cadena de custodia.',1,1,1],
           ['Gestión de derechos humanos, laborales y conflicto','Gestión integral de los derechos humanos, laborales y de la conflictividad, bajo el deber ser (Principios Rectores/UNGP y debida diligencia en DDHH) y las mejores prácticas. Hoy la gestión de DDHH no está madura sistémicamente: existen iniciativas de medición y elementos como la política DEI, el proyecto de mujeres en minería y el trabajo de exigencia de cumplimiento de derechos laborales en la relación con la comunidad, pero falta estructurarlo integralmente (debida diligencia UNGP, mecanismos de reclamación y remediación, y gestión de la conflictividad).',2,2,2]
         ];
         var _DC1='La gestión de proyectos como elemento clave del despliegue y desarrollo del modelo de negocio, incorporando la mirada de sostenibilidad en todo el ciclo (originación, diseño, ejecución y cierre). Evidencia: nuevos proyectos con criterios ASG (Porvenir en Nicaragua, 127 ha de compensación; exploración en Chile y Argentina con criterios ASG básicos). Pendiente: una metodología integral de gestión de proyectos que asegure criterios de sostenibilidad, con gobierno y estándares definidos.';
@@ -1960,11 +1958,11 @@ function loadState() {
           if(t04 && s.items[0] && s.items[0][lv]){ t04.label='Gestión de proyectos con mirada de sostenibilidad'; t04.desc=_DC1; delete t04.eid; s.items[0][lv].push(t04); }
           if(t06 && s.items[11] && s.items[11][lv]){ delete t06.eid; s.items[11][lv].push(t06); }
         });
-        if(!s.itemSeq) s.itemSeq={}; s.itemSeq[5]=7;
+        if(!s.itemSeq) s.itemSeq={}; s.itemSeq[5]=6;
         if(Array.isArray(s.brechasData)){
           [{prioridad:'ALTA',color:'#E9711C',horizonte:'M',titulo:'Liderazgo para el direccionamiento del portafolio con criterio de sostenibilidad',descripcion:'El diseño del portafolio (productos, servicios y relacionamiento) con criterio de sostenibilidad espera un líder o rol que lo direccione; en el diseño actual no se evidencia ese rol, por lo que no se incorpora de forma sistemática el análisis y las acciones de sostenibilidad en el modelo de negocio. Esto conecta con la brecha del rol del equipo de sostenibilidad corporativo y limita que la sostenibilidad oriente las decisiones de portafolio.',topics:[],iros:[],comps:[6],acciones:['Asignar un líder/rol que direccione el diseño del portafolio con criterio de sostenibilidad','Incorporar el análisis de criterios de sostenibilidad en los procesos clave del negocio','Conectar con el rol integrador del equipo de sostenibilidad del corporativo'],fuente:'Reestructuración Capa 6 (2026-09) · portafolio con criterio de sostenibilidad (C6-01)'},
            {prioridad:'ALTA',color:'#E9711C',horizonte:'M',titulo:'Criterios de sostenibilidad integrales en la contratación y el abastecimiento',descripcion:'Un abastecimiento sostenible espera criterios de sostenibilidad integrales que definan qué se exige a proveedores y contratistas e integren los insumos de los grupos de interés, la gestión de riesgos y la materialidad, conectados con gobierno y estrategia; en el diseño actual esos criterios no se incorporan de forma integral. Esto deja la cadena de suministro expuesta a riesgos ASG no gestionados, con impacto reputacional y de acceso a mercados responsables.',topics:[8],iros:[],comps:[6],acciones:['Definir un modelo de abastecimiento sostenible con criterios ASG exigibles a proveedores','Integrar insumos de grupos de interés, riesgos y materialidad en la contratación','Conectar el abastecimiento con gobierno, estrategia y debida diligencia'],fuente:'Reestructuración Capa 6 (2026-09) · gestión sostenible de cadena de abastecimiento (C6-02)'},
-           {prioridad:'ALTA',color:'#E9711C',horizonte:'M',titulo:'Gestión intencional e integral de derechos humanos',descripcion:'Los Principios Rectores (UNGP) esperan una debida diligencia en DDHH intencional, con gobierno, mecanismos de reclamación y remediación y gestión de la conflictividad; en el diseño actual la gestión de DDHH no está estructurada integralmente —existen iniciativas (política DEI, mujeres en minería, exigencia de derechos laborales en la comunidad) pero sin un marco sistémico—. Esto expone a impactos y conflictos en derechos humanos no gestionados, con riesgo para las comunidades, la licencia social y la reputación.',topics:[13],iros:[],comps:[6],acciones:['Estructurar una debida diligencia en DDHH bajo los Principios Rectores (UNGP)','Integrar DEI, mujeres en minería y derechos laborales en un marco único de DDHH','Implementar mecanismos de reclamación/remediación y gestión de la conflictividad'],fuente:'Reestructuración Capa 6 (2026-09) · gestión de derechos humanos, laborales y conflicto (C6-07)'},
+           {prioridad:'ALTA',color:'#E9711C',horizonte:'M',titulo:'Gestión intencional e integral de derechos humanos',descripcion:'Los Principios Rectores (UNGP) esperan una debida diligencia en DDHH intencional, con gobierno, mecanismos de reclamación y remediación y gestión de la conflictividad; en el diseño actual la gestión de DDHH no está estructurada integralmente —existen iniciativas (política DEI, mujeres en minería, exigencia de derechos laborales en la comunidad) pero sin un marco sistémico—. Esto expone a impactos y conflictos en derechos humanos no gestionados, con riesgo para las comunidades, la licencia social y la reputación.',topics:[13],iros:[],comps:[6],acciones:['Estructurar una debida diligencia en DDHH bajo los Principios Rectores (UNGP)','Integrar DEI, mujeres en minería y derechos laborales en un marco único de DDHH','Implementar mecanismos de reclamación/remediación y gestión de la conflictividad'],fuente:'Reestructuración Capa 6 (2026-09) · gestión de derechos humanos, laborales y conflicto (C6-06)'},
            {prioridad:'MEDIA',color:'#1565C0',horizonte:'M',titulo:'Continuidad y transformación de la inversión social en el territorio',descripcion:'La inversión social espera orientarse al impacto real, la transformación y la autonomía o sostenibilidad de las iniciativas, con medición de impacto social; en el diseño actual existe riesgo de continuidad por dependencia del acompañamiento y los recursos del Grupo (p. ej. el proyecto piscícola Asoagrollana) y falta direccionamiento hacia la autonomía. Esto implica que el valor social generado puede no sostenerse en el tiempo ni evidenciar impacto transformador.',topics:[6],iros:[],comps:[6],acciones:['Direccionar la inversión social hacia impacto, transformación y autonomía','Implementar medición de impacto social de las iniciativas','Diseñar la transición hacia la sostenibilidad/autonomía de los proyectos (ej. Asoagrollana)'],fuente:'Reestructuración Capa 6 (2026-09) · inversión social en el territorio (C6-04)'}].forEach(function(b){ if(!s.brechasData.some(function(x){return x&&x.titulo===b.titulo;})) s.brechasData.push(b); });
         }
         s.c6transform=true;
@@ -2176,6 +2174,40 @@ function loadState() {
           });
         }
         s._migProjC1toC5_202610=true;
+      }
+      if (!s._migAnalistaC1C6) {
+        if (Array.isArray(s.brechasData) && typeof _applyAnalistaC1C6==='function') _applyAnalistaC1C6(s.brechasData);
+        s._migAnalistaC1C6=true;
+      }
+      if (!s._migC606remove) {
+        try{
+          var _ABA6=' Incluye la trazabilidad y la debida diligencia de la cadena del oro (de la mina al destino, diferenciando oro propio, legalizado y artesanal) como parte del abastecimiento responsable: la debida diligencia OCDE (Guía + Suplemento de Oro) es el piso aplicable al productor, y la LBMA/RMI son estándares de refinería —no vinculantes para el productor— estratégicos por el acceso a mercados de oro responsable; hoy no existe un sistema de trazabilidad end-to-end ni se publica el % de onzas bajo certificación de cadena de custodia.';
+          var _FOR6=' Integra la trazabilidad y la cadena de custodia del oro artesanal y legalizado (Hemco, El Bagre) como instrumento de la formalización y del acceso a cadenas de oro responsable (canal Swiss Better Gold).';
+          if (Array.isArray(s.items) && s.items[5]) {
+            ['corp','col','nic'].forEach(function(lv){
+              var c6=s.items[5][lv]; if(!Array.isArray(c6)) return;
+              for(var i=c6.length-1;i>=0;i--){ var it=c6[i]; if(it && it.eid==='C6-06' && /[Tt]razabilidad/.test(it.label||'')) c6.splice(i,1); }
+              c6.forEach(function(it){ if(it && it.eid==='C6-07') it.eid='C6-06'; });
+              c6.forEach(function(it){ if(!it||!it.desc) return;
+                if(it.eid==='C6-02' && it.desc.indexOf('trazabilidad y la debida diligencia de la cadena del oro')<0) it.desc=it.desc+_ABA6;
+                if(it.eid==='C6-03' && it.desc.indexOf('cadena de custodia del oro artesanal')<0) it.desc=it.desc+_FOR6;
+              });
+            });
+            if(s.itemSeq) s.itemSeq[5]=6;
+          }
+          if (Array.isArray(s.brechasData)) {
+            s.brechasData.forEach(function(b){
+              if(!b||!b.titulo||!Array.isArray(b.eids)) return;
+              if(b.titulo.indexOf('Gestión intencional e integral de derechos humanos')>=0)
+                b.eids=b.eids.map(function(e){return e==='C6-07'?'C6-06':e;}).filter(function(e,i,a){return a.indexOf(e)===i;});
+              if(b.titulo.indexOf('Criterios de sostenibilidad integrales en la contratación')>=0 || b.titulo.indexOf('minería artesanal (MAPE)')>=0)
+                b.eids=b.eids.filter(function(e){return e!=='C6-06';});
+              if(b.titulo.indexOf('Trazabilidad del oro (cadena de custodia)')>=0)
+                ['C6-02','C6-03'].forEach(function(e){ if(b.eids.indexOf(e)<0) b.eids.push(e); });
+            });
+          }
+        }catch(_e6){}
+        s._migC606remove=true;
       }
       } catch(_migErr){ try{ if(typeof console!=='undefined'&&console.warn) console.warn('loadState: migración parcial; se continúa con normalización/reparación.', _migErr); }catch(_e){} }
       DEFAULT_ITEMS.forEach((defItems, ci) => {
@@ -2697,7 +2729,6 @@ var ELEM_CRIT=[
  {efic:'la formalización/legalización avanza con SBG en Nicaragua y con mineros de El Bagre en Colombia',idon:'gestionado por Operaciones/Gestión Social por país',form:'alianzas y programas documentados (GRI Sectorial 14.x)',auto:'la trazabilidad del mineral artesanal está en desarrollo',frec:'seguimiento continuo de los programas'},
  {efic:'las iniciativas obligatorias y voluntarias ejecutan y construyen tejido, pero sin foco claro en impacto/transformación',idon:'gestionada por Gestión Social; falta liderazgo integral del direccionamiento',form:'documentada por obras/proyectos, sin sistema de medición de impacto social',auto:'se mide ejecución, no impacto',frec:'ejecución anual, con riesgo de continuidad por dependencia del Grupo'},
  {efic:'gestión ambiental contundente: metas, medición de agua/energía/emisiones (Alcance 1-2), residuos, biodiversidad y compensación; incluye Plan de Gestión Ambiental con biodiversidad y gestión ambiental de relaves; fortaleza del modelo',idon:'gestionado por Gestión Ambiental y Climática',form:'documentado con indicadores GRI y metas; Plan de Gestión Ambiental y estándar de relaves (en desarrollo, GISTM)',auto:'medición apoyada en registros; Alcance 3 y dependencias TNFD pendientes',frec:'medición y seguimiento periódicos'},
- {efic:'no existe trazabilidad end-to-end del oro (mina a destino); resultado no cumplido',idon:'sin responsable/gobierno de la trazabilidad y la debida diligencia de la cadena del oro',form:'debida diligencia OCDE como piso; LBMA/RMI voluntarios (refinería), no publicados para el productor',auto:'sin sistema de trazabilidad ni % certificado publicado',frec:'sin proceso periódico de trazabilidad'},
  {efic:'existen iniciativas (DEI, mujeres en minería, derechos laborales en la comunidad), pero sin gestión integral de DDHH',idon:'sin responsable de una debida diligencia en DDHH (UNGP) intencional',form:'no estructurado integralmente; sin mecanismos formales de reclamación/remediación ni gestión de conflictividad',auto:'sin sistema de seguimiento de DDHH',frec:'iniciativas puntuales, sin ciclo sistémico'}
 ],
 [ /* C7 Doble materialidad */
@@ -3894,9 +3925,52 @@ function _seedBrechaEids(s){
   });
   s.brechaEidSeed=true;
 }
+// Brechas derivadas del análisis del analista (Capa 1 · C1–C6, diagnóstico de recorrido 2026).
+// Complementa brechas existentes (une vínculos + anexa el hallazgo) y crea las nuevas. Idempotente.
+function _applyAnalistaC1C6(arr){
+  if(!Array.isArray(arr)) return;
+  var MARK='Hallazgo del analista (diagnóstico de recorrido';
+  function find(sub){ for(var i=0;i<arr.length;i++){ if(arr[i]&&arr[i].titulo&&arr[i].titulo.indexOf(sub)>=0) return arr[i]; } return null; }
+  function uni(b,f,vals){ if(!Array.isArray(b[f])) b[f]=[]; (vals||[]).forEach(function(v){ if(b[f].map(String).indexOf(String(v))<0) b[f].push(v); }); }
+  function comp(sub,eids,topics,comps,note){
+    var b=find(sub); if(!b) return;
+    uni(b,'eids',eids); uni(b,'topics',topics); uni(b,'comps',comps);
+    if(note && String(b.descripcion||'').indexOf(MARK)<0){
+      b.descripcion=String(b.descripcion||'')+'<p style="margin:9px 0 0;"><strong>'+MARK+', C1–C6):</strong> '+note+'</p>';
+    }
+  }
+  comp('roles y responsabilidades por línea de gestión',['C4-02','C1-01','C3-01','C3-02','C4-01','C6-01'],[1,3],[1,3,4,6],
+    'el rol del corporativo para materializar la estrategia de sostenibilidad no está definido y tiende a entenderse delegado en la VP de Sostenibilidad y en los presidentes de país, cuando la priorización y armonización de los frentes debería recaer en el Presidente de la compañía y de cada operación. Varios responsables de asuntos no tienen claro su rol y por ello no definen metas ni KPIs; la supervisión de la Junta se limita a los elementos ya gestionados y el modelo de tres líneas solo opera en algunos procesos. La coyuntura de cambio es una oportunidad para redefinir estos roles.');
+  comp('prospectiva de sostenibilidad integrada',['C5-02','C5-01','C6-01'],[11,16],[5,6],
+    'la sostenibilidad se entiende principalmente como Ambiental, Social y SST, dejando por fuera DDHH, gestión de riesgos, cambio climático (incluido el Alcance 3), finanzas sostenibles, talento y ética; no existe un modelo operativo que gestione la sostenibilidad de forma integral a lo largo de la cadena de valor, que está definida pero sin criterios de gestión en cada eslabón.');
+  comp('escucha sistémica',['C7-03','C2-01','C2-02'],[6,1],[2,7],
+    'en grupos de interés no se evidenció una matriz de responsables o voceros por grupo (ni su extensión entre operaciones con grupos compartidos), ni un ejercicio formal de identificación y priorización, ni una definición explícita de los mecanismos de relacionamiento —que parecen surgir de la interacción cotidiana— ni su revisión periódica.');
+  comp('teoría del cambio de la estrategia',['C3-01','C3-02','C3-03'],[16,6],[3],
+    'en la prueba de recorrido, áreas del corporativo y de sostenibilidad de las operaciones no están alineadas sobre qué constituye gestión de sostenibilidad (por ejemplo, revelaciones financieras de sostenibilidad y riesgos de clima y de DDHH), por lo que no siempre los gestionan; la trazabilidad del dato y el monitoreo de efectividad existen en el frente de reportes, pero no en los demás frentes.');
+  comp('Criterios de sostenibilidad integrales en la contratación',['C6-02'],[8,9,13],[6,5],
+    'existe voluntad de gestionar el abastecimiento con criterios de sostenibilidad, pero aún no se define qué se exigirá ni con qué objetivos; en Colombia y Nicaragua no se evidenció gestión ASG de proveedores, sí un avance hacia la formalización (verificación de pagos de seguridad social y SST) que puede anclar un plan de cierre de brechas laborales en zonas rurales. La trazabilidad del oro se incorpora como instrumento de esta gestión, no como elemento independiente.');
+  comp('Continuidad y transformación de la inversión social',['C6-04','C6-05'],[6,16,7],[6],
+    'la gestión social y ambiental está bien ejecutada, pero falta madurar el modelo con medición de impacto y con una coordinación efectiva corporativo–operación que agregue valor; en inversión social falta direccionamiento estratégico (necesidades, impacto, priorización y autonomía de las iniciativas) y en lo ambiental y de biodiversidad falta incorporar las tendencias de finanzas para la biodiversidad.');
+  comp('Gestión intencional e integral de derechos humanos',['C6-06','C4-04'],[13,10,6],[6,4],
+    'la gestión de DDHH es un propósito declarado pero sin consenso sobre objetivos ni planes de trabajo, y sin una estrategia de las operaciones coordinada con el corporativo; tampoco se evidencian prácticas específicas de DDHH y de prevención de la corrupción en el relacionamiento con autoridades y comunidades (políticas, protocolos de reuniones y de apoyo).');
+  // Trazabilidad del oro: integrada en abastecimiento (C6-02) y formalización MAPE (C6-03); la brecha se relaciona a esos requisitos
+  comp('Trazabilidad del oro (cadena de custodia)',['C6-02','C6-03'],[8,9],[6],null);
+  function addNew(titulo,obj){ if(!find(titulo)) arr.push(obj); }
+  addNew('Plan de cierre de minas y transición post-minería',{prioridad:'MEDIA',color:'#EAB308',horizonte:'L',titulo:'Plan de cierre de minas y transición post-minería',
+    descripcion:'Una gestión responsable del ciclo minero espera anticipar el cierre y la transición post-minería —con estrategia, roles, estudios y provisión financiera— incluso en fase de crecimiento; en el diseño actual no se evidencian estrategias, planes ni estudios de cierre por ningún motivo (político, económico u operativo), ni roles y responsabilidades corporativas o por país para gestionarlo. Esto deja sin anticipar los pasivos y la continuidad del territorio tras la operación.',
+    topics:[2,16,6],iros:[],comps:[1,6],eids:['C1-02'],
+    acciones:['Definir la estrategia y el gobierno del cierre y la transición post-minería (roles corporativo y por país)','Elaborar estudios y provisión financiera de cierre progresivo y rehabilitación','Integrar el cierre al modelo de negocio y a la gestión de riesgos'],
+    fuente:'Análisis del analista · Capa 1 (C1-02) · diagnóstico de recorrido 2026'});
+  addNew('Direccionamiento, alcance y medición de la minería artesanal',{prioridad:'ALTA',color:'#E9711C',horizonte:'M',titulo:'Direccionamiento, alcance y medición de la minería artesanal (MAPE)',
+    descripcion:'Una gestión estratégica de la minería artesanal y de pequeña escala (MAPE) espera un propósito y un alcance definidos, indicadores de impacto y la cobertura de todos los actores de la cadena; en el diseño actual el corporativo no tiene claro el propósito ni el alcance de su intervención, en Colombia es una oportunidad de alto impacto social, ambiental y de DDHH que exige pasar de una actitud pasiva a una activa, y en Nicaragua faltan indicadores clave y las iniciativas no alcanzan a otros intervinientes (transportadores, cargue y descargue). La trazabilidad del oro se integra aquí como instrumento de formalización y de acceso a mercados responsables.',
+    topics:[9,8,13],iros:[],comps:[6],eids:['C6-03'],
+    acciones:['Definir propósito, alcance y riesgos de la intervención en MAPE (corporativo y operaciones)','Establecer indicadores de impacto y extender la gestión a todos los actores de la cadena','Incorporar la trazabilidad del oro como instrumento de formalización'],
+    fuente:'Análisis del analista · Capa 1 (C6-03) · diagnóstico de recorrido 2026'});
+}
 function getBrechas(){
   if(!state.brechasData || !Array.isArray(state.brechasData) || !state.brechasData.length){
     state.brechasData = JSON.parse(JSON.stringify(brechas));
+    _applyAnalistaC1C6(state.brechasData);
   }
   _seedBrechaEids(state);
   assignBrechaIds(state);
