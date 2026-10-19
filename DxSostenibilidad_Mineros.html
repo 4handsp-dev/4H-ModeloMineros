@@ -305,6 +305,15 @@
   .crit-1 { background:#FFF8E1; color:#827717; border-color:#FFE082; }
   .crit-2 { background:#E8F5E9; color:#1B5E20; border-color:#A5D6A7; }
 
+  /* ── Texto enriquecido de Brechas: restablecer viñetas/numeración (Tailwind las resetea) ── */
+  #brechasContainer ul { list-style: disc; margin: 5px 0; padding-left: 20px; }
+  #brechasContainer ol { list-style: decimal; margin: 5px 0; padding-left: 20px; }
+  #brechasContainer ul ul { list-style: circle; }
+  #brechasContainer li { margin: 2px 0; }
+
+  /* Matriz de doble materialidad embebida en el diagrama del Resumen */
+  #modelDiagramMatrix svg { width: 100%; height: auto; display: block; }
+
   /* ── Acordeón ── */
   details > summary { list-style: none; cursor: pointer; }
   details > summary::-webkit-details-marker { display: none; }
@@ -472,6 +481,7 @@
         <span id="savedIndicator" class="font-semibold hidden" style="color:#2E7D32;">Guardado &#10003;</span>
         <span id="unsavedIndicator" class="font-semibold" style="display:none;align-items:center;gap:4px;color:#E9711C;"><span class="mi mi-sm">error_outline</span>Cambios sin respaldar</span>
       </div>
+      <button onclick="guardarAhora()" class="nav-act" title="Guardar ahora en este navegador (localStorage)" style="border-color:#2E7D32;color:#2E7D32;"><span class="mi">save</span><span class="tab-label">Guardar</span></button>
       <button onclick="downloadJson()" class="nav-act" title="Descargar respaldo editable del modelo (.json)" style="border-color:var(--navy);color:var(--navy);"><span class="mi">data_object</span><span class="tab-label">Descargar JSON</span></button>
       <button id="excelBtn" onclick="downloadExcel()" class="nav-act" title="Exportar todo el modelo a Excel (.xlsx)" style="border-color:#1D6F42;color:#1D6F42;"><span class="mi">table_view</span><span class="tab-label">Excel</span></button>
       <button onclick="document.getElementById('importJsonInput').click()" class="nav-act" title="Cargar un modelo previamente guardado (.json)"><span class="mi">upload_file</span><span class="tab-label">Cargar JSON</span></button>
@@ -501,6 +511,7 @@
       </button>
     </div>
     <div id="modelDiagram" style="font-family:'Satoshi','Inter',sans-serif;"></div>
+    <div id="modelDiagramMatrix" style="font-family:'Satoshi','Inter',sans-serif;"></div>
   </div>
 
   <!-- Fila 1b: Resumen por nivel de valoración -->
@@ -2330,6 +2341,13 @@ function saveState() {
   if (ind && auto) { ind.classList.remove('hidden'); setTimeout(() => ind.classList.add('hidden'), 1500); }
 }
 
+function guardarAhora() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+  catch(e) { alert('No se pudo guardar en este navegador (almacenamiento no disponible). Usa «Descargar JSON» para respaldar.'); return; }
+  var ind = document.getElementById('savedIndicator');
+  if (ind) { ind.classList.remove('hidden'); setTimeout(function(){ ind.classList.add('hidden'); }, 1800); }
+}
+
 function resetAll() {
   if (!confirm('¿Restaurar todos los valores predeterminados de la Memoria 2025? Se perderán los cambios.')) return;
   localStorage.removeItem('mineros_dx_v5');
@@ -2516,6 +2534,8 @@ function renderModelDiagram() {
   //  entre el promedio simple por nivel activo y el ponderado corp/col/nic)
   const avgEl = document.getElementById('summaryAvg');
   if (avgEl) avgEl.textContent = globalAvg().toFixed(1);
+
+  if (typeof renderDiagramMatrix === 'function') renderDiagramMatrix();
 }
 
 function updateModelDiagram() {
@@ -3506,12 +3526,6 @@ function renderComponents() {
               </button>`).join('')}
           </div>
 
-          <!-- Score legend -->
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #F2F2F2;flex-wrap:wrap;">
-            <span style="font-size:10px;color:#B0B0B0;font-weight:500;letter-spacing:.03em;margin-right:2px;">Escala</span>
-            ${[1,2,3,4,5].map(v=>`<span class="item-badge ib${v}">${v}</span><span style="font-size:10px;color:#C0C0C0;">${SCORE_LABELS[v]}</span>`).join('')}<span class="item-badge ib-na">NA</span><span style="font-size:10px;color:#C0C0C0;">No aplica</span>
-          </div>
-
           <!-- Items list para el nivel activo -->
           <div id="items-list-${ci}" class="mb-3"></div>
           ${state.editMode ? `<button class="add-item-btn" onclick="addItem(${ci})">+ Agregar elemento · <span style="opacity:.7">${LEVELS.find(l=>l.id===activeLevel).label}</span></button>` : ''}
@@ -3552,6 +3566,23 @@ function renderComponents() {
 // ═══════════════════════════════════════════════
 // ── Diagram state ──────────────────────────────
 let diagramScoresVisible = false;
+let diagramMatrixVisible = false;
+
+function toggleDiagramMatrix() {
+  diagramMatrixVisible = !diagramMatrixVisible;
+  if (typeof renderModelDiagram === 'function') renderModelDiagram();
+  else if (typeof renderDiagramMatrix === 'function') renderDiagramMatrix();
+}
+function renderDiagramMatrix() {
+  var host = document.getElementById('modelDiagramMatrix'); if (!host) return;
+  if (!diagramMatrixVisible) { host.innerHTML = ''; return; }
+  var svg = buildMatrixSvg(diagramScoresVisible);
+  host.innerHTML = '<div style="border:1px solid #E4E7EB;border-radius:10px;padding:10px 12px;margin-top:10px;overflow-x:auto;background:white;">'
+    + '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;flex-wrap:wrap;">'
+    + '<span style="font-size:11px;font-weight:800;color:var(--ink);font-family:\'Gotu\',\'Space Grotesk\',sans-serif;">Doble materialidad · 18 asuntos (desde Capa 3)</span>'
+    + '<span style="font-size:9px;color:#9AA4AC;">' + (diagramScoresVisible ? 'coloreado por madurez · con puntaje' : 'clasificación por cuadrante · activa «Mostrar puntajes» para ver madurez') + '</span></div>'
+    + '<div style="min-width:680px;">' + svg + '</div></div>';
+}
 
 function toggleDiagramScores() {
   diagramScoresVisible = !diagramScoresVisible;
@@ -3571,6 +3602,7 @@ function toggleDiagramScores() {
     btn.style.color = 'var(--navy)';
     btn.style.borderColor = 'var(--sand)';
   }
+  if (typeof renderDiagramMatrix === 'function') renderDiagramMatrix();
 }
 
 function goToComponent(ci){
@@ -3667,7 +3699,8 @@ function makeDgNode(ci, opts) {
           '</div>' +
           '<div style="font-size:9.5px;color:' + opts.textColor + ';opacity:.7;line-height:1.3;">' + c.short + '</div>' +
         '</div>' +
-        (ci===6 ? ('<span class="mi" onclick="event.stopPropagation();goToMaterialidad();" title="Ver la gráfica de asuntos materiales (Capa 3 · Materialidad)" style="flex-shrink:0;cursor:pointer;font-size:17px;color:var(--orange);background:rgba(241,132,70,.12);border:1px solid rgba(241,132,70,.4);border-radius:7px;padding:3px 4px;line-height:1;margin-top:-1px;">scatter_plot</span>') : '') +
+        (ci===6 ? ('<span class="mi" onclick="event.stopPropagation();toggleDiagramMatrix();" title="Expandir o contraer la matriz de asuntos materiales aquí mismo" style="flex-shrink:0;cursor:pointer;font-size:17px;color:var(--orange);background:rgba(241,132,70,.12);border:1px solid rgba(241,132,70,.4);border-radius:7px;padding:3px 4px;line-height:1;margin-top:-1px;margin-right:4px;">'+(diagramMatrixVisible?'unfold_less':'unfold_more')+'</span>'
+          +'<span class="mi" onclick="event.stopPropagation();goToMaterialidad();" title="Ver la gráfica de asuntos materiales (Capa 3 · Materialidad)" style="flex-shrink:0;cursor:pointer;font-size:17px;color:var(--orange);background:rgba(241,132,70,.12);border:1px solid rgba(241,132,70,.4);border-radius:7px;padding:3px 4px;line-height:1;margin-top:-1px;">scatter_plot</span>') : '') +
       '</div>' +
       '<div class="dg-score-badge" style="display:none;margin-top:8px;padding:5px 8px;border-radius:8px;background:rgba(0,0,0,.12);align-items:center;justify-content:space-between;gap:6px;">' +
         '<div style="display:flex;align-items:baseline;gap:3px;">' +
@@ -3716,9 +3749,9 @@ function ejecKpiCard(title, sub, g, s){
   var col=(g>=1)?matColor(g):'#9AA4AC';
   return '<div class="dx-card" style="padding:13px 15px;">'
     +'<div style="font-size:9.5px;font-weight:800;color:#6B7A86;text-transform:uppercase;letter-spacing:.03em;">'+title+'</div>'
-    +'<div style="display:flex;align-items:baseline;gap:6px;margin-top:5px;"><span style="font-size:30px;font-weight:900;color:'+col+';line-height:1;">'+(g>=1?g.toFixed(1):'N/A')+'</span><span style="font-size:12px;color:#B0B0B0;font-weight:700;">/5</span></div>'
-    +'<div style="font-size:9.5px;font-weight:700;color:'+col+';margin-top:3px;">'+(g>=1?SCORE_LABELS[s]:'Sin datos')+'</div>'
-    +'<div style="font-size:8.5px;color:#AAB2B8;margin-top:2px;">'+sub+'</div></div>';
+    +'<div style="font-size:16px;font-weight:900;color:'+col+';line-height:1.15;margin-top:6px;">'+(g>=1?SCORE_LABELS[s]:'Sin datos')+'</div>'
+    +'<div style="display:flex;align-items:baseline;gap:4px;margin-top:3px;"><span style="font-size:12px;font-weight:700;color:#AAB2B8;">'+(g>=1?g.toFixed(1):'N/A')+'</span><span style="font-size:9px;color:#C4CAD0;font-weight:700;">/5</span></div>'
+    +'<div style="font-size:8.5px;color:#AAB2B8;margin-top:3px;">'+sub+'</div></div>';
 }
 function ejecKpiCardNum(title, big, sub, col){
   return '<div class="dx-card" style="padding:13px 15px;">'
@@ -3771,33 +3804,6 @@ function renderEjecutivo(){
   h+='</div>';
   // Distribución
   h+=ejecDistribucion(bands, totalEl);
-  // Focos de atención
-  var weakEl=elems.filter(function(e){return e.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,8);
-  var weakTp=topics.filter(function(t){return t.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,6);
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;" class="ejec-focos">';
-  h+='<div class="dx-card" style="padding:13px 15px;">';
-  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Elementos con menor madurez (Capa 1)</div>';
-  var grpE={}, ordE=[]; weakEl.forEach(function(e){ if(!grpE[e.cid]){grpE[e.cid]=[];ordE.push(e.cid);} grpE[e.cid].push(e); });
-  ordE.forEach(function(k){ var arr=grpE[k]; var cn=arr[0].comp||''; var cci=arr[0].ci;
-    h+='<div onclick="ejecGoto('+cci+')" title="Ir al componente" style="cursor:pointer;display:flex;align-items:center;gap:6px;margin:9px 0 3px;">'
-      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#fff;background:#093E5E;border-radius:4px;padding:1px 6px;flex-shrink:0;">C'+k+'</span>'
-      +'<span style="font-size:9.5px;font-weight:800;color:#093E5E;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+cn+'</span></div>';
-    arr.forEach(function(e){ h+='<div onclick="ejecGoto('+e.ci+')" title="Ir al componente" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:3px 0 3px 10px;border-bottom:1px dashed #EEE;">'
-      +ejecBadge(e.g,20)+'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8.5px;font-weight:800;color:#093E5E;background:#EEF3F6;border:1px solid #D6E2EA;border-radius:4px;padding:1px 5px;flex-shrink:0;">'+e.eid+'</span>'
-      +'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+e.label+'</span></div>'; });
-  });
-  h+='</div>';
-  h+='<div class="dx-card" style="padding:13px 15px;">';
-  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Asuntos materiales con menor madurez (Capa 3)</div>';
-  var grpT={}, ordT=[]; weakTp.forEach(function(t){ var k=t.type||'_'; if(!grpT[k]){grpT[k]=[];ordT.push(k);} grpT[k].push(t); });
-  ordT.forEach(function(k){ var ttl=(typeof TOPIC_TYPE_LABEL!=='undefined'&&TOPIC_TYPE_LABEL[k])?TOPIC_TYPE_LABEL[k]:{label:k,bg:'#9AA4AC'}; var arr=grpT[k];
-    h+='<div style="display:flex;align-items:center;gap:6px;margin:9px 0 3px;">'
-      +'<span style="width:9px;height:9px;border-radius:50%;background:'+ttl.bg+';flex-shrink:0;"></span>'
-      +'<span style="font-size:9.5px;font-weight:800;color:#5C4A2E;">'+ttl.label+'</span></div>';
-    arr.forEach(function(t){ h+='<div onclick="ejecTab3()" title="Ir a Materialidad" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:3px 0 3px 10px;border-bottom:1px dashed #EEE;">'
-      +ejecBadge(t.g,20)+'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(t.ti+1)+'. '+t.name+'</span></div>'; });
-  });
-  h+='</div></div>';
   // Capa 1 consolidado por elemento
   h+='<div style="margin:18px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+mi('layers')
     +'<h3 style="font-size:13px;font-weight:800;color:var(--ink);margin:0;">Capa 1 · Resultado por elemento y componente</h3>'
@@ -3806,19 +3812,20 @@ function renderEjecutivo(){
   COMP_META.forEach(function(c,ci){
     var cg=calcCompScoreGlobal(ci);
     h+='<div class="dx-card" id="ejec-c1-comp-'+ci+'" style="padding:12px 13px;">';
-    h+='<div onclick="ejecGoto('+ci+')" title="Ver componente" style="cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #F0F0F0;">'
-      +ejecBadge(cg,30)
+    var _ccol=(cg>=1)?matColor(cg):'#9AA4AC';
+    h+='<div onclick="ejecGoto('+ci+')" title="Ver componente" style="cursor:pointer;display:flex;align-items:center;gap:9px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #F0F0F0;">'
+      +'<span style="flex-shrink:0;width:14px;height:14px;border-radius:50%;background:'+_ccol+';"></span>'
       +'<div style="flex:1;min-width:0;"><div style="font-size:11.5px;font-weight:800;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">C'+c.id+' · '+c.name+'</div>'
-      +'<div style="font-size:8.5px;color:#AAB2B8;">'+ejecBandLabel(cg)+' · '+c.dim+'</div></div></div>';
+      +'<div style="font-size:9px;margin-top:1px;"><span style="font-weight:800;color:'+_ccol+';">'+(cg>=1?ejecBandLabel(cg):'No aplica')+'</span> <span style="color:#AAB2B8;font-weight:700;">'+(cg>=1?cg.toFixed(1):'NA')+'</span> <span style="color:#AAB2B8;">· '+c.dim+'</span></div></div></div>';
     var lens=[(state.items[ci].corp||[]).length,(state.items[ci].col||[]).length,(state.items[ci].nic||[]).length]; var maxLen=Math.max.apply(null,lens);
     for(var ii=0; ii<maxLen; ii++){
       var it=(state.items[ci].corp&&state.items[ci].corp[ii])||(state.items[ci].col&&state.items[ci].col[ii])||(state.items[ci].nic&&state.items[ci].nic[ii]); if(!it) continue;
       var gv=itemGlobal(ci,ii); var col=(gv>=1)?matColor(gv):'#9AA4AC';
       var tip='Corp '+ejecLv(itemLevelScore(ci,ii,'corp'))+' · Col '+ejecLv(itemLevelScore(ci,ii,'col'))+' · Nic '+ejecLv(itemLevelScore(ci,ii,'nic'));
-      h+='<div title="'+tip+'" style="display:flex;align-items:center;gap:6px;padding:3px 0 3px 6px;border-bottom:1px dashed #F3F3F3;border-left:3px solid '+col+';">'
-        +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#093E5E;flex-shrink:0;">'+(it.eid||'')+'</span>'
-        +'<span style="flex:1;min-width:0;font-size:9.5px;color:#444;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(it.label||'')+'</span>'
-        +'<span style="font-size:10px;font-weight:800;color:'+col+';flex-shrink:0;">'+(gv>=1?gv.toFixed(1):'NA')+'</span></div>';
+      h+='<div title="'+tip+'" style="display:flex;align-items:flex-start;gap:7px;padding:4px 0 4px 6px;border-bottom:1px dashed #F3F3F3;border-left:3px solid '+col+';">'
+        +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#093E5E;flex-shrink:0;margin-top:1px;">'+(it.eid||'')+'</span>'
+        +'<span style="flex:1;min-width:0;font-size:9.5px;color:#444;line-height:1.3;">'+(it.label||'')+'</span>'
+        +'<span style="flex-shrink:0;width:118px;text-align:right;line-height:1.1;margin-top:1px;"><span style="display:block;font-size:8.5px;font-weight:800;color:'+col+';">'+(gv>=1?ejecBandLabel(gv):'No aplica')+'</span><span style="display:block;font-size:7.5px;font-weight:700;color:#AAB2B8;">'+(gv>=1?gv.toFixed(1):'NA')+'</span></span></div>';
     }
     h+='</div>';
   });
@@ -3830,18 +3837,49 @@ function renderEjecutivo(){
   h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:10px;" class="ejec-c3">';
   topics.forEach(function(t){ var col=(t.g>=1)?matColor(t.g):'#9AA4AC'; var tt=TOPIC_TYPE_LABEL[t.type]||{label:t.type,bg:'#888',color:'#fff'};
     h+='<div onclick="ejecTab3()" title="Ir a Materialidad" style="cursor:pointer;background:white;border:1px solid #E4E7EB;border-radius:9px;padding:9px 11px;display:flex;align-items:center;gap:9px;">'
-      +ejecBadge(t.g,28)
+      +'<span style="flex-shrink:0;width:11px;height:11px;border-radius:50%;background:'+col+';margin-top:3px;"></span>'
       +'<div style="flex:1;min-width:0;"><div style="font-size:10.5px;font-weight:700;color:var(--ink);line-height:1.2;">'+(t.ti+1)+'. '+t.name+'</div>'
-      +'<div style="margin-top:3px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:7.5px;font-weight:700;background:'+tt.bg+';color:'+tt.color+';border-radius:3px;padding:1px 5px;">'+tt.label+'</span>'
-      +'<span style="font-size:8px;color:#AAB2B8;">'+ejecBandLabel(t.g)+'</span></div></div></div>';
+      +'<div style="margin-top:3px;display:flex;gap:5px;align-items:center;flex-wrap:wrap;">'
+      +'<span style="font-size:9px;font-weight:800;color:'+col+';">'+(t.g>=1?ejecBandLabel(t.g):'No aplica')+'</span>'
+      +'<span style="font-size:7.5px;font-weight:700;color:#AAB2B8;">'+(t.g>=1?t.g.toFixed(1):'NA')+'</span>'
+      +'<span style="font-size:7.5px;font-weight:700;background:'+tt.bg+';color:'+tt.color+';border-radius:3px;padding:1px 5px;">'+tt.label+'</span>'
+      +'</div></div></div>';
   });
   h+='</div>';
-  // Leyenda
-  h+='<div style="margin-top:16px;padding:10px 13px;background:#F7F9FC;border-radius:9px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">'
-    +'<span style="font-size:9px;font-weight:800;color:#6B7A86;text-transform:uppercase;">Escala de madurez</span>';
-  [1,2,3,4,5].forEach(function(v){ h+='<span style="display:inline-flex;align-items:center;gap:5px;">'+ejecBadge(v,18)+'<span style="font-size:9px;color:#666;">'+SCORE_LABELS[v]+'</span></span>'; });
-  h+='<span style="display:inline-flex;align-items:center;gap:5px;">'+ejecBadge(0,18)+'<span style="font-size:9px;color:#666;">No aplica</span></span>';
+  // Focos de atención (al final)
+  h+='<div style="margin:20px 0 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'+mi('priority_high')
+    +'<h3 style="font-size:13px;font-weight:800;color:var(--ink);margin:0;">Focos de atenci\u00f3n · menor madurez</h3>'
+    +'<span style="font-size:9px;color:#AAB2B8;">elementos (Capa 1) y asuntos (Capa 3) con menor valoraci\u00f3n</span></div>';
+  var weakEl=elems.filter(function(e){return e.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,8);
+  var weakTp=topics.filter(function(t){return t.g>=1;}).sort(function(a,b){return a.g-b.g;}).slice(0,6);
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0;" class="ejec-focos">';
+  h+='<div class="dx-card" style="padding:13px 15px;">';
+  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Elementos con menor madurez (Capa 1)</div>';
+  var grpE={}, ordE=[]; weakEl.forEach(function(e){ if(!grpE[e.cid]){grpE[e.cid]=[];ordE.push(e.cid);} grpE[e.cid].push(e); });
+  ordE.forEach(function(k){ var arr=grpE[k]; var cn=arr[0].comp||''; var cci=arr[0].ci;
+    h+='<div onclick="ejecGoto('+cci+')" title="Ir al componente" style="cursor:pointer;display:flex;align-items:center;gap:6px;margin:9px 0 3px;">'
+      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#fff;background:#093E5E;border-radius:4px;padding:1px 6px;flex-shrink:0;">C'+k+'</span>'
+      +'<span style="font-size:9.5px;font-weight:800;color:#093E5E;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+cn+'</span></div>';
+    arr.forEach(function(e){ var col=(e.g>=1)?matColor(e.g):'#9AA4AC'; h+='<div onclick="ejecGoto('+e.ci+')" title="Ir al componente" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:3px 0 3px 10px;border-bottom:1px dashed #EEE;">'
+      +'<span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:'+col+';"></span>'
+      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:8.5px;font-weight:800;color:#093E5E;background:#EEF3F6;border:1px solid #D6E2EA;border-radius:4px;padding:1px 5px;flex-shrink:0;">'+e.eid+'</span>'
+      +'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+e.label+'</span>'
+      +'<span style="flex-shrink:0;text-align:right;line-height:1.05;"><span style="display:block;font-size:8px;font-weight:800;color:'+col+';white-space:nowrap;">'+(e.g>=1?ejecBandLabel(e.g):'No aplica')+'</span><span style="display:block;font-size:7px;font-weight:700;color:#AAB2B8;">'+(e.g>=1?e.g.toFixed(1):'NA')+'</span></span></div>'; });
+  });
   h+='</div>';
+  h+='<div class="dx-card" style="padding:13px 15px;">';
+  h+='<div style="font-size:11px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:6px;">'+mi('priority_high')+'Asuntos materiales con menor madurez (Capa 3)</div>';
+  var grpT={}, ordT=[]; weakTp.forEach(function(t){ var k=t.type||'_'; if(!grpT[k]){grpT[k]=[];ordT.push(k);} grpT[k].push(t); });
+  ordT.forEach(function(k){ var ttl=(typeof TOPIC_TYPE_LABEL!=='undefined'&&TOPIC_TYPE_LABEL[k])?TOPIC_TYPE_LABEL[k]:{label:k,bg:'#9AA4AC'}; var arr=grpT[k];
+    h+='<div style="display:flex;align-items:center;gap:6px;margin:9px 0 3px;">'
+      +'<span style="width:9px;height:9px;border-radius:50%;background:'+ttl.bg+';flex-shrink:0;"></span>'
+      +'<span style="font-size:9.5px;font-weight:800;color:#5C4A2E;">'+ttl.label+'</span></div>';
+    arr.forEach(function(t){ var col=(t.g>=1)?matColor(t.g):'#9AA4AC'; h+='<div onclick="ejecTab3()" title="Ir a Materialidad" style="cursor:pointer;display:flex;align-items:center;gap:7px;padding:3px 0 3px 10px;border-bottom:1px dashed #EEE;">'
+      +'<span style="flex-shrink:0;width:9px;height:9px;border-radius:50%;background:'+col+';"></span>'
+      +'<span style="flex:1;min-width:0;font-size:10px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(t.ti+1)+'. '+t.name+'</span>'
+      +'<span style="flex-shrink:0;text-align:right;line-height:1.05;"><span style="display:block;font-size:8px;font-weight:800;color:'+col+';white-space:nowrap;">'+(t.g>=1?ejecBandLabel(t.g):'No aplica')+'</span><span style="display:block;font-size:7px;font-weight:700;color:#AAB2B8;">'+(t.g>=1?t.g.toFixed(1):'NA')+'</span></span></div>'; });
+  });
+  h+='</div></div>';
   host.innerHTML=h;
 }
 function renderResumenFindings() {
@@ -4263,18 +4301,18 @@ function renderBrechas(){
         +'<select onchange="brechaSetSel('+i+',\'horizonte\',this.value)" style="'+selCss+'">'+selOpts(HZ_OPTS,b.horizonte)+'</select>'
         +'<button onclick="brechaDelete('+i+')" style="margin-left:auto;background:none;border:1px solid #E4B4B4;color:#C62828;font-size:10px;border-radius:6px;padding:4px 9px;cursor:pointer;">Eliminar brecha</button></div>';
       d+='<div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:2px;">Título</div>';
-      d+='<div contenteditable="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'titulo\',this)" style="'+edCss+'font-size:12px;font-weight:800;color:var(--ink);margin-bottom:8px;">'+_insEsc(b.titulo)+'</div>';
+      d+='<div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'titulo\',this)" style="'+edCss+'font-size:12px;font-weight:800;color:var(--ink);margin-bottom:8px;">'+_insEsc(b.titulo)+'</div>';
       d+='<div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:3px;">Observación · criterio de auditoría (4C)</div>';
       d+='<div class="no-print" style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;align-items:center;">'+_fmtBtn('bold','format_bold','Negrita')+_fmtBtn('italic','format_italic','Cursiva')+_fmtBtn('insertUnorderedList','format_list_bulleted','Viñetas')+_fmtBtn('insertOrderedList','format_list_numbered','Numeración')+_fmtBtn('justifyFull','format_align_justify','Justificar')+'<button type="button" onmousedown="event.preventDefault()" onclick="brechaShow4C()" title="Consulta la guía Criterio/Condición/Causa/Consecuencia (no modifica el texto)" style="margin-left:6px;font-size:9px;font-weight:700;border:1px solid #E9711C;background:#FFF6EF;color:#C4631A;border-radius:6px;padding:3px 9px;cursor:pointer;">Consultar guía 4C</button><span style="font-size:8px;color:#AAB2B8;margin-left:4px;">el formato aplica al campo en edición</span></div>';
-      d+='<div contenteditable="true" onpaste="return brechaPaste(event)" onblur="brechaSetRich('+i+',\'descripcion\',this)" style="'+edCss+'font-size:10px;color:#444;line-height:1.6;margin-bottom:9px;min-height:64px;text-align:justify;">'+(b.descripcion||'')+'</div>';
+      d+='<div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetRich('+i+',\'descripcion\',this)" style="'+edCss+'font-size:10px;color:#444;line-height:1.6;margin-bottom:9px;min-height:64px;text-align:justify;">'+(b.descripcion||'')+'</div>';
       d+='<div style="font-size:8.5px;font-weight:800;color:#093E5E;text-transform:uppercase;margin:4px 0 3px;">Asuntos materiales</div>'+brechaListEditor(i,'topics',OPTS.topics);
       d+='<div style="font-size:8.5px;font-weight:800;color:#0E2029;text-transform:uppercase;margin:7px 0 3px;">IROs</div>'+brechaListEditor(i,'iros',OPTS.iros);
       d+='<div style="font-size:8.5px;font-weight:800;color:#5C4A2E;text-transform:uppercase;margin:7px 0 3px;">Componentes</div>'+brechaListEditor(i,'comps',OPTS.comps);
       d+='<div style="font-size:8.5px;font-weight:800;color:#7A3E0E;text-transform:uppercase;margin:7px 0 3px;">Requisitos (eids)</div>'+brechaListEditor(i,'eids',OPTS.eids);
       d+='<div style="border-top:1px solid #F0F1F3;margin-top:9px;padding-top:7px;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:3px;">Acciones</div>';
-      (b.acciones||[]).forEach(function(a,ai){ d+='<div style="display:flex;gap:5px;margin-bottom:3px;align-items:flex-start;"><span style="color:'+color+';font-size:10px;">✦</span><div contenteditable="true" onpaste="return brechaPaste(event)" onblur="brechaSetAccionRich('+i+','+ai+',this)" style="'+edCss+'flex:1;font-size:9.5px;color:#555;line-height:1.5;text-align:justify;">'+(a||'')+'</div><button onclick="brechaDelAccion('+i+','+ai+')" style="background:none;border:none;color:#C62828;font-size:13px;cursor:pointer;line-height:1;">×</button></div>'; });
+      (b.acciones||[]).forEach(function(a,ai){ d+='<div style="display:flex;gap:5px;margin-bottom:3px;align-items:flex-start;"><span style="color:'+color+';font-size:10px;">✦</span><div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetAccionRich('+i+','+ai+',this)" style="'+edCss+'flex:1;font-size:9.5px;color:#555;line-height:1.5;text-align:justify;">'+(a||'')+'</div><button onclick="brechaDelAccion('+i+','+ai+')" style="background:none;border:none;color:#C62828;font-size:13px;cursor:pointer;line-height:1;">×</button></div>'; });
       d+='<button onclick="brechaAddAccion('+i+')" class="add-item-btn" style="font-size:9px;margin-top:2px;">+ acción</button></div>';
-      d+='<div style="margin-top:7px;font-size:8.5px;color:#888;">Fuente: <span contenteditable="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'fuente\',this)" style="'+edCss+'display:inline-block;">'+_insEsc(b.fuente)+'</span></div>';
+      d+='<div style="margin-top:7px;font-size:8.5px;color:#888;">Fuente: <span contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'fuente\',this)" style="'+edCss+'display:inline-block;">'+_insEsc(b.fuente)+'</span></div>';
     } else {
       d+='<div style="font-size:10px;color:#555;line-height:1.6;margin:4px 0 8px;text-align:justify;">'+(b.descripcion||'')+'</div>';
       d+=chipRow('Asuntos',b.topics,topicChip)+chipRow('IROs',b.iros,iroChip)+chipRow('Componentes',b.comps,compChip)+chipRow('Requisitos',(b.eids||[]),eidChip);
@@ -4608,14 +4646,14 @@ function renderLevelSummaries() {
   const gc = 'grid-template-columns:minmax(150px,1.5fr) repeat(4,minmax(74px,1fr));';
   let html = '<div style="min-width:580px;">';
   // Encabezado
-  html += '<div style="display:grid;' + gc + 'gap:8px;align-items:end;padding-bottom:9px;border-bottom:1px solid #EEE;margin-bottom:9px;">';
+  html += '<div style="display:grid;' + gc + 'gap:8px;align-items:start;padding-bottom:9px;border-bottom:1px solid #EEE;margin-bottom:9px;">';
   html += '<div style="font-size:9px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.03em;">Componente</div>';
   cols.forEach(function(c){
     const ai = Math.min(5, Math.max(1, Math.round(c.avg)));
     html += '<div style="text-align:center;">';
     html += '<div style="font-size:9.5px;font-weight:800;color:' + c.color + ';white-space:nowrap;">' + c.flag + ' ' + c.label + '</div>';
-    html += '<div style="font-size:17px;font-weight:900;color:' + c.color + ';line-height:1.15;">' + c.avg.toFixed(1) + '</div>';
-    html += '<div style="font-size:7.5px;color:#AAA;">' + SCORE_LABELS[ai] + '</div>';
+    html += '<div style="font-size:9.5px;font-weight:900;color:' + matColor(ai) + ';line-height:1.15;margin-top:3px;">' + SCORE_LABELS[ai] + '</div>';
+    html += '<div style="font-size:8.5px;color:#AAB2B8;font-weight:700;margin-top:1px;">' + c.avg.toFixed(1) + '</div>';
     html += '</div>';
   });
   html += '</div>';
@@ -6268,9 +6306,9 @@ function domSvgToPng(sel,w,h){
     var s=new XMLSerializer().serializeToString(cl); return svgStrToPng(s,w,h);
   }catch(e){ return Promise.resolve(null); }
 }
-function buildMatrixSvg(){
+function buildMatrixSvg(withScores){
   var meta=(typeof getTopicsMeta==='function')?getTopicsMeta():TOPICS;
-  var byType={dm:[],fin:[],lp:[],imp:[]}; meta.forEach(function(t,ti){ if(byType[t.type]) byType[t.type].push({n:ti+1,name:t.name}); });
+  var byType={dm:[],fin:[],lp:[],imp:[]}; meta.forEach(function(t,ti){ if(byType[t.type]) byType[t.type].push({n:ti+1,name:t.name,ti:ti}); });
   var W=1100,H=810,PL=70,PR=22,PT=82,PB=84;
   var gW=W-PL-PR, gH=H-PT-PB, qw=gW/2, qh=gH/2;
   var Q={
@@ -6297,9 +6335,11 @@ function buildMatrixSvg(){
     svg+='<text x="'+(q.x+16)+'" y="'+(q.y+43)+'" font-size="11" font-style="italic" fill="#8A97A0">'+esc(q.sub)+'</text>';
     var ix=q.x+16, iy=q.y+64, availH=q.h-64-10, rows=Math.ceil(items.length/q.cols), rowH=Math.min(30, availH/Math.max(1,rows)), colW=(q.w-28)/q.cols;
     items.forEach(function(it,i){ var cc=i%q.cols, rr=Math.floor(i/q.cols); var cx=ix+cc*colW, cy=iy+rr*rowH;
-      svg+='<circle cx="'+(cx+10)+'" cy="'+(cy-4)+'" r="9" fill="'+q.col+'"/>';
+      var cfill=q.col, suf='';
+      if(withScores){ var g=(typeof topicGlobal==='function')?topicGlobal(it.ti):0; if(g>=1){ cfill=(typeof matColor==='function')?matColor(g):q.col; suf=' · '+g.toFixed(1); } else { cfill='#9AA4AC'; suf=' · NA'; } }
+      svg+='<circle cx="'+(cx+10)+'" cy="'+(cy-4)+'" r="9" fill="'+cfill+'"/>';
       svg+='<text x="'+(cx+10)+'" y="'+(cy-0.7)+'" font-size="9.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">'+it.n+'</text>';
-      svg+='<text x="'+(cx+25)+'" y="'+(cy-0.7)+'" font-size="'+(q.cols>1?'10.5':'12')+'" fill="#22333B">'+esc(it.name)+'</text>';
+      svg+='<text x="'+(cx+25)+'" y="'+(cy-0.7)+'" font-size="'+(q.cols>1?'10.5':'12')+'" fill="#22333B">'+esc(it.name)+esc(suf)+'</text>';
     });
   });
   // Divider cross
