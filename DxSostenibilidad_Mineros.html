@@ -309,7 +309,11 @@
   #brechasContainer ul { list-style: disc; margin: 5px 0; padding-left: 20px; }
   #brechasContainer ol { list-style: decimal; margin: 5px 0; padding-left: 20px; }
   #brechasContainer ul ul { list-style: circle; }
+  #brechasContainer ul ul ul { list-style: square; }
+  #brechasContainer ol ol { list-style: lower-latin; }
   #brechasContainer li { margin: 2px 0; }
+  /* execCommand('indent') fuera de lista: respetar la sangría aplicada */
+  #brechasContainer blockquote { margin: 4px 0 4px 24px; border: 0; padding: 0; }
 
   /* Matriz de doble materialidad embebida en el diagrama del Resumen */
   #modelDiagramMatrix svg { width: 100%; height: auto; display: block; }
@@ -466,8 +470,9 @@
       <div class="nav-group-label">Estrategia</div>
       <button class="tab-btn" onclick="showTab('ideas',this)" title="IDEAS"><span class="mi">rocket_launch</span> <span class="tab-label">IDEAS</span></button>
       <button class="tab-btn" onclick="showTab('ods',this)" title="ODS"><span class="mi">public</span> <span class="tab-label">ODS</span></button>
-      <div class="nav-group-label">Hallazgos</div>
+      <div class="nav-group-label">Observaciones</div>
       <button class="tab-btn" onclick="showTab('brechas',this)" title="Brechas"><span class="mi">flag</span> <span class="tab-label">Brechas</span></button>
+      <button class="tab-btn" onclick="showTab('plan',this)" title="Plan de acción"><span class="mi">checklist</span> <span class="tab-label">Plan de acción</span></button>
       <button class="tab-btn" onclick="showTab('kpis',this)" title="KPIs"><span class="mi">analytics</span> <span class="tab-label">KPIs</span></button>
       <div class="nav-group-label">Referencia</div>
       <button class="tab-btn" onclick="showTab('marcos',this)" title="Marcos"><span class="mi">menu_book</span> <span class="tab-label">Marcos</span></button>
@@ -1252,6 +1257,15 @@
   <div id="brechasResumen" class="mb-4"></div>
   <div id="brechasContainer" class="mb-6"></div>
   <div id="brechasRoadmap"></div>
+</div>
+
+<!-- ══════════════════════════════════ TAB PLAN DE ACCIÓN -->
+<div id="tab-plan" class="section-tab">
+  <div class="mb-3">
+    <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Plan de acción</h2>
+    <p class="text-xs text-gray-500 mt-1">Acciones sugeridas por brecha (numeradas: # de la brecha · consecutivo). La prioridad y el horizonte se heredan de la brecha y son editables por acción; agrega responsable y fecha estimada de implementación.</p>
+  </div>
+  <div id="planContent"></div>
 </div>
 
 <!-- ══════════════════════════════════ TAB KPIs -->
@@ -2398,6 +2412,7 @@ function showTab(id, btn) {
   var tab = document.getElementById('tab-' + id);
   if (tab) tab.style.display = 'block';
   if (id === 'ejecutivo' && typeof renderEjecutivo === 'function') renderEjecutivo();
+  if (id === 'plan' && typeof renderPlanAccion === 'function') renderPlanAccion();
   if (id === 'resumen') {
     if (typeof renderModelDiagram === 'function') renderModelDiagram();
     if (typeof renderLevelSummaries === 'function') renderLevelSummaries();
@@ -2405,6 +2420,15 @@ function showTab(id, btn) {
     if (typeof updateTopicMatAvg === 'function') updateTopicMatAvg();
     if (typeof renderPanorama === 'function' && document.getElementById('panoramaIntegrado')) renderPanorama();
   }
+  // Refresco de contenido al entrar a cada pestaña (evita vistas desfasadas por cambios en otras hojas)
+  if (id === 'capa1' && typeof renderComponents === 'function') renderComponents();
+  if (id === 'capa2') { if (typeof renderIROs === 'function') renderIROs(); if (typeof renderIROHeatmap === 'function') renderIROHeatmap(); }
+  if (id === 'capa3') { if (typeof renderTopicsTable === 'function') renderTopicsTable(); if (typeof renderMaterialityMap === 'function') renderMaterialityMap(); if (typeof renderTopicMaturity === 'function') renderTopicMaturity(); }
+  if (id === 'ideas' && typeof renderStrategyChains === 'function') renderStrategyChains();
+  if (id === 'ods' && typeof renderODS === 'function') renderODS();
+  if (id === 'brechas' && typeof renderBrechas === 'function') renderBrechas();
+  if (id === 'kpis' && typeof renderKPIs === 'function') renderKPIs();
+  if (id === 'marcos' && typeof renderMarco === 'function') renderMarco();
   document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
   // Asegurar que el botón activo sea siempre visible en el scroll
@@ -3005,6 +3029,7 @@ function recomputeAllGlobals() {
   updateModelDiagram();
   renderResumenFindings();
   updateCharts();
+  if (typeof renderLevelSummaries === 'function' && document.getElementById('levelSummaries')) renderLevelSummaries();
   if (document.getElementById('topicMaturityList')) renderTopicMaturity();
   if (typeof renderStrategyChains==='function') renderStrategyChains();
   if (typeof renderEjecutivo === 'function') renderEjecutivo();
@@ -3179,18 +3204,24 @@ function onItemScoreClick(e) {
   const v  = parseInt(e.currentTarget.dataset.val);
   const lv = e.currentTarget.dataset.lv || activeLevel;
   const field = e.currentTarget.dataset.field || 'expertScore';
-  state.items[ci][lv][ii][field] = v;
-  // Reconstruir la fila (actualiza badges Modelo/Analista, chip Δ y sustentación sugerida)
-  refreshItemRow(ci, ii);
-  refreshCompHeader(ci);
-  updateModelDiagram();
-  renderResumenFindings();
-  updateHeaderAvg();
-  updateCharts();
-  if (typeof renderEjecutivo === 'function') renderEjecutivo();
-  if (typeof renderPanorama === 'function' && document.getElementById('panoramaIntegrado')) renderPanorama();
+  var _it = state.items[ci][lv][ii];
+  var _oldScore = _it.score, _oldExpert = _it.expertScore;
+  _it[field] = v;
+  // Si editan el Modelo y la nota del Analista aún no se ha diferenciado, mantenerlas en sincronía (la consolidación usa la del Analista)
+  if (field === 'score' && (_oldExpert === undefined || _oldExpert === null || _oldExpert === _oldScore)) _it.expertScore = v;
+  // Refrescos independientes: un fallo en uno no debe impedir que el Tablero y demás se actualicen
+  _safeRun(function(){ refreshItemRow(ci, ii); });
+  _safeRun(function(){ refreshCompHeader(ci); });
+  _safeRun(function(){ updateModelDiagram(); });
+  _safeRun(function(){ renderResumenFindings(); });
+  _safeRun(function(){ if (typeof renderLevelSummaries === 'function' && document.getElementById('levelSummaries')) renderLevelSummaries(); });
+  _safeRun(function(){ updateHeaderAvg(); });
+  _safeRun(function(){ updateCharts(); });
+  _safeRun(function(){ if (typeof renderEjecutivo === 'function') renderEjecutivo(); });
+  _safeRun(function(){ if (typeof renderPanorama === 'function' && document.getElementById('panoramaIntegrado')) renderPanorama(); });
   saveState();
 }
+function _safeRun(fn){ try{ fn(); }catch(e){ try{ if(typeof console!=='undefined'&&console.warn) console.warn('refresh parcial:', e); }catch(_){} } }
 
 function refreshItemRow(ci, ii) {
   const old = document.getElementById(`item-row-${ci}-${ii}`);
@@ -4017,7 +4048,47 @@ function getBrechas(){
 var BRECHA_PRC={'CRÍTICA':'#C62828','ALTA':'#E9711C','MEDIA':'#EAB308','PREPARACIÓN':'#093E5E'};
 function brechaColor(b){ return BRECHA_PRC[b.prioridad]||b.color||'#888'; }
 
-function brechaRefresh(){ saveState(); renderBrechas(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); }
+function brechaRefresh(){ saveState(); renderBrechas(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); if(document.getElementById('planContent')) renderPlanAccion(); if(document.getElementById('componentsGrid')&&typeof renderComponents==='function') renderComponents(); if(document.getElementById('topicMaturityList')&&typeof renderTopicMaturity==='function') renderTopicMaturity(); }
+function renderPlanAccion(){
+  var host=document.getElementById('planContent'); if(!host) return;
+  var arr=getBrechas();
+  var PR=[['CRÍTICA','CRÍTICA'],['ALTA','ALTA'],['MEDIA','MEDIA'],['PREPARACIÓN','PREPARACIÓN']];
+  var HZ=[['C','Corto plazo'],['M','Mediano plazo'],['L','Largo plazo']];
+  var selCss='font-size:10px;border:1px solid #D5D5D5;border-radius:6px;padding:4px 6px;background:white;font-family:Inter,sans-serif;';
+  var inCss='width:100%;font-size:10px;border:1px solid #D5D5D5;border-radius:6px;padding:4px 6px;font-family:Inter,sans-serif;';
+  var totalAcc=arr.reduce(function(s,b){return s+((b.acciones||[]).length);},0);
+  var h='<div style="font-size:10px;color:var(--gray-dp);margin-bottom:10px;">'+arr.length+' brechas · '+totalAcc+' acciones. Numeración «# de brecha · consecutivo»; la prioridad y el horizonte se heredan de la brecha y son editables por acción.</div>';
+  arr.forEach(function(b,bi){
+    var n=brechaNum(b); var col=brechaColor(b);
+    h+='<div class="dx-card" style="padding:0;margin-bottom:12px;overflow:hidden;border-left:3px solid '+col+';">';
+    h+='<div onclick="_gotoBrechaFromTopic('+bi+',\''+_insEsc(b.bid||'')+'\')" title="Ir a la brecha origen en la hoja de Brechas" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 12px;background:#FAFBFC;border-bottom:1px solid #EEF1F4;">'
+      +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;color:#fff;background:'+col+';border-radius:5px;padding:2px 7px;flex-shrink:0;">'+(b.bid||('B'+n))+'</span>'
+      +'<span style="font-size:11.5px;font-weight:800;color:var(--ink);flex:1;min-width:0;">'+_insEsc(b.titulo)+'</span>'
+      +'<span class="mi" style="font-size:14px;color:#C4CAD0;flex-shrink:0;">open_in_new</span>'
+      +'<span style="font-size:8.5px;color:#9AA4AC;flex-shrink:0;">'+((b.acciones||[]).length)+' acciones</span></div>';
+    if(!(b.acciones||[]).length){ h+='<div style="padding:10px 12px;font-size:10px;color:#9AA4AC;font-style:italic;">Sin acciones registradas en esta brecha.</div>'; }
+    else {
+      h+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;min-width:740px;font-family:Inter,sans-serif;"><thead><tr style="background:#F4F6F8;color:#6B7A86;font-size:8.5px;text-transform:uppercase;letter-spacing:.03em;">'
+        +'<th style="padding:6px 8px;text-align:left;width:38px;">#</th><th style="padding:6px 8px;text-align:left;">Acción sugerida</th>'
+        +'<th style="padding:6px 8px;text-align:left;width:120px;">Prioridad</th><th style="padding:6px 8px;text-align:left;width:130px;">Horizonte</th>'
+        +'<th style="padding:6px 8px;text-align:left;width:150px;">Responsable</th><th style="padding:6px 8px;text-align:left;width:140px;">Fecha estimada</th></tr></thead><tbody>';
+      (b.acciones||[]).forEach(function(a,ai){ var m=brechaAccMeta(b,ai);
+        h+='<tr style="border-bottom:1px solid #F0F1F3;vertical-align:top;">'
+          +'<td style="padding:6px 8px;font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;color:'+col+';white-space:nowrap;">'+n+'.'+(ai+1)+'</td>'
+          +'<td style="padding:6px 8px;"><div contenteditable="true" lang="es" spellcheck="true" onblur="planSetAccionText('+bi+','+ai+',this)" style="outline:none;border:1px dashed #E0E4E8;border-radius:5px;padding:3px 6px;background:#FFFEFB;font-size:10px;color:#444;line-height:1.5;">'+(a||'')+'</div></td>'
+          +'<td style="padding:6px 8px;"><select onchange="planSetMeta('+bi+','+ai+',\'prioridad\',this.value)" style="'+selCss+'">'+PR.map(function(o){return '<option value="'+o[0]+'"'+(m.prioridad===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td>'
+          +'<td style="padding:6px 8px;"><select onchange="planSetMeta('+bi+','+ai+',\'horizonte\',this.value)" style="'+selCss+'">'+HZ.map(function(o){return '<option value="'+o[0]+'"'+(m.horizonte===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td>'
+          +'<td style="padding:6px 8px;"><input type="text" value="'+_insEsc(m.responsable)+'" oninput="planSetMeta('+bi+','+ai+',\'responsable\',this.value)" placeholder="Área / cargo" style="'+inCss+'"></td>'
+          +'<td style="padding:6px 8px;"><input type="date" value="'+_insEsc(m.fecha)+'" oninput="planSetMeta('+bi+','+ai+',\'fecha\',this.value)" style="'+inCss+'"></td>'
+          +'</tr>';
+      });
+      h+='</tbody></table></div>';
+    }
+    h+='</div>';
+  });
+  if(!arr.length) h+='<div style="padding:20px;text-align:center;color:#9AA4AC;font-size:11px;">No hay brechas registradas.</div>';
+  host.innerHTML=h;
+}
 function brechaSetText(i,field,el){ getBrechas()[i][field]=(el.innerText||'').trim(); saveState(); renderBrechas(); }
 function brechaSetSel(i,field,v){ getBrechas()[i][field]=v; brechaRefresh(); }
 function brechaSetList(i,field,v){
@@ -4029,7 +4100,13 @@ function brechaSetList(i,field,v){
 function brechaSetAccion(i,ai,el){ getBrechas()[i].acciones[ai]=(el.innerText||'').trim(); saveState(); }
 function brechaSetEidList(i,v){ var arr=(v||'').split(',').map(function(x){return x.trim().toUpperCase();}).filter(function(x){return /^C\d{1,2}-\d{2}$/.test(x);}); getBrechas()[i].eids=arr; saveState(); renderBrechas(); if(typeof renderComponents==='function') renderComponents(); }
 function brechaAddAccion(i){ getBrechas()[i].acciones.push('Nueva acción'); brechaRefresh(); }
-function brechaDelAccion(i,ai){ getBrechas()[i].acciones.splice(ai,1); brechaRefresh(); }
+function brechaDelAccion(i,ai){ var b=getBrechas()[i]; b.acciones.splice(ai,1); if(Array.isArray(b.accionMeta)) b.accionMeta.splice(ai,1); brechaRefresh(); }
+// Plan de acción — numeración y metadatos por acción
+function brechaNum(b){ var m=/(\d+)$/.exec((b&&b.bid)||''); return m?parseInt(m[1],10):0; }
+function _ensureAccMeta(b){ if(!Array.isArray(b.accionMeta)) b.accionMeta=[]; while(b.accionMeta.length<((b.acciones||[]).length)) b.accionMeta.push({}); return b.accionMeta; }
+function brechaAccMeta(b,ai){ var m=(b&&Array.isArray(b.accionMeta)&&b.accionMeta[ai])?b.accionMeta[ai]:{}; return {prioridad:m.prioridad||b.prioridad||'MEDIA', horizonte:m.horizonte||b.horizonte||'M', responsable:m.responsable||'', fecha:m.fecha||''}; }
+function planSetAccionText(bi,ai,el){ var b=getBrechas()[bi]; if(!b||!b.acciones)return; b.acciones[ai]=(el.innerHTML||'').trim(); saveState(); if(document.getElementById('brechasContainer')&&typeof renderBrechas==='function') renderBrechas(); }
+function planSetMeta(bi,ai,field,val){ var b=getBrechas()[bi]; if(!b)return; _ensureAccMeta(b); if(!b.accionMeta[ai]) b.accionMeta[ai]={}; b.accionMeta[ai][field]=val; saveState(); }
 function brechaDelete(i){ if(!confirm('¿Eliminar esta brecha?')) return; getBrechas().splice(i,1); brechaRefresh(); }
 function brechaAdd(){
   var arr=getBrechas();
@@ -4303,20 +4380,20 @@ function renderBrechas(){
       d+='<div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:2px;">Título</div>';
       d+='<div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'titulo\',this)" style="'+edCss+'font-size:12px;font-weight:800;color:var(--ink);margin-bottom:8px;">'+_insEsc(b.titulo)+'</div>';
       d+='<div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:3px;">Observación · criterio de auditoría (4C)</div>';
-      d+='<div class="no-print" style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;align-items:center;">'+_fmtBtn('bold','format_bold','Negrita')+_fmtBtn('italic','format_italic','Cursiva')+_fmtBtn('insertUnorderedList','format_list_bulleted','Viñetas')+_fmtBtn('insertOrderedList','format_list_numbered','Numeración')+_fmtBtn('justifyFull','format_align_justify','Justificar')+'<button type="button" onmousedown="event.preventDefault()" onclick="brechaShow4C()" title="Consulta la guía Criterio/Condición/Causa/Consecuencia (no modifica el texto)" style="margin-left:6px;font-size:9px;font-weight:700;border:1px solid #E9711C;background:#FFF6EF;color:#C4631A;border-radius:6px;padding:3px 9px;cursor:pointer;">Consultar guía 4C</button><span style="font-size:8px;color:#AAB2B8;margin-left:4px;">el formato aplica al campo en edición</span></div>';
+      d+='<div class="no-print" style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px;align-items:center;">'+_fmtBtn('bold','format_bold','Negrita')+_fmtBtn('italic','format_italic','Cursiva')+_fmtBtn('insertUnorderedList','format_list_bulleted','Viñetas')+_fmtBtn('insertOrderedList','format_list_numbered','Numeración')+_fmtBtn('indent','format_indent_increase','Subviñeta · aumentar sangría')+_fmtBtn('outdent','format_indent_decrease','Disminuir sangría')+_fmtBtn('justifyFull','format_align_justify','Justificar')+'<button type="button" onmousedown="event.preventDefault()" onclick="brechaShow4C()" title="Consulta la guía Criterio/Condición/Causa/Consecuencia (no modifica el texto)" style="margin-left:6px;font-size:9px;font-weight:700;border:1px solid #E9711C;background:#FFF6EF;color:#C4631A;border-radius:6px;padding:3px 9px;cursor:pointer;">Consultar guía 4C</button><span style="font-size:8px;color:#AAB2B8;margin-left:4px;">el formato aplica al campo en edición</span></div>';
       d+='<div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetRich('+i+',\'descripcion\',this)" style="'+edCss+'font-size:10px;color:#444;line-height:1.6;margin-bottom:9px;min-height:64px;text-align:justify;">'+(b.descripcion||'')+'</div>';
       d+='<div style="font-size:8.5px;font-weight:800;color:#093E5E;text-transform:uppercase;margin:4px 0 3px;">Asuntos materiales</div>'+brechaListEditor(i,'topics',OPTS.topics);
       d+='<div style="font-size:8.5px;font-weight:800;color:#0E2029;text-transform:uppercase;margin:7px 0 3px;">IROs</div>'+brechaListEditor(i,'iros',OPTS.iros);
       d+='<div style="font-size:8.5px;font-weight:800;color:#5C4A2E;text-transform:uppercase;margin:7px 0 3px;">Componentes</div>'+brechaListEditor(i,'comps',OPTS.comps);
       d+='<div style="font-size:8.5px;font-weight:800;color:#7A3E0E;text-transform:uppercase;margin:7px 0 3px;">Requisitos (eids)</div>'+brechaListEditor(i,'eids',OPTS.eids);
       d+='<div style="border-top:1px solid #F0F1F3;margin-top:9px;padding-top:7px;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:3px;">Acciones</div>';
-      (b.acciones||[]).forEach(function(a,ai){ d+='<div style="display:flex;gap:5px;margin-bottom:3px;align-items:flex-start;"><span style="color:'+color+';font-size:10px;">✦</span><div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetAccionRich('+i+','+ai+',this)" style="'+edCss+'flex:1;font-size:9.5px;color:#555;line-height:1.5;text-align:justify;">'+(a||'')+'</div><button onclick="brechaDelAccion('+i+','+ai+')" style="background:none;border:none;color:#C62828;font-size:13px;cursor:pointer;line-height:1;">×</button></div>'; });
+      (b.acciones||[]).forEach(function(a,ai){ d+='<div style="display:flex;gap:5px;margin-bottom:3px;align-items:flex-start;"><span style="color:'+color+';font-size:9px;font-weight:800;font-family:ui-monospace,Menlo,monospace;flex-shrink:0;min-width:24px;text-align:right;margin-top:1px;">'+brechaNum(b)+'.'+(ai+1)+'</span><div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetAccionRich('+i+','+ai+',this)" style="'+edCss+'flex:1;font-size:9.5px;color:#555;line-height:1.5;text-align:justify;">'+(a||'')+'</div><button onclick="brechaDelAccion('+i+','+ai+')" style="background:none;border:none;color:#C62828;font-size:13px;cursor:pointer;line-height:1;">×</button></div>'; });
       d+='<button onclick="brechaAddAccion('+i+')" class="add-item-btn" style="font-size:9px;margin-top:2px;">+ acción</button></div>';
       d+='<div style="margin-top:7px;font-size:8.5px;color:#888;">Fuente: <span contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'fuente\',this)" style="'+edCss+'display:inline-block;">'+_insEsc(b.fuente)+'</span></div>';
     } else {
       d+='<div style="font-size:10px;color:#555;line-height:1.6;margin:4px 0 8px;text-align:justify;">'+(b.descripcion||'')+'</div>';
       d+=chipRow('Asuntos',b.topics,topicChip)+chipRow('IROs',b.iros,iroChip)+chipRow('Componentes',b.comps,compChip)+chipRow('Requisitos',(b.eids||[]),eidChip);
-      d+='<div style="margin-top:8px;border-top:1px solid #F0F1F3;padding-top:7px;">'+(b.acciones||[]).map(function(a){return '<div style="font-size:9.5px;color:#555;line-height:1.55;display:flex;gap:5px;"><span style="color:'+color+';flex-shrink:0;">✦</span><span style="flex:1;text-align:justify;">'+(a||'')+'</span></div>';}).join('')+'</div>';
+      d+='<div style="margin-top:8px;border-top:1px solid #F0F1F3;padding-top:7px;">'+(b.acciones||[]).map(function(a,ai){return '<div style="font-size:9.5px;color:#555;line-height:1.55;display:flex;gap:5px;"><span style="color:'+color+';flex-shrink:0;font-weight:800;font-family:ui-monospace,Menlo,monospace;font-size:9px;min-width:24px;text-align:right;">'+brechaNum(b)+'.'+(ai+1)+'</span><span style="flex:1;text-align:justify;">'+(a||'')+'</span></div>';}).join('')+'</div>';
       d+='<div style="font-size:8.5px;color:#A5A5A5;margin-top:6px;"><span class="mi" style="font-size:11px;vertical-align:-2px;">verified</span> '+_insEsc(b.fuente)+'</div>';
     }
     return d;
@@ -5079,13 +5156,15 @@ function onTopicScoreClick(e) {
   const lv = e.currentTarget.dataset.lv || activeLevel;
   const field = e.currentTarget.dataset.field || 'expertScore';
   if(!state.topicManual) state.topicManual={}; state.topicManual[ti]=true; // editar la nota = override a Manual
-  state.topicScores[ti][lv][field] = v;
-  const old = document.getElementById(`topic-mat-${ti}`);
-  if (old) { const nw = buildTopicMaturityCard(ti); old.replaceWith(nw); }
-  updateTopicMatAvg();
-  renderTopicsTable();   // refrescar madurez global en la tabla
-  if (typeof renderEjecutivo === 'function') renderEjecutivo();
-  if (typeof renderPanorama === 'function' && document.getElementById('panoramaIntegrado')) renderPanorama();
+  var _ts = state.topicScores[ti][lv];
+  var _oldScore = _ts.score, _oldExpert = _ts.expertScore;
+  _ts[field] = v;
+  if (field === 'score' && (_oldExpert === undefined || _oldExpert === null || _oldExpert === _oldScore)) _ts.expertScore = v;
+  _safeRun(function(){ const old = document.getElementById('topic-mat-'+ti); if (old) { const nw = buildTopicMaturityCard(ti); old.replaceWith(nw); } });
+  _safeRun(function(){ updateTopicMatAvg(); });
+  _safeRun(function(){ renderTopicsTable(); });
+  _safeRun(function(){ if (typeof renderEjecutivo === 'function') renderEjecutivo(); });
+  _safeRun(function(){ if (typeof renderPanorama === 'function' && document.getElementById('panoramaIntegrado')) renderPanorama(); });
   saveState();
 }
 
