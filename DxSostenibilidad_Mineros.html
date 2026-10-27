@@ -1369,10 +1369,10 @@ const MAT_COLORS  = ['#9AA4AC','#EF4444','#F97316','#EAB308','#22C55E','#10B981'
 // COMPONENT METADATA
 // ═══════════════════════════════════════════════
 const COMP_META = [
-  {id:1, icon:'handshake',               name:'Grupos de interés',               short:'Mapeo, segmentación y mecanismos de relacionamiento',            dim:'Social-Gobernanza'},
-  {id:2, icon:'explore',                 name:'Estrategia de sostenibilidad',    short:'Propósito, compromisos y ejes estratégicos derivados de la estrategia de negocio IDEAS',             dim:'Estratégica'},
-  {id:3, icon:'gavel',                   name:'Gobernanza sostenible',    short:'Liderazgo de la sostenibilidad, supervisión ASG y compensación ligada a sostenibilidad',                  dim:'Gobernanza'},
-  {id:4, icon:'device_hub',              name:'Modelo operativo para la sostenibilidad', short:'Modelo operativo del negocio y para la sostenibilidad, y gestión de proyectos',      dim:'Económica-Operacional'},
+  {id:1, icon:'gavel',                   name:'Gobernanza sostenible',    short:'Liderazgo de la sostenibilidad, supervisión ASG y compensación ligada a sostenibilidad',                  dim:'Gobernanza'},
+  {id:2, icon:'device_hub',              name:'Modelo operativo para la sostenibilidad', short:'Modelo operativo del negocio y para la sostenibilidad, y gestión de proyectos',      dim:'Económica-Operacional'},
+  {id:3, icon:'explore',                 name:'Estrategia de sostenibilidad',    short:'Propósito, compromisos y ejes estratégicos derivados de la estrategia de negocio IDEAS',             dim:'Estratégica'},
+  {id:4, icon:'handshake',               name:'Grupos de interés',               short:'Mapeo, segmentación y mecanismos de relacionamiento',            dim:'Social-Gobernanza'},
   {id:5, icon:'center_focus_strong',     name:'Doble materialidad',              short:'Proceso GRI-aligned, 18 asuntos (incl. operación responsable), revisión bienal', dim:'Estratégica-Transversal', mat:true},
   {id:6, icon:'warning_amber',           name:'Gestión de riesgos y oportunidades', short:'SGIR (COSO ERM 2017 + ISO 31000), modelo de tres líneas y escenarios de largo plazo',          dim:'Gobernanza-Estratégica'},
   {id:7, icon:'assignment',              name:'Procesos, roles y políticas',     short:'Políticas, procesos, roles, conocimiento crítico y transición post-minería',              dim:'Gobernanza-Operacional'},
@@ -1381,7 +1381,7 @@ const COMP_META = [
   {id:10,icon:'campaign',                name:'Reporte interno y externo',       short:'Gobernanza del reporte y revelación, aseguramiento interno y externo',      dim:'Gobernanza-Comunicación'}
 ];
 // ── Etapa D · Mapa Componente→Asuntos (fuente única para la herencia al crear una brecha desde un requisito) ──
-const COMP_TOPICS = {1:[6,1],2:[3,15,16,6,12,11],3:[1],4:[8,11,16],5:[6,9,8,13,2,10,12],6:[3,1],7:[1,10,2,16],8:[11,18],9:[12,16],10:[10]};  // esquema 3: C2 Estrategia hereda asuntos del antiguo Modelo de negocio; C7 Procesos suma cierre/transición (#2, #16)
+const COMP_TOPICS = {1:[1],2:[8,11,16],3:[3,15,16,6,12,11],4:[6,1],5:[6,9,8,13,2,10,12],6:[3,1],7:[1,10,2,16],8:[11,18],9:[12,16],10:[10]};  // esquema 3: C2 Estrategia hereda asuntos del antiguo Modelo de negocio; C7 Procesos suma cierre/transición (#2, #16)
 // Deriva los IROs a partir de los asuntos heredados (unión sin duplicados)
 function _irosForTopics(tops){ var out=[]; (tops||[]).forEach(function(n){ var arr=(typeof IRO_DEFAULT_LINKS!=='undefined' && IRO_DEFAULT_LINKS[String(n)])?IRO_DEFAULT_LINKS[String(n)]:[]; arr.forEach(function(x){ if(out.indexOf(x)<0) out.push(x); }); }); return out; }
 // Inverso: componentes cuyo mapa incluye un asunto dado (para heredar comps al crear desde un asunto)
@@ -1406,28 +1406,28 @@ const C1_INTEGRA = {
   c201: ' Incluye el propósito y la misión de sostenibilidad: el propósito de crear valor sostenible está documentado e integrado en la visión corporativa multilatina (GRI 2-22) y se despliega a través de la estrategia de negocio IDEAS, que lo vincula a los asuntos materiales; se verifica además que el rol del corporativo y de cada operación (Colombia y Nicaragua) para materializarlo esté definido.'
 };
 const DEFAULT_ITEMS = [
-// C1 — Grupos de Interés
+// C1 — Gobernanza
 [
-  {label:'Mapa y segmentación de grupos de interés',desc:'GI internos y externos identificados, segmentados y documentados. Mapa publicado en la Memoria 2025 (GRI 2-29).',score:4},
-  {label:'Mecanismos de relacionamiento',desc:'Canales diferenciados por tipo de GI (asambleas, mesas de diálogo, brigadas de salud, visitas territoriales); incluye el sistema formal de PQR con protocolos de atención y seguimiento (GRI 2-26) y los programas de relacionamiento comunitario activos: «Corazón de Oro» (+35 jornadas de voluntariado), Fundación Mineros y el mecanismo OXI.',score:4}
+  {label:'Liderazgo de la sostenibilidad',desc:'Comités de Auditoría, Riesgos y Sostenibilidad activos; supervisión formal ASG documentada (GRI 2-12/2-13). Incluye la composición de la Junta con criterios de diversidad de género, independencia y competencias ASG — hoy no publicada de forma detallada.',score:4},
+  {label:'Compensación variable alta dirección ligada a sostenibilidad',desc:'Compensación variable de alta dirección vinculada a KPIs ASG confirmado en Memoria 2025. Práctica de gobernanza avanzada.',score:5}
 ],
-// C2 — Estrategia de Sostenibilidad
+// C2 — Modelo operativo para la sostenibilidad
+[
+  {label:'Modelo operativo negocio',desc:'Responsabilidades corporativas y por operación, autoridad, coordinación y distribución de funciones claras y documentadas, consistentes con la estrategia de sostenibilidad y las definiciones de gobierno corporativo.',score:3},
+  {label:'Modelo operativo para la sostenibilidad',desc:'Modelo operativo que ejecuta la estrategia de sostenibilidad y acompaña la cadena de valor para desarrollarla: estructura, roles, células de trabajo y sinergias entre corporativo y operación que traducen la estrategia en gestión efectiva. Evalúa en qué medida el modelo operativo despliega la estrategia y habilita una cadena de valor sostenible.',score:2},
+  {label:'Gestión de proyectos con mirada de sostenibilidad',desc:'La gestión de proyectos como elemento clave del despliegue y desarrollo del modelo de negocio, incorporando la mirada de sostenibilidad en todo el ciclo (originación, diseño, ejecución y cierre). Evidencia: nuevos proyectos con criterios ASG (Porvenir en Nicaragua, 127 ha de compensación; exploración en Chile y Argentina con criterios ASG básicos). Pendiente: una metodología integral de gestión de proyectos que asegure criterios de sostenibilidad, con gobierno y estándares definidos.',score:3}
+],
+// C3 — Estrategia de Sostenibilidad
 [
   {label:'Estrategia de sostenibilidad integrada al negocio',desc:'Partiendo del modelo de negocio de la compañía y considerando los asuntos relevantes en estándares y tendencias de sostenibilidad, la Compañía debe definir compromisos, responsabilidades y objetivos de sostenibilidad, que le permitan inspirar el conjunto de decisiones sobre cómo y con qué capacidades y recursos conseguirlos.'+C6_INTEGRA.c301+C1_INTEGRA.c201,score:5},
   {label:'Metas, iniciativas y hoja de ruta por dimensión',desc:'Objetivos específicos definidos y reportados para cada una de las definiciones estratégicas de sostenibilidad, considerando los asuntos materiales.'+C6_INTEGRA.c302,score:4},
   {label:'Contribución a los ODS: teoría del cambio e impacto',desc:'La estrategia parte de las brechas sistémicas de los ODS y aplica una teoría del cambio para transformar capacidades y condiciones, buscando impacto y transformación real (contribución neta medible). Hoy las contribuciones a los ODS se declaran por asunto material y se vinculan a indicadores GRI, pero sin teoría del cambio formal ni medición de impacto/transformación que retroalimente la estrategia.'+C6_INTEGRA.c303,score:2}
 ],
-// C3 — Gobernanza
-[
-  {label:'Liderazgo de la sostenibilidad',desc:'Comités de Auditoría, Riesgos y Sostenibilidad activos; supervisión formal ASG documentada (GRI 2-12/2-13). Incluye la composición de la Junta con criterios de diversidad de género, independencia y competencias ASG — hoy no publicada de forma detallada.',score:4},
-  {label:'Compensación variable alta dirección ligada a sostenibilidad',desc:'Compensación variable de alta dirección vinculada a KPIs ASG confirmado en Memoria 2025. Práctica de gobernanza avanzada.',score:5}
-],
 
-// C4 — Modelo operativo para la sostenibilidad
+// C4 — Grupos de Interés
 [
-  {label:'Modelo operativo negocio',desc:'Responsabilidades corporativas y por operación, autoridad, coordinación y distribución de funciones claras y documentadas, consistentes con la estrategia de sostenibilidad y las definiciones de gobierno corporativo.',score:3},
-  {label:'Modelo operativo para la sostenibilidad',desc:'Modelo operativo que ejecuta la estrategia de sostenibilidad y acompaña la cadena de valor para desarrollarla: estructura, roles, células de trabajo y sinergias entre corporativo y operación que traducen la estrategia en gestión efectiva. Evalúa en qué medida el modelo operativo despliega la estrategia y habilita una cadena de valor sostenible.',score:2},
-  {label:'Gestión de proyectos con mirada de sostenibilidad',desc:'La gestión de proyectos como elemento clave del despliegue y desarrollo del modelo de negocio, incorporando la mirada de sostenibilidad en todo el ciclo (originación, diseño, ejecución y cierre). Evidencia: nuevos proyectos con criterios ASG (Porvenir en Nicaragua, 127 ha de compensación; exploración en Chile y Argentina con criterios ASG básicos). Pendiente: una metodología integral de gestión de proyectos que asegure criterios de sostenibilidad, con gobierno y estándares definidos.',score:3}
+  {label:'Mapa y segmentación de grupos de interés',desc:'GI internos y externos identificados, segmentados y documentados. Mapa publicado en la Memoria 2025 (GRI 2-29).',score:4},
+  {label:'Mecanismos de relacionamiento',desc:'Canales diferenciados por tipo de GI (asambleas, mesas de diálogo, brigadas de salud, visitas territoriales); incluye el sistema formal de PQR con protocolos de atención y seguimiento (GRI 2-26) y los programas de relacionamiento comunitario activos: «Corazón de Oro» (+35 jornadas de voluntariado), Fundación Mineros y el mecanismo OXI.',score:4}
 ],
 // C5 — Doble materialidad
 [
@@ -1458,7 +1458,7 @@ const DEFAULT_ITEMS = [
 ],
 // C9 — Medición
 [
-  {label:'Gestión de indicadores de sostenibilidad',desc:'Definición, existencia y gestión de indicadores para medir y supervisar el modelo de gestión, los procesos y el monitoreo de riesgos, oportunidades y metas, alineados con la estrategia, el modelo de negocio y los asuntos materiales (muy alineado con las metas, iniciativas y hoja de ruta de C2-02). Cada indicador debe ser pertinente, relevante y factible según el método SMART (específico, medible, alcanzable, relevante y temporal) y capturar el triple impacto en las dimensiones de gobernanza, económica, social y ambiental. Hoy existe una batería robusta de indicadores por dimensión, gestionada por área y alineada a GRI: ambiental —emisiones GHG Alcance 1 (74.812 tCO₂e) y 2 (8.960 tCO₂e) con comparativo 2024-2025 (GRI 305-1/2), agua, energía, residuos y biodiversidad (57.604 árboles, ha restauradas, 206 animales rescatados), esta última midiendo actividad y no estado del ecosistema (sin TNFD/SBTN a nivel de paisaje)—; social —KPIs SST completos (TRIFR, LTIFR, HSIFR, FFR) por país (GRI 403-9/10, SASB 510a) y talento, diversidad e inclusión (GRI 401/404/405)—; y económica —valor económico distribuido $488.5M (GRI 201-1) e indicadores fiscales país por país en 6 jurisdicciones (GRI 207-4)—. Persisten, sin embargo, un vacío de marco formal de gestión de indicadores (evaluación SMART, dueño único, ciclo de revisión) y brechas de cobertura: la medición de Alcance 3 (requerida por WGC, ICMM e ISSB S2) no está desarrollada, la equidad salarial (GRI 202-1) está omitida por confidencialidad —gap frente a inversores ESG— y no se usa un índice formal de licencia social (modelo Thomson & Boutilier). Brecha principal: no existe medición de impacto estructurada; se recomienda estructurarla bajo principios SROI (Social Return on Investment) complementados con IRIS+ (GIIN), las cinco dimensiones del Impact Management Project, B4SI para la inversión social y el Natural Capital Protocol para el impacto ambiental.',score:3},
+  {label:'Gestión de indicadores de sostenibilidad',desc:'Definición, existencia y gestión de indicadores para medir y supervisar el modelo de gestión, los procesos y el monitoreo de riesgos, oportunidades y metas, alineados con la estrategia, el modelo de negocio y los asuntos materiales (muy alineado con las metas, iniciativas y hoja de ruta de C3-02). Cada indicador debe ser pertinente, relevante y factible según el método SMART (específico, medible, alcanzable, relevante y temporal) y capturar el triple impacto en las dimensiones de gobernanza, económica, social y ambiental. Hoy existe una batería robusta de indicadores por dimensión, gestionada por área y alineada a GRI: ambiental —emisiones GHG Alcance 1 (74.812 tCO₂e) y 2 (8.960 tCO₂e) con comparativo 2024-2025 (GRI 305-1/2), agua, energía, residuos y biodiversidad (57.604 árboles, ha restauradas, 206 animales rescatados), esta última midiendo actividad y no estado del ecosistema (sin TNFD/SBTN a nivel de paisaje)—; social —KPIs SST completos (TRIFR, LTIFR, HSIFR, FFR) por país (GRI 403-9/10, SASB 510a) y talento, diversidad e inclusión (GRI 401/404/405)—; y económica —valor económico distribuido $488.5M (GRI 201-1) e indicadores fiscales país por país en 6 jurisdicciones (GRI 207-4)—. Persisten, sin embargo, un vacío de marco formal de gestión de indicadores (evaluación SMART, dueño único, ciclo de revisión) y brechas de cobertura: la medición de Alcance 3 (requerida por WGC, ICMM e ISSB S2) no está desarrollada, la equidad salarial (GRI 202-1) está omitida por confidencialidad —gap frente a inversores ESG— y no se usa un índice formal de licencia social (modelo Thomson & Boutilier). Brecha principal: no existe medición de impacto estructurada; se recomienda estructurarla bajo principios SROI (Social Return on Investment) complementados con IRIS+ (GIIN), las cinco dimensiones del Impact Management Project, B4SI para la inversión social y el Natural Capital Protocol para el impacto ambiental.',score:3},
   {label:'Desempeño e impacto financiero sostenible',desc:'Medición de cómo la estrategia de sostenibilidad, los riesgos y oportunidades, los impactos y los asuntos materiales afectan la posición y el desempeño financiero de la compañía: efectos sobre ingresos, costos, flujo de caja, acceso y costo de capital y condición financiera en el corto, mediano y largo plazo. Se estructura bajo IFRS S1/S2 (ISSB) —y los siguientes estándares S en desarrollo—, TCFD y TNFD, y la normativa de los mercados de valores donde cotiza o aspira a cotizar la compañía. Brecha: hoy no se cuantifica el efecto financiero de los asuntos de sostenibilidad (los escenarios climáticos no permean las finanzas); se recomienda iniciar la conexión sostenibilidad–finanzas aprovechando la alineación GRI/TCFD ya activa. (Insumos adicionales pendientes de incorporar.)',score:1},
   {label:'Retorno de la inversión y recursos de sostenibilidad',desc:'Medición del retorno de las inversiones y recursos destinados a la sostenibilidad (Capex y Opex): si se priorizan de forma efectiva y qué impacto generan en términos financieros y de valor económico, social y ambiental. Incorpora el SROI (Social Return on Investment) o equivalente (Sustainable ROI) para monetizar y comparar el retorno de las iniciativas frente a los recursos invertidos, apoyándose en IRIS+ y las cinco dimensiones del Impact Management Project. Brecha base: hoy no se mide el retorno ni el impacto de la inversión en sostenibilidad y el Capex/Opex de sostenibilidad no se prioriza ni evalúa con una metodología de retorno; se recomienda estructurar un modelo de SROI/S-ROI que vincule recursos, resultados e impacto.',score:1}
 ],
@@ -1478,13 +1478,13 @@ function goldSplitBrechas(){
   return [
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Trazabilidad del oro (cadena de custodia)',
    descripcion:'Sin trazabilidad del oro de la mina al destino (LBMA/RMI): limita el acceso a mercados de oro responsable y la demostración de origen. Requerido por WGC/LBMA; Swiss Better Gold es referente de custodia en Nicaragua.',
-   topics:[8], iros:['R-09'], comps:[4,5],
+   topics:[8], iros:['R-09'], comps:[2,5],
    acciones:['Implementar una cadena de custodia trazable del oro (de la mina al destino)','Publicar el % de onzas bajo certificación de cadena de custodia (LBMA/RMI)','Extender Swiss Better Gold como referente de trazabilidad del mineral artesanal'],
    fuente:'Memoria 2025 — sin sistema de trazabilidad end-to-end del oro (WGC/LBMA)'},
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Debida diligencia ASG de proveedores',
    descripcion:'Baja cobertura de evaluación ambiental de proveedores (3.20%, GRI 308-1) frente a la social (57.98%, GRI 414-1): brecha de debida diligencia en la cadena de suministro con riesgo reputacional y de acceso a mercados responsables.',
-   topics:[8], iros:['R-09'], comps:[4,5],
+   topics:[8], iros:['R-09'], comps:[2,5],
    acciones:['Ampliar la evaluación ambiental de proveedores (GRI 308-1: 3.20% → meta)','Homologar la cobertura ambiental con la social (partir del 57.98% de GRI 414-1)','Formalizar la debida diligencia ASG de proveedores con criterios, seguimiento y remediación'],
    fuente:'KPI — proveedores eval. ambiental 3.20% (GRI 308-1) vs. social 57.98% (GRI 414-1)'}
   ];
@@ -1512,7 +1512,7 @@ const brechas = [
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Escenarios climáticos 1.5°C/2°C en planificación financiera',
    descripcion:'Los marcos TCFD/IFRS S2 esperan que los escenarios climáticos permeen la estrategia y la planificación financiera; aunque el TCFD está activo, en el diseño actual los escenarios 1.5°C/2°C no se integran en la planificación financiera ni en el capex de largo plazo y no existe un net-zero pathway cuantificado. Esto impide anticipar los efectos financieros de la transición y orientar la inversión de largo plazo frente al riesgo climático.',
-   topics:[15,3,12], iros:['R-21'], comps:[2,6,9],
+   topics:[15,3,12], iros:['R-21'], comps:[3,6,9],
    acciones:['Integrar escenarios TCFD al capex y a la planeación financiera','Cuantificar y publicar la ruta net-zero','Vincular metas climáticas a la remuneración variable'],
    fuente:'Memoria 2025 (TCFD activo, no integrado a finanzas)'},
 
@@ -1524,31 +1524,31 @@ const brechas = [
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Indicadores y reporte de ciberseguridad',
    descripcion:'La ciberseguridad, identificada como asunto material, debería contar con indicadores y reporte formal que permitan evaluar y gestionar el riesgo tecnológico; en el diseño actual no se reporta formalmente ni existen indicadores públicos. Esto impide dimensionar la exposición a incidentes que comprometan operaciones, datos críticos o la convergencia OT/IT, un riesgo estratégico creciente.',
-   topics:[18], iros:['IA-18'], comps:[8,3],
+   topics:[18], iros:['IA-18'], comps:[8,1],
    acciones:['Definir KPIs de ciberseguridad y su reporte periódico a la Junta','Formalizar la gestión del riesgo tecnológico (OT/IT)','Incluir ciberseguridad en el SGIR'],
    fuente:'Memoria 2025 — asunto material sin reporte'},
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Análisis de evolución y comunicación del indicador de licencia social a los grupos de interés',
    descripcion:'La licencia social, como evidencia de impacto social y de sana convivencia con las comunidades, debería no solo medirse sino analizar su evolución en el tiempo y comunicarse de forma comprensible a los grupos de interés; en el diseño actual el indicador se mide y se le hace seguimiento, pero su evolución no se analiza ni se comunica adecuadamente. Esto limita la rendición de cuentas y el fortalecimiento de la confianza con las comunidades, debilitando la licencia social como activo estratégico.',
-   topics:[6], iros:[], comps:[10,1],
+   topics:[6], iros:[], comps:[10,4],
    acciones:['Analizar la evolución en el tiempo del indicador de licencia social','Comunicar el indicador de forma comprensible a los grupos de interés','Vincular el indicador con la evidencia de impacto social y la convivencia con comunidades'],
    fuente:'Reestructuración Capa 10 (2026-09) · comunicación de la licencia social (C10-01; reencauzada desde el requisito de licencia social, antes en Grupos de Interés)'},
 
   {prioridad:'PREPARACIÓN', color:'#093E5E', horizonte:'L', titulo:'Preparación anticipada al marco ISSB / IFRS S1-S2',
    descripcion:'Aunque el marco ISSB/IFRS S1-S2 aún no es obligatorio para el grupo, es el estándar hacia el que convergen reguladores e inversores y su preparación temprana aprovecha la alineación con GRI y TCFD ya activos; en el diseño actual no existe un roadmap formal de adopción. Esto conlleva el riesgo de rezago frente a las exigencias del mercado de capitales y, a la vez, la oportunidad de diferenciarse anticipándose.',
-   topics:[12,10], iros:[], comps:[10,3,2],
+   topics:[12,10], iros:[], comps:[10,1,3],
    acciones:['Gap analysis GRI + TCFD vs ISSB S1/S2','Monitorear la regulación colombiana (SFC / Supersociedades)','Incluir ISSB en la hoja de ruta de marcos 2026–2028'],
    fuente:'Marco normativo emergente — convergencia global'},
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Documentación, medición de impacto y teoría del cambio de la estrategia',
    descripcion:'Una estrategia de sostenibilidad robusta espera documentar su teoría del cambio y evidenciar la medición de impacto y la contribución neta a los ODS; en el diseño actual la alineación con los ODS se declara por capítulo, sin teoría del cambio documentada ni contribución neta verificable. Esto impide demostrar el impacto real de las iniciativas y rutas estratégicas y retroalimentar y refinar la estrategia con base en resultados.',
-   topics:[6,16], iros:[], comps:[2],
+   topics:[6,16], iros:[], comps:[3],
    acciones:['Definir la teoría del cambio por iniciativa/ruta estratégica con resultados esperados','Establecer métricas de contribución neta y un marco de medición de impacto','Retroalimentar y refinar la estrategia con la evidencia de impacto (ciclo de mejora)'],
-   fuente:'Reestructuración Modelo de negocio (2026-09; componente integrado en 2026-10) · reubicación de «Teoría del cambio» a C2'},
+   fuente:'Reestructuración Modelo de negocio (2026-09; componente integrado en 2026-10) · reubicación de «Teoría del cambio» a C3'},
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Gobierno y escucha sistémica para la sostenibilidad',
    descripcion:'Un modelo maduro espera un gobierno y una escucha sistémica de la sostenibilidad —continua, integrada y medible— vinculada a los mecanismos de relacionamiento, PQR y materialidad; en el diseño actual la participación de los grupos de interés opera de forma bienal y por canales, sin una plataforma ni metodología que asegure escucha continua e integrada. Esto debilita el direccionamiento con propósito y la capacidad de incorporar la voz de los grupos de interés en la estrategia.',
-   topics:[6,1], iros:[], comps:[5,1],
+   topics:[6,1], iros:[], comps:[5,4],
    acciones:['Integrar los mecanismos de escucha (relacionamiento, PQR, materialidad) en un modelo único de gobierno','Vincular la escucha al direccionamiento estratégico con propósito','Definir métricas de escucha y de integración del relacionamiento'],
    fuente:'Reestructuración Capa 1 (2026-09) · unificación de la participación de GI en materialidad (C5-03)'},
 
@@ -1560,21 +1560,21 @@ const brechas = [
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Visión de futuro estratégica y prospectiva de sostenibilidad integrada',
    descripcion:'El modelo operativo espera una capacidad o rol de visión prospectiva que entienda la sostenibilidad como un todo —más allá de lo Ambiental y Social— e integre de forma unificada RRHH, DDHH, finanzas sostenibles, cadena de abastecimiento, tecnología y gobierno corporativo; en el diseño actual la gestión se aborda por elementos tradicionales, sin una visión integradora de futuro. Esto limita la anticipación estratégica y la gestión unificada de la sostenibilidad en el Grupo.',
-   topics:[], iros:[], comps:[4],
+   topics:[], iros:[], comps:[2],
    acciones:['Definir un rol/función de prospectiva y visión integrada de sostenibilidad','Integrar las dimensiones (ambiental, social, RRHH, DDHH, finanzas sostenibles, abastecimiento, tecnología, gobierno) en un modelo de gestión unificado','Incorporar análisis de futuro/escenarios de sostenibilidad al direccionamiento estratégico'],
-   fuente:'Reestructuración Capa 4 (2026-09) · modelo operativo para la sostenibilidad (C4-02)'},
+   fuente:'Reestructuración Capa 4 (2026-09) · modelo operativo para la sostenibilidad (C2-02)'},
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Diferenciación de roles y perfiles entre corporativo y operación',
    descripcion:'Una operación eficiente espera una diferenciación clara entre funciones corporativas y de operación, con roles y perfiles definidos; en el diseño actual esa línea no es clara —al existir equipos por país, pareciera que hay corporativos operando en las operaciones—. Esto genera duplicidades y pérdida de eficiencia y sinergias, y dificulta la transformación del modelo operativo (perfiles deseados, mapeo y reubicación de talento y conformación de células de trabajo).',
-   topics:[1,14], iros:[], comps:[4],
+   topics:[1,14], iros:[], comps:[2],
    acciones:['Definir roles y perfiles diferenciados entre corporativo y operación','Mapear y reubicar el talento interno según el rol/perfil objetivo','Conformar células de trabajo por procesos de operación aprovechando sinergias y eficiencia'],
-   fuente:'Reestructuración Capa 4 (2026-09) · modelo operativo para la sostenibilidad (C4-02)'},
+   fuente:'Reestructuración Capa 4 (2026-09) · modelo operativo para la sostenibilidad (C2-02)'},
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Liderazgo para el direccionamiento del portafolio con criterio de sostenibilidad',
    descripcion:'El diseño del portafolio (productos, servicios y relacionamiento) con criterio de sostenibilidad espera un líder o rol que lo direccione; en el diseño actual no se evidencia ese rol, por lo que no se incorpora de forma sistemática el análisis y las acciones de sostenibilidad en el modelo de negocio. Esto conecta con la brecha del rol del equipo de sostenibilidad corporativo y limita que la sostenibilidad oriente las decisiones de portafolio.',
-   topics:[11,16], iros:[], comps:[2],
+   topics:[11,16], iros:[], comps:[3],
    acciones:['Asignar un líder/rol que direccione el diseño del portafolio con criterio de sostenibilidad','Incorporar el análisis de criterios de sostenibilidad en los procesos clave del negocio','Conectar con el rol integrador del equipo de sostenibilidad del corporativo'],
-   fuente:'Reestructuración Operación responsable (2026-09; componente integrado en 2026-10) · portafolio con criterio de sostenibilidad (C2-01)'},
+   fuente:'Reestructuración Operación responsable (2026-09; componente integrado en 2026-10) · portafolio con criterio de sostenibilidad (C3-01)'},
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Criterios de sostenibilidad integrales en la contratación y el abastecimiento',
    descripcion:'Un abastecimiento sostenible espera criterios de sostenibilidad integrales que definan qué se exige a proveedores y contratistas e integren los insumos de los grupos de interés, la gestión de riesgos y la materialidad, conectados con gobierno y estrategia; en el diseño actual esos criterios no se incorporan de forma integral. Esto deja la cadena de suministro expuesta a riesgos ASG no gestionados, con impacto reputacional y de acceso a mercados responsables.',
@@ -1590,9 +1590,9 @@ const brechas = [
 
   {prioridad:'MEDIA', color:'#1565C0', horizonte:'M', titulo:'Continuidad y transformación de la inversión social en el territorio',
    descripcion:'La inversión social espera orientarse al impacto real, la transformación y la autonomía o sostenibilidad de las iniciativas, con medición de impacto social; en el diseño actual existe riesgo de continuidad por dependencia del acompañamiento y los recursos del Grupo (p. ej. el proyecto piscícola Asoagrollana) y falta direccionamiento hacia la autonomía. Esto implica que el valor social generado puede no sostenerse en el tiempo ni evidenciar impacto transformador.',
-   topics:[6,16], iros:[], comps:[5,2],
+   topics:[6,16], iros:[], comps:[5,3],
    acciones:['Direccionar la inversión social hacia impacto, transformación y autonomía','Implementar medición de impacto social de las iniciativas','Diseñar la transición hacia la sostenibilidad/autonomía de los proyectos (ej. Asoagrollana)'],
-   fuente:'Reestructuración Operación responsable (2026-09; componente integrado en 2026-10) · inversión social en el territorio (C5-01, C2-02, C2-03)'},
+   fuente:'Reestructuración Operación responsable (2026-09; componente integrado en 2026-10) · inversión social en el territorio (C5-01, C3-02, C3-03)'},
 
   {prioridad:'ALTA', color:'#E9711C', horizonte:'M', titulo:'Madurez y operación corporativa del marco de gestión de riesgos',
    descripcion:'Un marco de gestión de riesgos maduro (COSO ERM 2017, ISO 31000) espera metodologías corporativas unificadas y transversales y una estructura independiente que opere de forma efectiva; en el diseño actual, aunque esos estándares se declaran adoptados y comunicados externamente, no se evidencia su cumplimiento pleno ni su madurez: el área corporativa de riesgos está vacante, no hay metodologías unificadas y la gestión independiente solo existe en procesos operativos por país (SST, Ambiental). Esto genera una posible brecha entre lo declarado y lo implementado y debilita la gestión transversal de riesgos y oportunidades.',
@@ -1652,10 +1652,10 @@ let activeLevel = 'corp';
 // Basado en Memoria 2025: OXI activo, brigadas de salud, Negocios Agroforestales,
 // AMATIA/Xipe SST, ISO 45001, gobernanza corporativa aplica igual.
 const DEFAULT_SCORES_COL = [
-  [4,4],               // C1 GI — mapa + mecanismos/PQR/programas unificados
-  [4,4,2],             // C2 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
-  [4,5],         // C3 Gobernanza sostenible — Liderazgo de la sostenibilidad, Compensación variable
-  [3,2,3],             // C4 Modelo operativo para la sostenibilidad — Modelo operativo negocio, Modelo operativo para la sostenibilidad, Gestión de proyectos
+  [4,5],         // C1 Gobernanza sostenible — Liderazgo de la sostenibilidad, Compensación variable
+  [3,2,3],             // C2 Modelo operativo para la sostenibilidad — Modelo operativo negocio, Modelo operativo para la sostenibilidad, Gestión de proyectos
+  [4,4,2],             // C3 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
+  [4,4],               // C4 GI — mapa + mecanismos/PQR/programas unificados
   [5,5,2],             // C5 — Análisis DM, Integración continua, Escucha sistémica
   [3,3,1,5],             // C6 — Marco, Integración (IROs+relaves), escenarios LP, Modelo de tres líneas
   [4,3,2,2,1],           // C7 — Políticas, Procesos, Roles, Conocimiento crítico, Transición post-minería
@@ -1668,10 +1668,10 @@ const DEFAULT_SCORES_COL = [
 // Basado en Memoria 2025: SBG activo, Proyecto Porvenir, formularios QR SST,
 // presa San José relaves, menor madurez plataformas, ISO 45001 también activo.
 const DEFAULT_SCORES_NIC = [
-  [3,3],               // C1 GI — mapa + mecanismos/PQR/programas unificados
-  [3,3,1],             // C2 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
-  [3,4],         // C3 Gobernanza sostenible — Liderazgo de la sostenibilidad, Compensación variable
-  [3,2,3],             // C4 Modelo operativo para la sostenibilidad — Modelo operativo negocio, Modelo operativo para la sostenibilidad, Gestión de proyectos
+  [3,4],         // C1 Gobernanza sostenible — Liderazgo de la sostenibilidad, Compensación variable
+  [3,2,3],             // C2 Modelo operativo para la sostenibilidad — Modelo operativo negocio, Modelo operativo para la sostenibilidad, Gestión de proyectos
+  [3,3,1],             // C3 Estrategia — integración, metas+hoja ruta, ODS+teoría del cambio
+  [3,3],               // C4 GI — mapa + mecanismos/PQR/programas unificados
   [4,4,2],             // C5 — Análisis DM, Integración continua, Escucha sistémica
   [3,3,1,4],             // C6 — Marco, Integración (IROs+relaves), escenarios LP, Modelo de tres líneas
   [4,3,2,1,1],           // C7 — Políticas, Procesos, Roles, Conocimiento crítico, Transición post-minería
@@ -1705,7 +1705,7 @@ function defaultState() {
       nic:  mkItems(ci, DEFAULT_SCORES_NIC)
     })),
     notes: Array(DEFAULT_ITEMS.length).fill(null).map(() => ({corp:'', col:'', nic:''})),
-    compSchema: 3,   // esquema de 10 componentes (2026-10-26): no aplican migraciones de esquemas anteriores
+    compSchema: 4,   // esquema 4 (2026-10-27): 10 componentes numerados en el orden del Modelo de gestión; no aplican migraciones anteriores
     _migValC6: true, _notasC6: true, _notasC1: true, _migGob2026: true, _migValGob: true, _notasGob: true, _migC401: true, _migDatosMem2025: true, _migEstrSost: true,   // modelo base: sin valoraciones ni notas del encargo
     topicCrits: topics.map(t => [...t.crit]),
     topicScores: TOPIC_MATURITY.map(t => ({
@@ -1736,7 +1736,7 @@ function defaultState() {
 function _coerceV5Shape(s){
   if(!s || typeof s!=='object') return s;
   if(!Array.isArray(s.items)) s.items=[];
-  var n = (s.compSchema===3 && typeof DEFAULT_ITEMS!=='undefined' && DEFAULT_ITEMS.length) ? DEFAULT_ITEMS.length : (s.compSchema===2 ? 11 : 12);
+  var n = (s.compSchema>=3 && typeof DEFAULT_ITEMS!=='undefined' && DEFAULT_ITEMS.length) ? DEFAULT_ITEMS.length : (s.compSchema===2 ? 11 : 12);
   for(var ci=0; ci<n; ci++){
     var comp=s.items[ci];
     if(!comp || typeof comp!=='object' || Array.isArray(comp)){ comp=s.items[ci]={}; }
@@ -1751,8 +1751,8 @@ function _salvageState(){
   var raw; try{ raw=JSON.parse(localStorage.getItem('mineros_dx_v5')); }catch(e){ raw=null; }
   if(!raw || !Array.isArray(raw.items)) return null;
   var base=defaultState();
-  var _sch=(raw.compSchema===3)?3:((raw.compSchema===2)?2:1);
-  function _rawIdx(ci){ if(_sch===3) return ci; var c2=ci+1; return _sch===2 ? c2 : (c2<5?c2:c2+1); }
+  var _sch=(raw.compSchema>=4)?4:((raw.compSchema===3)?3:((raw.compSchema===2)?2:1));
+  function _rawIdx(ci){ if(_sch===4) return ci; var c3=(ci<4)?S4_IDX_FROM3.indexOf(ci):ci; if(c3<0) c3=ci; if(_sch===3) return c3; var c2=c3+1; return _sch===2 ? c2 : (c2<5?c2:c2+1); }
   var _legacy=(_sch===1);
   try{
     for(var ci=0; ci<base.items.length; ci++){
@@ -1889,8 +1889,8 @@ function _normalizeInsumoSchema(d){
   if(!d || typeof d!=='object' || d._insumoMigrado) return d;
   var m=d.meta||{}, sch=String(m.schema||'');
   var nComp = (typeof m.esquema_componentes==='number') ? m.esquema_componentes : (/\/1\.(?:[2-9])/.test(sch) ? 10 : (/\/1\.1\b/.test(sch) ? 11 : 12));
-  var gobDone=/\/1\.(?:[3-9])/.test(sch);
-  if(nComp===10 && gobDone) return d;
+  var gobDone=/\/1\.(?:[3-9])/.test(sch), ordDone=/\/1\.(?:[4-9])/.test(sch) || m.esquema_orden===4;
+  if(nComp===10 && gobDone && ordDone) return d;
   var dropped=[], fusion=[], gobRet=[];
   if(Array.isArray(d.elementos)){
     d.elementos=d.elementos.filter(function(el){
@@ -1901,11 +1901,12 @@ function _normalizeInsumoSchema(d){
       if(nComp!==10 && mm && +mm[1]===1 && mm[2]==='01'){ fusion.push(el.eid); return false; }   // fusionado en C2-01 (se conserva su calificación)
       if(nComp!==10) e=_c1MapEid(e);
       if(!gobDone){ if(e==='C3-04'||e==='C3-05'){ gobRet.push(el.eid); return false; } e=_gobMapEid(e); }
+      if(!ordDone) e=_s4MapEid(e);
       el.eid=e; return true;
     });
   }
-  if(Array.isArray(d.brechas_sugeridas)){ if(nComp===12) _c6RemapBrechas(d.brechas_sugeridas); if(nComp!==10) _c1RemapBrechas(d.brechas_sugeridas); if(!gobDone) _gobRemapBrechas(d.brechas_sugeridas); }
-  d._insumoMigrado={desde:(nComp===10?'versión previa al ajuste de Gobernanza':'esquema de '+nComp+' componentes'), retirados:dropped, fusionados:fusion, gobRetirados:gobRet};
+  if(Array.isArray(d.brechas_sugeridas)){ if(nComp===12) _c6RemapBrechas(d.brechas_sugeridas); if(nComp!==10) _c1RemapBrechas(d.brechas_sugeridas); if(!gobDone) _gobRemapBrechas(d.brechas_sugeridas); if(!ordDone) _s4RemapBrechas(d.brechas_sugeridas); }
+  d._insumoMigrado={desde:(nComp===10?(gobDone?'numeración previa al orden del Modelo (esquema 3)':'versión previa al ajuste de Gobernanza'):'esquema de '+nComp+' componentes'), retirados:dropped, fusionados:fusion, gobRetirados:gobRet};
   return d;
 }
 
@@ -1974,11 +1975,12 @@ function _postLoadNotasC6(s){
       var base=(ts.rationale&&String(ts.rationale).trim())?String(ts.rationale):suggestTopicRationale(ti, ts.score);
       if(base.indexOf(MK+p[1])>=0) return;
       ts.rationale=base.replace(/\s+$/,'')+'\n\n'+b; }); });
-  [['C2-01','C6-01',LV],['C2-02','C6-04',['nic']]].forEach(function(p){ p[2].forEach(function(lv){
-    var arr=(s.items[1]&&s.items[1][lv])||[];
+  var _e4=(s.compSchema>=4), _ie=_e4?2:1;
+  [[_e4?'C3-01':'C2-01','C6-01',LV],[_e4?'C3-02':'C2-02','C6-04',['nic']]].forEach(function(p){ p[2].forEach(function(lv){
+    var arr=(s.items[_ie]&&s.items[_ie][lv])||[];
     arr.forEach(function(it,ii){ if(!it||it.eid!==p[0]) return; var b=bloque(p[1],lv); if(!b) return;
       if(String(it.rationale||'').indexOf(MK+p[1])>=0) return;
-      var base=(it.rationale&&String(it.rationale).trim())?String(it.rationale):suggestItemRationale(1, ii, it.score);
+      var base=(it.rationale&&String(it.rationale).trim())?String(it.rationale):suggestItemRationale(_ie, ii, it.score);
       it.rationale=base.replace(/\s+$/,'')+'\n\n'+b; }); }); });
   s._notasC6=true;
 }
@@ -2042,7 +2044,7 @@ function _c1RemapBrechas(arr){
   });
 }
 function _migSchema3_C1(s){
-  if(!s || s.compSchema===3) return;
+  if(!s || s.compSchema>=3) return;
   if(!Array.isArray(s.items)) s.items=[];
   while(s.items.length<11) s.items.push({corp:[],col:[],nic:[]});
   var LV=['corp','col','nic'];
@@ -2093,7 +2095,7 @@ function _migSchema3_C1(s){
   // 5) Brechas
   if(Array.isArray(s.brechasData)) _c1RemapBrechas(s.brechasData);
   // 6) Análisis del analista C1–C6 pendiente en estados muy antiguos: se aplica en la numeración vigente
-  if(s._deferAnalistaC1C6){ if(Array.isArray(s.brechasData)) _applyAnalistaC1C6(s.brechasData); delete s._deferAnalistaC1C6; }
+  // (el análisis del analista pendiente, s._deferAnalistaC1C6, se aplica en _migSchema4_Orden, ya en la numeración vigente)
   s.compSchema=3;
 }
 // Traslada el «Análisis Analista» de C1-01 (archivo) a la sustentación de C2-01 en los 3 niveles (corre en init)
@@ -2105,9 +2107,10 @@ function _postLoadNotasC1(s){
     var src=(A.items[lv]||[]).filter(function(it){ return it&&(it.eid==='C1-01'||/[Pp]rop[oó]sito/.test(it.label||'')); })[0]; if(!src) return;
     var n=_c6NotaAnalista(src.rationale); if(!n) return;
     var sc=(src.expertScore!==undefined&&src.expertScore!==null)?src.expertScore:src.score;
-    (s.items[1]&&s.items[1][lv]||[]).forEach(function(it,ii){ if(!it||it.eid!=='C2-01') return;
+    var _ie=(s.compSchema>=4)?2:1, _ee=(s.compSchema>=4)?'C3-01':'C2-01';
+    (s.items[_ie]&&s.items[_ie][lv]||[]).forEach(function(it,ii){ if(!it||it.eid!==_ee) return;
       if(String(it.rationale||'').indexOf(MK)>=0) return;
-      var base=(it.rationale&&String(it.rationale).trim())?String(it.rationale):suggestItemRationale(1, ii, it.score);
+      var base=(it.rationale&&String(it.rationale).trim())?String(it.rationale):suggestItemRationale(_ie, ii, it.score);
       it.rationale=base.replace(/\s+$/,'')+'\n\nANÁLISIS DEL ANALISTA — '+MK+' «'+(src.label||'')+'» (Modelo de negocio, fusionado en este requisito) · '+LVN[lv]+' · calificación del analista en origen: '+sc+'.\n'+n; });
   });
   s._notasC1=true;
@@ -2231,6 +2234,58 @@ function _migC401(s){
   var prev=['Cadena de valor','Modelo operativo','Modelo de cadena de valor y modelo operativo documentado'];
   if(s.items&&s.items[3]) ['corp','col','nic'].forEach(function(lv){ (s.items[3][lv]||[]).forEach(function(it){ if(it&&it.eid==='C4-01'&&prev.indexOf(it.label)>=0) it.label='Modelo operativo negocio'; }); });
   s._migC401=true;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ESQUEMA 4 (2026-10-27, usuario) · Numeración de componentes en el orden en que aparecen en el Modelo de gestión
+//   C1 Gobernanza sostenible (antes C3) · C2 Modelo operativo para la sostenibilidad (antes C4)
+//   C3 Estrategia de sostenibilidad (antes C2) · C4 Grupos de interés (antes C1) · C5–C10 sin cambio.
+// Es una permutación: no cambia ningún requisito, calificación, sustentación ni brecha; solo su numeración
+// (componente, IDs de requisito Cn-mm y referencias en los textos). Se ejecuta una sola vez (compSchema=4).
+// ═══════════════════════════════════════════════════════════════
+var S4_NUM = {1:4, 2:3, 3:1, 4:2};          // número de componente esquema 3 → esquema 4
+var S4_IDX_FROM3 = [2, 3, 1, 0];             // índice nuevo (0..3) ← índice del esquema 3
+function _s4Num(n){ n = +n; return S4_NUM[n] || n; }
+function _s4Idx(i3){ return (i3 >= 0 && i3 < 4) ? (S4_NUM[i3 + 1] - 1) : i3; }   // índice esquema 3 → índice esquema 4
+function _s4MapEid(e){ var m = /^C(\d{1,2})-(\d{2})$/.exec(String(e || '')); if (!m) return e; var n = +m[1]; return (n >= 1 && n <= 4) ? ('C' + S4_NUM[n] + '-' + m[2]) : e; }
+function _s4MapText(t){
+  if (typeof t !== 'string' || !t) return t;
+  // Las referencias históricas a requisitos retirados («requisito retirado C1-01») conservan su numeración de origen
+  var keep = []; t = t.replace(/(requisito retirado )(C\d{1,2}-\d{2})/g, function(_, p, id){ keep.push(id); return p + '\u0001' + (keep.length - 1) + '\u0001'; });
+  t = t.replace(/(^|[^A-Za-z0-9#_\-–])C([1-4])(-\d{2})?(?![0-9A-Za-z_–])/g, function(all, pre, num, req){ return pre + 'C' + S4_NUM[+num] + (req || ''); });
+  return t.replace(/\u0001(\d+)\u0001/g, function(_, i){ return keep[+i]; });
+}
+function _s4RemapBrechas(arr){
+  if (!Array.isArray(arr)) return;
+  arr.forEach(function(b){
+    if (!b || typeof b !== 'object') return;
+    if (Array.isArray(b.eids)) b.eids = b.eids.map(_s4MapEid);
+    if (Array.isArray(b.comps)) b.comps = b.comps.map(function(c){ return (typeof c === 'number' || /^\d+$/.test(String(c))) ? _s4Num(c) : c; });
+    ['titulo', 'descripcion', 'fuente'].forEach(function(f){ if (typeof b[f] === 'string') b[f] = _s4MapText(b[f]); });
+    if (Array.isArray(b.acciones)) b.acciones = b.acciones.map(function(a){ return (typeof a === 'string') ? _s4MapText(a) : a; });
+  });
+}
+function _migSchema4_Orden(s){
+  if (!s || s.compSchema !== 3 || !Array.isArray(s.items) || s.items.length < 4) return;
+  var LV = ['corp', 'col', 'nic'];
+  // 1) Reordenar componentes (y sus notas)
+  var it3 = s.items.slice(0, 4), nt3 = Array.isArray(s.notes) ? s.notes.slice(0, 4) : null;
+  for (var i3 = 0; i3 < 4; i3++){ s.items[_s4Idx(i3)] = it3[i3]; if (nt3) s.notes[_s4Idx(i3)] = nt3[i3]; }
+  // 2) Consecutivos por componente (claves = índice)
+  if (s.itemSeq && typeof s.itemSeq === 'object'){ var ns = {}; Object.keys(s.itemSeq).forEach(function(k){ var n = +k; ns[(n >= 0 && n < 4) ? _s4Idx(n) : k] = s.itemSeq[k]; }); s.itemSeq = ns; }
+  // 3) IDs de requisito y referencias en los textos
+  s.items.forEach(function(comp){ if (!comp) return; LV.forEach(function(lv){ (comp[lv] || []).forEach(function(it){
+    if (!it) return; if (it.eid) it.eid = _s4MapEid(it.eid);
+    if (typeof it.desc === 'string') it.desc = _s4MapText(it.desc);
+    if (typeof it.rationale === 'string') it.rationale = _s4MapText(it.rationale);
+  }); }); });
+  if (Array.isArray(s.notes)) s.notes.forEach(function(n, ci){ if (n && typeof n === 'object') LV.forEach(function(lv){ if (typeof n[lv] === 'string') n[lv] = _s4MapText(n[lv]); }); else if (typeof n === 'string') s.notes[ci] = _s4MapText(n); });
+  if (Array.isArray(s.topicScores)) s.topicScores.forEach(function(ts){ if (ts) LV.forEach(function(lv){ if (ts[lv] && typeof ts[lv].rationale === 'string') ts[lv].rationale = _s4MapText(ts[lv].rationale); }); });
+  // 4) Brechas (componentes, requisitos y textos)
+  if (Array.isArray(s.brechasData)) _s4RemapBrechas(s.brechasData);
+  // 5) Análisis del analista pendiente de estados muy antiguos: se aplica ya en la numeración vigente
+  if (s._deferAnalistaC1C6){ if (Array.isArray(s.brechasData)) _applyAnalistaC1C6(s.brechasData); delete s._deferAnalistaC1C6; }
+  s.compSchema = 4;
 }
 
 // Estrategia de sostenibilidad ≠ estrategia de negocio IDEAS (2026-10-26): C3-01 en estados guardados (reemplazo exacto)
@@ -2680,6 +2735,7 @@ function loadState() {
       _migC401(s);             // C4-01 → «Modelo operativo negocio»
       _migValGob(s);           // asuntos #10 (3/4/3) y #12 (4/4/4) aprobados tras retirar Ética y Gobierno fiscal
       _migNivel3Nombre(s);     // nombre del nivel 3 «En desarrollo / Formalización» en los textos guardados
+      _migSchema4_Orden(s);    // esquema 4: C1 Gobernanza · C2 Modelo operativo · C3 Estrategia · C4 Grupos de interés (orden del Modelo)
       DEFAULT_ITEMS.forEach((defItems, ci) => {
         ['corp','col','nic'].forEach(lv => {
           if (!s.items[ci][lv]) {
@@ -2946,8 +3002,8 @@ function toggleEditMode(){
 
 // ═══════════════════════════════════════════════
 // MODEL DIAGRAM (Resumen tab) — «Núcleo y anillos» (2026-10-26, boceto E+ v4 aprobado por el usuario)
-//   01 Punto de partida (entradas, no se califican) → 02 Marco de dirección y gestión institucional (C3 + C4)
-//   → 03 Estrategia de sostenibilidad: núcleo C2, ciclo C1 · C5 · C6 (retroalimentación), anillo de los 4 compromisos
+//   01 Punto de partida (entradas, no se califican) → 02 Marco de dirección y gestión institucional (C1 + C2)
+//   → 03 Estrategia de sostenibilidad: núcleo C3, ciclo C4 · C5 · C6 (retroalimentación), anillo de los 4 compromisos
 //   → Ejes estratégicos (6) + Habilitadores transversales → 04 Soporte y capacidades de gestión (C7–C10)
 //   Todo se calcula en vivo (madurez global ponderada); lienzo fijo 880 px que se escala al ancho disponible.
 // ═══════════════════════════════════════════════
@@ -3171,7 +3227,7 @@ function renderModelDiagram() {
   h += pill(308, 'groups', 'Grupos de interés', 'típicos del negocio', '', 'gi');
   h += pill(596, 'list_alt', 'Asuntos relevantes', 'del negocio', ' onclick="showTab(\'capa3\',document.querySelector(\'.tab-btn[onclick*=capa3]\'))" tabindex="0" role="button"', 'ar');
 
-  // ── 02 Marco de dirección y gestión institucional (C3 · C4)
+  // ── 02 Marco de dirección y gestión institucional (C1 · C2)
   h += dg2Label(20, 128, '02', 'Marco de dirección y gestión institucional');
   const front = function(x, id, desc){
     const c = C(id);
@@ -3180,23 +3236,23 @@ function renderModelDiagram() {
       + '<br><span style="color:#B9CCD8;font-size:11px;">' + desc + '</span>'
       + dg2Mat(G(id), { dark:true, lab:'white', empty:'rgba(255,255,255,.18)', segW:22 }) + '</span></div>';
   };
-  h += front(20, 3, 'Dirección, liderazgo y supervisión');
-  h += front(480, 4, 'Despliegue en corporativo y operaciones');
+  h += front(20, 1, 'Dirección, liderazgo y supervisión');
+  h += front(480, 2, 'Despliegue en corporativo y operaciones');
 
   // ── 03 Estrategia de sostenibilidad
   h += dg2Label(20, 280, '03', 'Estrategia de sostenibilidad');
   h += '<div style="position:absolute;left:20px;top:298px;width:190px;display:flex;flex-direction:column;gap:5px;font-size:10.5px;line-height:15px;color:#8A97A1;"><span>Retroalimentación continua y dinámica</span><span>Decisiones de priorización y gestión</span></div>';
-  const c2 = C(2);
-  h += '<div class="dg2-hit"' + click(2) + ' style="position:absolute;left:368px;top:478px;width:144px;height:144px;box-sizing:border-box;padding:15px;display:flex;align-items:center;justify-content:center;text-align:center;background:#BED4CF;border-radius:50%;box-shadow:0 0 0 5px #F2F6F9,0 0 0 6px #C9D6DF;font-size:9.5px;line-height:13px;color:rgba(28,28,28,.6);">'
+  const c2 = C(3);
+  h += '<div class="dg2-hit"' + click(3) + ' style="position:absolute;left:368px;top:478px;width:144px;height:144px;box-sizing:border-box;padding:15px;display:flex;align-items:center;justify-content:center;text-align:center;background:#BED4CF;border-radius:50%;box-shadow:0 0 0 5px #F2F6F9,0 0 0 6px #C9D6DF;font-size:9.5px;line-height:13px;color:rgba(28,28,28,.6);">'
      + '<span><span class="mi" style="font-size:18px;color:#1C1C1C;">' + c2.icon + '</span><br><b style="color:#1C1C1C;font-family:\'Space Grotesk\',\'Gotu\',sans-serif;font-size:14px;line-height:16px;">' + c2.name + '</b>'
-     + dg2Mat(G(2), { lab:'#1C1C1C', empty:'rgba(255,255,255,.6)', segW:13, segH:3, gap:2, mt:5 }) + '</span></div>';
+     + dg2Mat(G(3), { lab:'#1C1C1C', empty:'rgba(255,255,255,.6)', segW:13, segH:3, gap:2, mt:5 }) + '</span></div>';
   const orb = function(x, y, id){
     const c = C(id);
     return '<div class="dg2-hit"' + click(id) + ' style="position:absolute;left:' + x + 'px;top:' + y + 'px;width:124px;height:124px;box-sizing:border-box;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;background:#F18446;border-radius:50%;font-size:9.5px;line-height:12px;color:rgba(255,255,255,.78);">'
       + '<span><span class="mi" style="font-size:18px;color:white;">' + c.icon + '</span><br><b style="color:white;font-size:12px;line-height:14px;">' + c.name.replace(/^Gestión de riesgos/, 'Riesgos') + '</b>'
       + dg2Mat(G(id), { lab:'white', empty:'rgba(255,255,255,.45)', segW:12, segH:3, gap:2, mt:5 }) + '</span></div>';
   };
-  h += orb(239, 408, 1) + orb(517, 408, 5) + orb(378, 648, 6);
+  h += orb(239, 408, 4) + orb(517, 408, 5) + orb(378, 648, 6);
 
   // ── Ejes estratégicos (6) + Habilitadores transversales
   const ejes = (typeof SUST_EJES !== 'undefined' ? SUST_EJES : []).filter(function(o){ return !o.hab; });
@@ -3430,23 +3486,23 @@ function obsForCrit(k, text, status){
 }
 // Situación observada por ELEMENTO × criterio de diseño (anclada en la evidencia de cada elemento)
 var ELEM_CRIT=[
-[ /* C1 Grupos de interés */
- {efic:'los grupos de interés están identificados y segmentados, con mapa publicado',idon:'gestionado por Relacionamiento/Gestión Social; supervisión del área',form:'está documentado y publicado en la Memoria (GRI 2-29)',auto:'el mapa se mantiene sin una plataforma de gestión de stakeholders integrada',frec:'se actualiza en el ciclo de materialidad/anual'},
- {efic:'operan canales diferenciados (asambleas, mesas, brigadas), el sistema de PQR (GRI 2-26) y los programas comunitarios (Corazón de Oro, Fundación Mineros, OXI)',idon:'responsabilidad en Gestión Social con equipos territoriales',form:'los mecanismos, el PQR y los programas están documentados por tipo de grupo de interés',auto:'los canales y el PQR no están integrados en un sistema único de relacionamiento',frec:'se ejecutan de forma recurrente según cada canal'}
+[ /* C1 Gobernanza de sostenibilidad */
+ {efic:'la Junta ejerce supervisión ASG a través de sus comités; su composición con criterios de diversidad, independencia y competencias ASG aún no se publica de forma detallada',idon:'comités de Auditoría, Riesgos y Sostenibilidad activos (GRI 2-12/2-13)',form:'la supervisión ASG está documentada; la matriz de composición/independencia no está publicada',auto:'la información de gobierno se soporta corporativamente, sin plataforma dedicada',frec:'sesiones de comité periódicas'},
+ {efic:'la compensación variable ligada a KPIs ASG alinea incentivos con el desempeño',idon:'gobernado por el Comité de Compensación',form:'confirmado y documentado en la Memoria 2025',auto:'el vínculo KPI ASG–compensación no está automatizado de forma declarada',frec:'evaluación anual de desempeño'}
 ],
-[ /* C2 Estrategia de sostenibilidad */
+[ /* C2 Modelo operativo para la sostenibilidad */
+ {efic:'la cadena de valor está descrita de extremo a extremo (aguas arriba y aguas abajo), pero la trazabilidad y las dependencias upstream/downstream aún no son completas',idon:'responsables por operación con supervisión corporativa',form:'documentado (GRI 2-6) con actividades y relaciones comerciales; la visión aguas arriba/aguas abajo no está plenamente cerrada',auto:'la información de cadena existe, sin plataforma unificada ni trazabilidad end-to-end',frec:'actualización anual'},
+ {efic:'el modelo operativo ejecuta parcialmente la estrategia de sostenibilidad y acompaña la cadena de valor; falta visión prospectiva integrada y diferenciación de roles corporativo/operación',idon:'roles entre corporativo y operación aún no plenamente diferenciados',form:'no formalizado como modelo operativo de sostenibilidad con células de trabajo y sinergias',auto:'sin sistema que soporte la ejecución integrada de la estrategia',frec:'sin cadencia definida de despliegue'},
+ {efic:'los nuevos proyectos incorporan criterios ASG (Porvenir 127 ha; exploración Chile/Argentina básica), pero sin metodología integral de gestión de proyectos con mirada de sostenibilidad',idon:'gestionado por Exploración/Proyectos; sin gobierno formal de la gestión de proyectos sostenibles',form:'documentado por proyecto, sin estándar/metodología formal de gestión de proyectos',auto:'sin sistema que consolide el desempeño de sostenibilidad de los proyectos',frec:'revisión por hitos de proyecto'}
+],
+[ /* C3 Estrategia de sostenibilidad */
  {efic:'los cuatro compromisos y seis ejes estratégicos, derivados de la estrategia de negocio IDEAS y del propósito corporativo (declarado y documentado, GRI 2-22), conectan con asuntos, KPIs y metas; en el portafolio, procesos clave (NAF, SBG, legalización minera) incorporan el análisis de sostenibilidad, pero no de forma sistemática en productos, servicios y relacionamiento',idon:'gobernado por la alta dirección de sostenibilidad; no se evidencia un líder que direccione el portafolio con criterio de sostenibilidad, ni está claro el rol del corporativo y de las operaciones para materializar el propósito',form:'la integración está totalmente documentada',auto:'el vínculo asunto–KPI–meta no está en una plataforma integrada',frec:'seguimiento con la planeación estratégica'},
  {efic:'hay objetivos definidos y reportados por definición estratégica de sostenibilidad, considerando los asuntos materiales, e incluye la hoja de ruta climática con proyectos e inversiones (Salto Grande, GLP, solar) con avances; la inversión social se ejecuta (infraestructura social y proyectos productivos) sin metas de impacto ni plan de autonomía de las iniciativas',idon:'responsables por dimensión con coordinación de Sostenibilidad',form:'las metas 2025 y los proyectos están definidos y documentados con montos',auto:'el avance de metas y proyectos se consolida sin automatización declarada',frec:'reporte anual y seguimiento periódico de proyectos'},
  {efic:'las contribuciones a los ODS se vinculan a indicadores GRI, pero sin teoría del cambio con contribución neta e impacto transformacional verificable; la inversión social tampoco aplica una teoría del cambio ni mide su impacto o transformación',idon:'falta un responsable de la teoría del cambio y de la medición de impacto que retroalimente la estrategia',form:'la alineación ODS está documentada por asunto, sin teoría del cambio formal ni métricas de impacto',auto:'sin métricas ni trazabilidad de la contribución neta ni del impacto/transformación',frec:'reporte anual, sin monitoreo de impacto que refine la estrategia'}
 ],
-[ /* C3 Gobernanza de sostenibilidad */
- {efic:'la Junta ejerce supervisión ASG a través de sus comités; su composición con criterios de diversidad, independencia y competencias ASG aún no se publica de forma detallada',idon:'comités de Auditoría, Riesgos y Sostenibilidad activos (GRI 2-12/2-13)',form:'la supervisión ASG está documentada; la matriz de composición/independencia no está publicada',auto:'la información de gobierno se soporta corporativamente, sin plataforma dedicada',frec:'sesiones de comité periódicas'},
- {efic:'la compensación variable ligada a KPIs ASG alinea incentivos con el desempeño',idon:'gobernado por el Comité de Compensación',form:'confirmado y documentado en la Memoria 2025',auto:'el vínculo KPI ASG–compensación no está automatizado de forma declarada',frec:'evaluación anual de desempeño'}
-],
-[ /* C4 Modelo operativo para la sostenibilidad */
- {efic:'la cadena de valor está descrita de extremo a extremo (aguas arriba y aguas abajo), pero la trazabilidad y las dependencias upstream/downstream aún no son completas',idon:'responsables por operación con supervisión corporativa',form:'documentado (GRI 2-6) con actividades y relaciones comerciales; la visión aguas arriba/aguas abajo no está plenamente cerrada',auto:'la información de cadena existe, sin plataforma unificada ni trazabilidad end-to-end',frec:'actualización anual'},
- {efic:'el modelo operativo ejecuta parcialmente la estrategia de sostenibilidad y acompaña la cadena de valor; falta visión prospectiva integrada y diferenciación de roles corporativo/operación',idon:'roles entre corporativo y operación aún no plenamente diferenciados',form:'no formalizado como modelo operativo de sostenibilidad con células de trabajo y sinergias',auto:'sin sistema que soporte la ejecución integrada de la estrategia',frec:'sin cadencia definida de despliegue'},
- {efic:'los nuevos proyectos incorporan criterios ASG (Porvenir 127 ha; exploración Chile/Argentina básica), pero sin metodología integral de gestión de proyectos con mirada de sostenibilidad',idon:'gestionado por Exploración/Proyectos; sin gobierno formal de la gestión de proyectos sostenibles',form:'documentado por proyecto, sin estándar/metodología formal de gestión de proyectos',auto:'sin sistema que consolide el desempeño de sostenibilidad de los proyectos',frec:'revisión por hitos de proyecto'}
+[ /* C4 Grupos de interés */
+ {efic:'los grupos de interés están identificados y segmentados, con mapa publicado',idon:'gestionado por Relacionamiento/Gestión Social; supervisión del área',form:'está documentado y publicado en la Memoria (GRI 2-29)',auto:'el mapa se mantiene sin una plataforma de gestión de stakeholders integrada',frec:'se actualiza en el ciclo de materialidad/anual'},
+ {efic:'operan canales diferenciados (asambleas, mesas, brigadas), el sistema de PQR (GRI 2-26) y los programas comunitarios (Corazón de Oro, Fundación Mineros, OXI)',idon:'responsabilidad en Gestión Social con equipos territoriales',form:'los mecanismos, el PQR y los programas están documentados por tipo de grupo de interés',auto:'los canales y el PQR no están integrados en un sistema único de relacionamiento',frec:'se ejecutan de forma recurrente según cada canal'}
 ],
 [ /* C5 Doble materialidad */
  {efic:'el análisis de doble materialidad se realiza con la metodología de 4 pasos y produce la matriz con resultado en los 4 cuadrantes; su alcance cubre los asuntos de la operación responsable, cuya gestión se evalúa por asunto en Capa 3',idon:'liderado por Sostenibilidad con participación de áreas',form:'los 4 pasos, la categorización en 4 cuadrantes y el ciclo bienal están documentados (GRI 3-1/3-2)',auto:'el proceso se soporta documentalmente, sin herramienta dedicada',frec:'ciclo bienal documentado'},
@@ -4713,17 +4769,17 @@ function _applyAnalistaC1C6(arr){
       b.descripcion=String(b.descripcion||'')+'<p style="margin:9px 0 0;"><strong>'+MARK+', C1–C6):</strong> '+note+'</p>';
     }
   }
-  comp('roles y responsabilidades por línea de gestión',['C6-04','C2-01','C2-02','C3-01'],[1,3],[2,3,6],
+  comp('roles y responsabilidades por línea de gestión',['C6-04','C3-01','C3-02','C1-01'],[1,3],[3,1,6],
     'el rol del corporativo para materializar la estrategia de sostenibilidad no está definido y tiende a entenderse delegado en la VP de Sostenibilidad y en los presidentes de país, cuando la priorización y armonización de los frentes debería recaer en el Presidente de la compañía y de cada operación. Varios responsables de asuntos no tienen claro su rol y por ello no definen metas ni KPIs; la supervisión de la Junta se limita a los elementos ya gestionados y el modelo de tres líneas solo opera en algunos procesos. La coyuntura de cambio es una oportunidad para redefinir estos roles.');
-  comp('prospectiva de sostenibilidad integrada',['C4-02','C4-01','C2-01'],[11,16],[4,2],
+  comp('prospectiva de sostenibilidad integrada',['C2-02','C2-01','C3-01'],[11,16],[2,3],
     'la sostenibilidad se entiende principalmente como Ambiental, Social y SST, dejando por fuera DDHH, gestión de riesgos, cambio climático (incluido el Alcance 3), finanzas sostenibles, talento y ética; no existe un modelo operativo que gestione la sostenibilidad de forma integral a lo largo de la cadena de valor, que está definida pero sin criterios de gestión en cada eslabón.');
-  comp('escucha sistémica',['C5-03','C1-01','C1-02'],[6,1],[1,5],
+  comp('escucha sistémica',['C5-03','C4-01','C4-02'],[6,1],[4,5],
     'en grupos de interés no se evidenció una matriz de responsables o voceros por grupo (ni su extensión entre operaciones con grupos compartidos), ni un ejercicio formal de identificación y priorización, ni una definición explícita de los mecanismos de relacionamiento —que parecen surgir de la interacción cotidiana— ni su revisión periódica.');
-  comp('teoría del cambio de la estrategia',['C2-01','C2-02','C2-03'],[16,6],[2],
+  comp('teoría del cambio de la estrategia',['C3-01','C3-02','C3-03'],[16,6],[3],
     'en la prueba de recorrido, áreas del corporativo y de sostenibilidad de las operaciones no están alineadas sobre qué constituye gestión de sostenibilidad (por ejemplo, revelaciones financieras de sostenibilidad y riesgos de clima y de DDHH), por lo que no siempre los gestionan; la trazabilidad del dato y el monitoreo de efectividad existen en el frente de reportes, pero no en los demás frentes.');
-  comp('Criterios de sostenibilidad integrales en la contratación',['C5-01'],[8,9,13],[5,4],
+  comp('Criterios de sostenibilidad integrales en la contratación',['C5-01'],[8,9,13],[5,2],
     'existe voluntad de gestionar el abastecimiento con criterios de sostenibilidad, pero aún no se define qué se exigirá ni con qué objetivos; en Colombia y Nicaragua no se evidenció gestión ASG de proveedores, sí un avance hacia la formalización (verificación de pagos de seguridad social y SST) que puede anclar un plan de cierre de brechas laborales en zonas rurales. La trazabilidad del oro se incorpora como instrumento de esta gestión, no como elemento independiente.');
-  comp('Continuidad y transformación de la inversión social',['C5-01','C2-02','C2-03'],[6,16,7],[5,2],
+  comp('Continuidad y transformación de la inversión social',['C5-01','C3-02','C3-03'],[6,16,7],[5,3],
     'la gestión social y ambiental está bien ejecutada, pero falta madurar el modelo con medición de impacto y con una coordinación efectiva corporativo–operación que agregue valor; en inversión social falta direccionamiento estratégico (necesidades, impacto, priorización y autonomía de las iniciativas) y en lo ambiental y de biodiversidad falta incorporar las tendencias de finanzas para la biodiversidad.');
   comp('Gestión intencional e integral de derechos humanos',['C5-01'],[13,10,6],[5],
     'la gestión de DDHH es un propósito declarado pero sin consenso sobre objetivos ni planes de trabajo, y sin una estrategia de las operaciones coordinada con el corporativo; tampoco se evidencian prácticas específicas de DDHH y de prevención de la corrupción en el relacionamiento con autoridades y comunidades (políticas, protocolos de reuniones y de apoyo).');
@@ -5217,24 +5273,24 @@ function renderBrechas(){
 // (dinámica: madurez de componentes × asuntos materiales × IROs vinculados)
 // ═══════════════════════════════════════════════════════════════
 var IDEAS_CHAIN=[
-  {key:'I', name:'Incrementar producción', color:'#F18446', comps:[2,4,5], topics:[12,16,9,4]},
-  {key:'D', name:'Desarrollar territorio', color:'#1A5C80', comps:[5,1,4],   topics:[6,16,13,8]},
+  {key:'I', name:'Incrementar producción', color:'#F18446', comps:[3,2,5], topics:[12,16,9,4]},
+  {key:'D', name:'Desarrollar territorio', color:'#1A5C80', comps:[5,4,2],   topics:[6,16,13,8]},
   {key:'E', name:'Excelencia operacional', color:'#2E7D32', comps:[5,6,7,8,9], topics:[5,2,4,17,7]},
-  {key:'A', name:'Alto desempeño',         color:'#093E5E', comps:[3,5,6,9,10], topics:[1,10,3,14,18]},
-  {key:'S', name:'Shareholder’s Value',    color:'#7C3AED', comps:[2,10], topics:[12,11,1,15]}
+  {key:'A', name:'Alto desempeño',         color:'#093E5E', comps:[1,5,6,9,10], topics:[1,10,3,14,18]},
+  {key:'S', name:'Shareholder’s Value',    color:'#7C3AED', comps:[3,10], topics:[12,11,1,15]}
 ];
 var ODS_CHAIN=[
-  {name:'Desarrollo económico', ods:[8,10,12,16], comps:[5,4,2],  topics:[16,8,9,12]},
-  {name:'Derechos humanos',     ods:[8,10,16],    comps:[5,3],  topics:[13]},
-  {name:'Gestión social',       ods:[1,10,16],    comps:[5,1],    topics:[6]},
+  {name:'Desarrollo económico', ods:[8,10,12,16], comps:[5,2,3],  topics:[16,8,9,12]},
+  {name:'Derechos humanos',     ods:[8,10,16],    comps:[5,1],  topics:[13]},
+  {name:'Gestión social',       ods:[1,10,16],    comps:[5,4],    topics:[6]},
   {name:'Salud y seguridad en el trabajo', ods:[3,8], comps:[7], topics:[5]},
   {name:'Agua',                 ods:[6,12],       comps:[5],   topics:[17]},
   {name:'Biodiversidad',        ods:[6,12,15],    comps:[5],    topics:[7]},
   {name:'Materiales y relaves', ods:[12],         comps:[5,6],  topics:[2]},
-  {name:'Gestión climática',    ods:[7,13],       comps:[5,2,6],  topics:[15,4]},
-  {name:'Gobierno corporativo', ods:[8,12,16],    comps:[3],    topics:[1,10,3]},
-  {name:'Nuestro talento',      ods:[4,8,10,16],  comps:[3,7],    topics:[14]},
-  {name:'Temas transversales',  ods:[9,16],       comps:[8,2], topics:[11,18]}
+  {name:'Gestión climática',    ods:[7,13],       comps:[5,3,6],  topics:[15,4]},
+  {name:'Gobierno corporativo', ods:[8,12,16],    comps:[1],    topics:[1,10,3]},
+  {name:'Nuestro talento',      ods:[4,8,10,16],  comps:[1,7],    topics:[14]},
+  {name:'Temas transversales',  ods:[9,16],       comps:[8,3], topics:[11,18]}
 ];
 
 function computeElemVal(comps, topics){
@@ -7119,7 +7175,7 @@ function validateInsumo(data){
     (b.topics||[]).forEach(function(t){ if(!(t>=1&&t<=18)) warns.push('brecha «'+_insEsc(String(b.titulo).slice(0,24))+'…» topic fuera de 1–18: '+_insEsc(t)); });
     stats.brechas++;
   });
-  if(data && data._insumoMigrado){ var _im=data._insumoMigrado, _dr=_im.retirados||[], _fu=_im.fusionados||[]; warns.push('Insumo con numeración anterior ('+_im.desde+'): IDs y componentes renumerados al esquema actual de '+COMP_META.length+' componentes.'+(_dr.length?(' No se aplican las calificaciones de requisitos retirados de «Operación responsable» ('+_dr.join(', ')+'): sus temas se evalúan ahora en el asunto material de Capa 3.'):'')+(_fu.length?(' La calificación de «Propósito y misión» ('+_fu.join(', ')+') no se aplica: ese requisito se fusionó en C2-01, que conserva su propia calificación.'):'')+((_im.gobRetirados&&_im.gobRetirados.length)?(' No se aplican las calificaciones de los requisitos retirados de Gobernanza (ética y gobierno fiscal: '+_im.gobRetirados.join(', ')+'): se evalúan en los asuntos #10 y #12.'):'')); }
+  if(data && data._insumoMigrado){ var _im=data._insumoMigrado, _dr=_im.retirados||[], _fu=_im.fusionados||[]; warns.push('Insumo con numeración anterior ('+_im.desde+'): IDs y componentes renumerados al esquema actual de '+COMP_META.length+' componentes.'+(_dr.length?(' No se aplican las calificaciones de requisitos retirados de «Operación responsable» ('+_dr.join(', ')+'): sus temas se evalúan ahora en el asunto material de Capa 3.'):'')+(_fu.length?(' La calificación de «Propósito y misión» ('+_fu.join(', ')+') no se aplica: ese requisito se fusionó en C3-01, que conserva su propia calificación.'):'')+((_im.gobRetirados&&_im.gobRetirados.length)?(' No se aplican las calificaciones de los requisitos retirados de Gobernanza (ética y gobierno fiscal: '+_im.gobRetirados.join(', ')+'): se evalúan en los asuntos #10 y #12.'):'')); }
   return {errs:errs,warns:warns,stats:stats,idx:idx};
 }
 function importInsumo(input){
