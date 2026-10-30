@@ -295,6 +295,19 @@
   .notes-area::placeholder { color: #BDBDBD; }
 
   /* ── Botón de criterio ── */
+  /* Capa 3 · tabla de asuntos materiales (2026-10-29): anchos fijos por columna, encabezado alineado con sus datos */
+  .topics-tbl { table-layout: fixed; border-collapse: collapse; }
+  .topics-tbl td { vertical-align: middle; overflow-wrap: break-word; }
+  .topics-tbl .tt-h th { font-family:'Satoshi','Inter',sans-serif; font-size:9.5px; font-weight:700; color:#8A949C; line-height:1.2; padding:8px 8px 7px; vertical-align:bottom; background:#FAFBFC; border-bottom:1px solid #E9ECEF; }
+  .topics-tbl .tt-h th.c { text-align:center; padding-left:2px; padding-right:2px; }
+  .topics-tbl .tt-h th.l { text-align:left; }
+  .topics-tbl .tt-h th.s { color:#C4631A; background:#FFF6EF; }
+  .topics-tbl .tt-h th.k { background:#F3F5F7; color:#6B7680; }
+  .topics-tbl .tt-h th.q { color:#A9B1B8; font-weight:600; }
+  .topics-tbl .tt-g { font-family:'Satoshi','Inter',sans-serif; padding:6px 8px 2px; text-align:center; font-size:8.5px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:#8A949C; background:#F3F5F7; border-radius:8px 8px 0 0; white-space:nowrap; }
+  .topics-tbl .tt-g-sust { color:#C4631A; background:#FFF6EF; }
+  .topics-tbl td.tt-k { background:#FAFBFC; }
+  .topics-tbl.v-global .tt-h th.k:after { content:'Corp · Col · Nic'; display:block; margin-top:2px; font-size:7px; font-weight:600; color:#AAB2B8; letter-spacing:0; white-space:nowrap; }
   .crit-btn {
     cursor: pointer; padding: 2px 8px; border-radius: 12px;
     font-size: 11px; font-weight: 600; border: 1px solid;
@@ -806,7 +819,7 @@
 <div id="tab-capa3" class="section-tab">
   <div class="mb-5">
     <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Capa 3 · Asuntos materiales — Doble materialidad</h2>
-    <p class="text-xs mt-1" style="color:var(--gray-dp);">Metodología 4 pasos · GRI 3-1/3-2 · 18 asuntos categorizados. Haz clic en cada criterio para ciclar entre ✗ / △ / ✓.</p>
+    <p class="text-xs mt-1" style="color:var(--gray-dp);">Metodología 4 pasos · GRI 3-1/3-2 · 18 asuntos categorizados. La madurez de cada asunto se califica por nivel con 6 criterios (✗ / △ / ✓).</p>
   </div>
   <div id="matMapaCard" style="border:1px solid #E4E7EB;border-radius:12px;padding:20px;background:white;margin-bottom:20px;">
     <div style="display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
@@ -905,42 +918,45 @@
     <button class="filter-btn" style="font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid #E4E7EB;background:white;color:#2E7D32;font-family:'Satoshi','Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:5px;" onclick="filterTopics('lp',this)"><span style="width:7px;height:7px;background:#2E7D32;border-radius:2px;display:inline-block;flex-shrink:0;"></span>Monitoreo largo plazo · <span id="fcount-lp">3</span></button>
     <button class="filter-btn" style="font-size:11px;padding:4px 12px;border-radius:6px;border:1px solid #E4E7EB;background:white;color:var(--orange);font-family:'Satoshi','Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:5px;" onclick="filterTopics('imp',this)"><span style="width:7px;height:7px;background:var(--orange);border-radius:2px;display:inline-block;flex-shrink:0;"></span>Impacto GI · <span id="fcount-imp">2</span></button>
   </div>
+  <div id="topicsViewBar" style="margin-bottom:8px;"></div>
   <div class="no-print" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
     <button id="topicsEditBtn" onclick="toggleTopicsEdit()" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;padding:6px 14px;border-radius:8px;cursor:pointer;border:1.5px solid var(--orange);background:white;color:var(--orange);font-family:'Satoshi','Inter',sans-serif;">
       <span class="mi" style="font-size:15px;" id="topicsEditIcon">edit</span>
       <span id="topicsEditLabel">Activar edición</span>
     </button>
-    <button onclick="syncAllTopicsFromCrit()" title="Pone al día la madurez de los asuntos en modo Auto según sus criterios (no toca los marcados como Manual)" style="display:inline-flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;border:1px solid #D5DBE0;background:white;color:#5A6670;font-family:'Satoshi','Inter',sans-serif;"><span class="mi" style="font-size:15px;">sync</span>Sincronizar madurez con criterios</button>
-    <span style="font-size:9.5px;color:#AAA;">Con edición activa: nombre, cuadrante, roles, reporte y marcos editables; clic en Gobernanza/Procesos/Tecnología-datos/Indicadores para ciclar ✗ → △ → ✓. La madurez de cada asunto sigue sus criterios en modo <strong>Auto</strong>; pásalo a <strong>Manual</strong> en su detalle para fijar la nota.</span>
+    <span id="topicsEditHint" style="font-size:9.5px;color:#AAA;"></span>
   </div>
   <div class="dx-card" style="overflow-x:auto;">
-    <table class="w-full text-xs" style="min-width:0;">
+    <table id="topicsTable" class="w-full text-xs topics-tbl">
+      <colgroup id="topicsColgroup"></colgroup>
       <thead>
-        <tr class="bg-gray-50">
+        <tr class="tt-grp">
           <th colspan="2"></th>
-          <th id="thSustGrp" colspan="1" style="padding:6px 8px 0;text-align:center;font-size:9px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:#C4631A;background:#FFF6EF;border-radius:8px 8px 0 0;white-space:nowrap;">Estrategia de sostenibilidad</th>
-          <th colspan="9"></th>
+          <th id="thSustGrp" colspan="1" class="tt-g tt-g-sust">Estrategia de sostenibilidad</th>
+          <th colspan="2"></th>
+          <th colspan="6" class="tt-g" title="Criterios de gestión calificados por nivel: ✗ No existe · △ Parcial · ✓ Completo">Criterios de gestión</th>
+          <th colspan="1"></th>
         </tr>
-        <tr class="border-b border-gray-100 bg-gray-50">
-          <th class="text-center py-3 px-1 font-semibold text-gray-400" style="font-size:10px;line-height:1.2;" title="Ranking en la matriz de doble materialidad">#</th>
-          <th class="text-left py-3 px-2 font-semibold text-gray-400">Asunto material</th>
-          <th class="text-left py-3 px-2 font-semibold" style="color:#C4631A;background:#FFF6EF;" title="Compromiso de sostenibilidad principal (relleno) y relacionados (punteado)">Compromiso</th>
-          <th id="thSustEje" class="text-left py-3 px-2 font-semibold" style="color:#C4631A;background:#FFF6EF;display:none;" title="Visible solo en modo edición: eje principal y relacionados">Eje estratégico</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400" style="font-size:10px;line-height:1.2;">Cuadrante</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400" style="font-size:10px;line-height:1.2;" title="Madurez global ponderada (analista, 3 niveles)">Madurez<br>global</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;">Gober-<br>nanza</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;">Roles</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;">Procesos</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;" title="Tecnología y trazabilidad del dato donde el volumen/criticidad lo exige">Tec./<br>datos</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;">Indica-<br>dores</th>
-          <th class="text-center py-3 px-1 font-semibold text-gray-400" style="font-size:10px;line-height:1.2;">Reporte</th>
-          <th class="text-left py-3 px-1 font-semibold text-gray-400 hidden md:table-cell" style="font-size:10px;line-height:1.2;">Marcos</th>
+        <tr class="tt-h">
+          <th class="c" title="Ranking en la matriz de doble materialidad">#</th>
+          <th class="l">Asunto material</th>
+          <th class="l s" title="Compromiso de sostenibilidad principal (relleno) y relacionados (punteado)">Compromiso</th>
+          <th id="thSustEje" class="l s" style="display:none;" title="Visible solo en modo edición: eje principal y relacionados">Eje estratégico</th>
+          <th class="c q" title="Cuadrante de la matriz de doble materialidad">Cuadrante</th>
+          <th id="thTopicMat" class="c" title="Promedio ponderado de la madurez de los 3 niveles (pesos de Parámetros)">Madurez<br>global</th>
+          <th class="c k" title="Políticas y lineamientos formales del asunto, con supervisión de un órgano de gobierno">Políticas</th>
+          <th class="c k" title="Responsable idóneo asignado, con segregación de funciones">Roles</th>
+          <th class="c k" title="Proceso documentado, estandarizado y con frecuencia definida">Procesos</th>
+          <th class="c k" title="Soporte tecnológico y trazabilidad del dato donde el volumen/criticidad lo exige">Tec. /<br>datos</th>
+          <th class="c k" title="Indicadores de resultado con línea base, meta y seguimiento">Indicadores</th>
+          <th class="c k" title="Divulgación pública trazable del asunto">Reporte</th>
+          <th class="l">Marcos</th>
         </tr>
       </thead>
       <tbody id="topicsTableBody"></tbody>
     </table>
     <p style="font-size:10.5px;color:#B0B0B0;padding:8px 16px;border-top:1px solid #F5F5F5;" class="no-print"><span class="mi mi-sm" style="font-size:13px;vertical-align:middle;color:#C8C8C8;margin-right:4px;">touch_app</span>Clic en cada criterio para ciclar: <span class="crit-btn crit-0">✗ No existe</span> → <span class="crit-btn crit-1">△ Parcial</span> → <span class="crit-btn crit-2">✓ Completo</span></p>
-    <p style="font-size:9px;color:#9A9A9A;padding:0 16px 10px;line-height:1.5;"><span class="mi mi-sm" style="font-size:12px;vertical-align:middle;color:#C8C8C8;margin-right:3px;">info</span><strong style="color:#8A8A8A;">Alcance:</strong> Gobernanza, Procesos, Tecnología/datos, Indicadores, Roles y Reporte (capítulo) son <strong>valoración y mapeo del modelo, a validar por el analista</strong>; el nombre, el cuadrante y los Marcos (GRI/SASB/TCFD) son referencias de la Memoria 2025 y de estándares aplicables. La <strong>Madurez global</strong> es el promedio ponderado por nivel (Corp/Col/países); en modo <strong>Auto</strong> sigue a los criterios (el más débil limita), y en <strong>Manual</strong> queda fijada por el analista. Es la madurez que se lleva al Resumen y al Tablero.</p>
+    <p style="font-size:9px;color:#9A9A9A;padding:0 16px 10px;line-height:1.5;"><span class="mi mi-sm" style="font-size:12px;vertical-align:middle;color:#C8C8C8;margin-right:3px;">info</span><strong style="color:#8A8A8A;">Alcance:</strong> esta tabla es la <strong>base de la madurez de la Capa 3</strong>. Los 6 criterios (Políticas, Roles, Procesos, Tecnología y datos, Indicadores y Reporte) se califican <strong>por nivel</strong> con la escala ✗ No existe · △ Parcial · ✓ Completo — valoración del modelo, a validar por el analista. Madurez de cada nivel (el criterio más débil limita): 2 o más ✗ → 1 · No gestionado; 1 ✗ → 2 · Básico; sin ✗ y 2 o más △ → 3 · En desarrollo; sin ✗ y máximo 1 △ → 4 · Incorporado (el 5 · Líder no se asigna por criterios). La <strong>Madurez global</strong> es el promedio ponderado de los 3 niveles con los pesos de Parámetros y es la que se lleva al Resumen y al Tablero. El nombre, el cuadrante y los Marcos (GRI/SASB/TCFD) son referencias de la Memoria 2025. La sección «Madurez de la gestión por asunto material» es documental y no alimenta esta calificación.</p>
   </div>
 
   <!-- ══ Madurez de asuntos materiales (doble calificación) ══ -->
@@ -948,10 +964,10 @@
     <div class="flex items-start justify-between mb-3 gap-3 flex-wrap">
       <div>
         <h3 style="font-size:14px;font-weight:800;color:var(--navy);font-family:'Gotu','Space Grotesk',sans-serif;">Madurez de la gestión por asunto material</h3>
-        <p style="font-size:11px;color:var(--gray-dp);margin-top:2px;">Escala 1–5 con doble calificación: <strong style="color:#093E5E;">Modelo</strong> (sugerida) y <strong style="color:#F18446;">Analista experto</strong> (definitiva). La consolidación usa la del analista.</p>
+        <p style="font-size:11px;color:var(--gray-dp);margin-top:2px;"><strong>Sección documental</strong>: sustentación por nivel y calificación de referencia (<strong style="color:#093E5E;">Modelo</strong> y <strong style="color:#F18446;">Analista</strong>). <strong>No alimenta</strong> la madurez de los asuntos: la calificación de la Capa 3 sale de los criterios de la tabla de asuntos materiales.</p>
       </div>
       <div style="background:white;border:1px solid #E4E7EB;border-radius:10px;padding:8px 16px;text-align:center;flex-shrink:0;">
-        <div style="font-size:9px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.04em;">Madurez media · Analista</div>
+        <div style="font-size:9px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.04em;">Referencia · Analista</div>
         <div style="font-size:22px;font-weight:800;color:var(--orange);line-height:1.1;" id="topicMatAvg">—</div>
         <div style="font-size:9px;color:#B0B0B0;" id="topicMatAvgLbl">de 18 asuntos</div>
       </div>
@@ -961,7 +977,7 @@
       <button class="tlevel-btn" data-lv="corp" onclick="setActiveLevel('corp',null)" style="display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:7px;cursor:pointer;border:1.5px solid #093E5E;background:#093E5E18;color:#093E5E;font-family:'Satoshi','Inter',sans-serif;">🏛 Corporativo</button>
       <button class="tlevel-btn" data-lv="col" onclick="setActiveLevel('col',null)" style="display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:7px;cursor:pointer;border:1.5px solid #E4E7EB;background:white;color:#888;font-family:'Satoshi','Inter',sans-serif;">🇨🇴 Colombia</button>
       <button class="tlevel-btn" data-lv="nic" onclick="setActiveLevel('nic',null)" style="display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;padding:5px 12px;border-radius:7px;cursor:pointer;border:1.5px solid #E4E7EB;background:white;color:#888;font-family:'Satoshi','Inter',sans-serif;">🇳🇮 Nicaragua</button>
-      <span style="font-size:9px;color:#AAA;margin-left:4px;">El global de cada asunto es el promedio ponderado de los 3 niveles</span>
+      <span style="font-size:9px;color:#AAA;margin-left:4px;">Nivel de la sustentación y de la calificación de referencia (no consolida)</span>
     </div>
     <div id="topicMaturityList" class="grid md:grid-cols-2 gap-3"></div>
   </div>
@@ -1211,13 +1227,12 @@
 <!-- ══════════════════════════════════ TAB BRECHAS -->
 <div id="tab-brechas" class="section-tab">
   <div class="mb-3">
-    <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Brechas y hoja de ruta de madurez</h2>
+    <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Brechas de madurez</h2>
     <p class="text-xs text-gray-500 mt-1">Observaciones priorizadas: elementos de baja madurez (Capa 1), IROs sugeridos (Capa 2), asuntos materiales (Capa 3) y vacíos de indicadores (KPIs). Cada brecha aparece una vez, agrupada por su componente principal (o, si se elige, por su eje estratégico principal); a la derecha, los componentes y asuntos materiales con los que se relaciona. Clic en una para ver/editar.</p>
   </div>
   <div id="brechasToolbar" class="no-print" style="position:sticky;top:0;z-index:30;background:#F4F5F6;"></div>
   <div id="brechasResumen" class="mb-4"></div>
   <div id="brechasContainer" class="mb-6"></div>
-  <div id="brechasRoadmap"></div>
 </div>
 
 <!-- ══════════════════════════════════ TAB PLAN DE ACCIÓN -->
@@ -1226,6 +1241,7 @@
     <h2 class="text-base font-bold" style="font-family:'Gotu','Space Grotesk',sans-serif;color:var(--ink);">Plan de acción</h2>
     <p class="text-xs text-gray-500 mt-1">Acciones sugeridas por brecha (numeradas: # de la brecha · consecutivo). La prioridad y el horizonte se heredan de la brecha y son editables por acción; agrega responsable y fecha estimada de implementación.</p>
   </div>
+  <div id="planResumen" style="position:sticky;top:0;z-index:30;background:#F4F5F6;padding:6px 0 10px;margin-bottom:6px;"></div>
   <div id="planContent"></div>
 </div>
 
@@ -1972,7 +1988,7 @@ function _postLoadNotasC6(s){
   [[9,'C6-03'],[6,'C6-04'],[13,'C6-06'],[17,'C6-05']].forEach(function(p){ var ti=p[0]-1;
     LV.forEach(function(lv){ var ts=s.topicScores&&s.topicScores[ti]&&s.topicScores[ti][lv]; if(!ts) return;
       var b=bloque(p[1],lv); if(!b) return;
-      var base=(ts.rationale&&String(ts.rationale).trim())?String(ts.rationale):suggestTopicRationale(ti, ts.score);
+      var base=(ts.rationale&&String(ts.rationale).trim())?String(ts.rationale):suggestTopicRationale(ti, ts.score, lv);
       if(base.indexOf(MK+p[1])>=0) return;
       ts.rationale=base.replace(/\s+$/,'')+'\n\n'+b; }); });
   var _e4=(s.compSchema>=4), _ie=_e4?2:1;
@@ -2220,7 +2236,7 @@ function _postLoadNotasGob(s){
       var src=(A.items[lv]||[]).filter(function(it){ return it&&it.eid===p[1]; })[0]; if(!src) return;
       var txt=(p[2]==='nota')?_c6NotaAnalista(src.rationale):String(src.desc||'').trim(); if(!txt) return;
       var ts=s.topicScores&&s.topicScores[ti]&&s.topicScores[ti][lv]; if(!ts) return;
-      var base=(ts.rationale&&String(ts.rationale).trim())?String(ts.rationale):suggestTopicRationale(ti, ts.score);
+      var base=(ts.rationale&&String(ts.rationale).trim())?String(ts.rationale):suggestTopicRationale(ti, ts.score, lv);
       if(base.indexOf(MK)>=0) return;
       var sc=(src.expertScore!==undefined&&src.expertScore!==null)?src.expertScore:src.score;
       ts.rationale=base.replace(/\s+$/,'')+'\n\n'+(p[2]==='nota'?'ANÁLISIS DEL ANALISTA':'EVIDENCIA')+' — '+MK+' «'+(src.label||'')+'» (Gobernanza sostenible) · '+LVN[lv]+' · calificación del analista en origen: '+sc+'.\n'+txt;
@@ -3346,10 +3362,10 @@ function suggestRationale(scoreVal, evidence) {
 }
 // ── Sustentación por asunto material basada en los 6 criterios + fuentes ──
 var CRIT_META={
-  gov:{n:'Gobernanza', req:'supervisión formal del asunto por un órgano de gobierno con responsabilidad definida', src:'GRI 2-12/2-13 y 3-3; ESRS 2 (GOV); Código País'},
+  gov:{n:'Políticas', req:'políticas y lineamientos formales del asunto, con supervisión de un órgano de gobierno y responsabilidad definida', src:'GRI 2-12/2-13 y 3-3; ESRS 2 (GOV); Código País'},
   roles:{n:'Roles / responsable', req:'un responsable idóneo asignado con segregación de funciones', src:'modelo de tres líneas de defensa (IIA); GRI 2-13; ISO 37000'},
   proc:{n:'Procesos', req:'un proceso documentado, estandarizado y con frecuencia definida', src:'GRI 3-3 «gestión del tema material» y la norma/estándar ISO específico del asunto'},
-  tech:{n:'Tecnología/datos', req:'soporte tecnológico y trazabilidad del dato donde el volumen o la criticidad lo exigen', src:'buenas prácticas de gestión de información ESG; controles ITGC; trazabilidad exigida por ISSB S1/S2'},
+  tech:{n:'Tecnología y datos', req:'soporte tecnológico y trazabilidad del dato donde el volumen o la criticidad lo exigen', src:'buenas prácticas de gestión de información ESG; controles ITGC; trazabilidad exigida por ISSB S1/S2'},
   ind:{n:'Indicadores', req:'indicadores de resultado con línea base, meta y seguimiento', src:'estándar temático GRI/SASB del asunto; TCFD/ISSB para métricas'},
   rep:{n:'Reporte', req:'divulgación pública trazable y, deseablemente, con aseguramiento independiente', src:'GRI/SASB/TCFD/ISSB; aseguramiento externo (ISAE 3000)'}
 };
@@ -3376,36 +3392,30 @@ var TOPIC_CRIT_JUSTIF=[
  { /*18 Ciberseguridad*/ gov:'Tecnología de la Información es responsable, sin un gobierno ASG formal del tema', roles:'responsable en Tecnología de la Información', proc:'está identificado como material, pero sin un proceso/política pública específica', tech:'no hay un sistema de gestión de ciberseguridad reportado formalmente', ind:'no se reporta formalmente en la Memoria 2025', rep:'sin divulgación formal (GRI 3-3 · no reportado)' }
 ];
 
-function suggestTopicRationale(ti, scoreVal){
+function suggestTopicRationale(ti, scoreVal, lvx){
   var meta=(typeof getTopicsMeta==='function')?getTopicsMeta()[ti]:null;
   var tm=(typeof TOPIC_MATURITY!=='undefined'&&TOPIC_MATURITY[ti])?TOPIC_MATURITY[ti]:{ev:''};
   if(!meta) return '';
   if(scoreVal===0) return 'NO APLICA — Este asunto material no aplica en el nivel/alcance en edición (operación o responsabilidad diferente). Se EXCLUYE del cálculo de madurez. Justifique brevemente por qué no aplica; el analista debe validarlo.';
   var v=Math.min(5,Math.max(1,Math.round(scoreVal||1)));
   var label=(typeof SCORE_LABELS!=='undefined'&&SCORE_LABELS[v])?SCORE_LABELS[v]:'';
-  var evaluables=[['gov',meta.gov],['proc',meta.proc],['tech',meta.tech],['ind',meta.ind]];
+  var _lv=lvx||((typeof activeLevel!=='undefined')?activeLevel:'corp'), _c=(meta.crit&&meta.crit[_lv])||{};
+  var evaluables=TOPIC_CRIT_KEYS.map(function(k){ return [k,_c[k]||'△']; });
   var cons=evaluables.filter(function(c){return c[1]==='✓';});
   var parc=evaluables.filter(function(c){return c[1]==='△';});
   var aus =evaluables.filter(function(c){return c[1]==='✗';});
   // Criterios evaluados
   var J=(typeof TOPIC_CRIT_JUSTIF!=='undefined'&&TOPIC_CRIT_JUSTIF[ti])?TOPIC_CRIT_JUSTIF[ti]:{};
   function critLine(name,key,val){ var sym=(val==='✓'||val==='△'||val==='✗'); var w=sym?(' ('+critWord(val)+')'):''; var obs=J[key]?(' — '+J[key]):''; var cm=CRIT_META[key]; var ev=cm?(' Se evalúa contra: '+cm.req+' ('+cm.src+').'):''; return '• '+name+': '+val+w+obs+'.'+ev; }
-  var lines=[
-    critLine('Gobernanza','gov',meta.gov),
-    critLine('Roles / responsable','roles',meta.roles||'sin asignar'),
-    critLine('Procesos','proc',meta.proc),
-    critLine('Tecnología / datos','tech',meta.tech||'△'),
-    critLine('Indicadores','ind',meta.ind),
-    critLine('Reporte / divulgación','rep',meta.rep||'sin divulgación')
-  ];
+  var lines=TOPIC_CRIT_KEYS.map(function(k){ return critLine(TOPIC_CRIT_LBL[k],k,_c[k]||'△'); });
   // Por qué el nivel
   function names(arr){ return arr.map(function(c){return CRIT_META[c[0]].n;}).join(', '); }
-  var porque='El nivel '+v+' · '+label+' (para el alcance en edición) se sustenta en que '+cons.length+' de 4 criterios evaluables están consolidados'+(cons.length?(' ['+names(cons)+']'):'')+'.';
+  var porque='El nivel '+v+' · '+label+' (para el alcance en edición) se sustenta en que '+cons.length+' de 6 criterios evaluables están consolidados'+(cons.length?(' ['+names(cons)+']'):'')+'.';
   if(parc.length) porque+=' Se observan de forma parcial (△): '+names(parc)+'.';
   if(aus.length)  porque+=' No se evidencian (✗): '+names(aus)+'.';
-  porque+=' El responsable asignado es '+(meta.roles||'—')+' y la divulgación se realiza en «'+(meta.rep||'—')+'». '
-    +(cons.length>=3?'La combinación de criterios respalda un diseño maduro; el margen restante es de optimización/aseguramiento.'
-     :(cons.length===2?'La base existe pero aún no es integral; los criterios parciales o ausentes limitan un nivel superior.'
+  porque+=' '
+    +(cons.length>=5?'La combinación de criterios respalda un diseño maduro; el margen restante es de optimización/aseguramiento.'
+     :(cons.length>=3?'La base existe pero aún no es integral; los criterios parciales o ausentes limitan un nivel superior.'
      :'La gestión del asunto es incipiente: los criterios ausentes/parciales explican la calificación baja.'));
   // Qué debería mejorar — por criterio no consolidado, con fuente
   var gaps=parc.concat(aus);
@@ -3413,8 +3423,6 @@ function suggestTopicRationale(ti, scoreVal){
     return '• '+m.n+' ('+c[1]+'): la escala/estándar espera '+m.req+'. Criterio contra el que se evalúa: '+m.src+'. El analista debe CONFIRMAR en campo si existe evidencia no reportada o REFUTAR el hallazgo.';
   });
   // Reporte/Roles como buenas prácticas si están vacíos
-  if(!meta.rep){ mejoras.push('• '+CRIT_META.rep.n+': no se identifica divulgación específica; se espera '+CRIT_META.rep.req+'. Criterio: '+CRIT_META.rep.src+'.'); }
-  if(!meta.roles){ mejoras.push('• '+CRIT_META.roles.n+': responsable no asignado; se espera '+CRIT_META.roles.req+'. Criterio: '+CRIT_META.roles.src+'.'); }
   if(!mejoras.length){ mejoras=['• Los criterios evaluables están consolidados; la mejora esperada es sostener la eficiencia, la trazabilidad del dato y el aseguramiento independiente (ISAE 3000), y validar benchmarking externo frente a los marcos del asunto ('+(meta.marcos||'GRI/SASB')+').']; }
   var evTxt=(tm.ev&&tm.ev.trim())?tm.ev.trim():'El modelo no dispone de evidencia documentada específica para este asunto en las fuentes analizadas; a validar por el analista.';
   var marcosTxt=meta.marcos?('\n\nMARCOS DE REFERENCIA DEL ASUNTO: '+meta.marcos+'.'):'';
@@ -4810,30 +4818,67 @@ var BRECHA_PRC={'CRÍTICA':'#C62828','ALTA':'#E9711C','MEDIA':'#EAB308','PREPARA
 function brechaColor(b){ return BRECHA_PRC[b.prioridad]||b.color||'#888'; }
 
 function brechaRefresh(){ saveState(); renderBrechas(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); if(document.getElementById('planContent')) renderPlanAccion(); if(document.getElementById('componentsGrid')&&typeof renderComponents==='function') renderComponents(); if(document.getElementById('topicMaturityList')&&typeof renderTopicMaturity==='function') renderTopicMaturity(); }
+// Plan de acción — filtros por prioridad y horizonte de la ACCIÓN (combinables; 2026-10-29)
+var planFilters={pr:'',hz:''};
+function planFilterToggle(k,v){ planFilters[k]=(planFilters[k]===v)?'':v; renderPlanAccion(); }
+function planFilterClear(){ planFilters={pr:'',hz:''}; renderPlanAccion(); }
+function renderPlanResumen(arr){
+  var el=document.getElementById('planResumen'); if(!el) return;
+  var f=planFilters, all=[];
+  arr.forEach(function(b,bi){ (b.acciones||[]).forEach(function(_,ai){ all.push(brechaAccMeta(b,ai)); }); });
+  var PRc=[['CRÍTICA','#C62828'],['ALTA','#E9711C'],['MEDIA','#EAB308'],['PREPARACIÓN','#093E5E']];
+  var HZc=[['C','Corto plazo','< 1 año','#C62828'],['M','Mediano plazo','1–3 años','#E9711C'],['L','Largo plazo','> 3 años','#2E7D32']];
+  var nPr=function(p){ return all.filter(function(m){ return m.prioridad===p && (!f.hz||m.horizonte===f.hz); }).length; };
+  var nHz=function(h){ return all.filter(function(m){ return m.horizonte===h && (!f.pr||m.prioridad===f.pr); }).length; };
+  var shown=all.filter(function(m){ return (!f.pr||m.prioridad===f.pr)&&(!f.hz||m.horizonte===f.hz); }).length;
+  var card=function(kind,val,n,lbl,sub,c){ var on=(f[kind]===val), dim=(f[kind]&&!on);
+    return '<button type="button" onclick="planFilterToggle(\''+kind+'\',\''+val+'\')" aria-pressed="'+on+'" title="'+(on?'Quitar filtro':'Filtrar por '+lbl)+'" style="flex:1 1 0;min-width:92px;text-align:left;cursor:pointer;background:'+(on?c+'14':'white')+';border:1px solid '+(on?c:'#E4E7EB')+';border-top:3px solid '+c+';border-radius:9px;padding:7px 10px;opacity:'+(dim?'.55':'1')+';font-family:inherit;">'
+      +'<div style="display:flex;align-items:baseline;gap:6px;"><span style="font-size:18px;font-weight:800;color:var(--ink);line-height:1;">'+n+'</span>'+(sub?'<span style="font-size:8.5px;color:#AAB2B8;">'+sub+'</span>':'')+'</div>'
+      +'<div style="font-size:9px;font-weight:700;color:'+(on?c:'#6B7A86')+';margin-top:3px;white-space:nowrap;">'+lbl+'</div></button>'; };
+  var h='<div style="display:flex;gap:8px;align-items:stretch;flex-wrap:wrap;">';
+  h+='<div style="display:flex;flex-direction:column;gap:4px;flex:4 1 380px;min-width:0;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;letter-spacing:.06em;">Prioridad</div><div style="display:flex;gap:8px;">';
+  PRc.forEach(function(p){ h+=card('pr',p[0],nPr(p[0]),p[0],'',p[1]); });
+  h+='</div></div><div style="display:flex;flex-direction:column;gap:4px;flex:3 1 290px;min-width:0;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;letter-spacing:.06em;">Horizonte</div><div style="display:flex;gap:8px;">';
+  HZc.forEach(function(z){ h+=card('hz',z[0],nHz(z[0]),z[1],z[2],z[3]); });
+  h+='</div></div></div>';
+  var lbl=[]; if(f.pr) lbl.push('prioridad <strong>'+f.pr+'</strong>'); if(f.hz) lbl.push('horizonte <strong>'+({C:'corto',M:'mediano',L:'largo'}[f.hz])+' plazo</strong>');
+  h+='<div style="font-size:9.5px;color:var(--gray-dp);margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span class="mi" style="color:var(--orange);font-size:15px;">filter_alt</span>'
+    +(lbl.length?('<span>'+shown+' de '+all.length+' acciones · '+lbl.join(' y ')+'</span><button type="button" onclick="planFilterClear()" class="no-print" style="font-size:10px;color:#666;border:1px solid #E4E7EB;background:white;border-radius:6px;padding:3px 9px;cursor:pointer;">Limpiar filtros</button>')
+      :('<span>'+all.length+' acciones en '+arr.length+' brechas · clic en una tarjeta para filtrar; se pueden combinar prioridad y horizonte. Los conteos de cada grupo reflejan el filtro del otro.</span>'))+'</div>';
+  el.innerHTML=h;
+}
 function renderPlanAccion(){
   var host=document.getElementById('planContent'); if(!host) return;
   var arr=getBrechas();
+  renderPlanResumen(arr);
+  var _pf=planFilters, _okAcc=function(b,ai){ var m=brechaAccMeta(b,ai); return (!_pf.pr||m.prioridad===_pf.pr)&&(!_pf.hz||m.horizonte===_pf.hz); }, _fOn=!!(_pf.pr||_pf.hz), _nVis=0;
   var PR=[['CRÍTICA','CRÍTICA'],['ALTA','ALTA'],['MEDIA','MEDIA'],['PREPARACIÓN','PREPARACIÓN']];
   var HZ=[['C','Corto plazo'],['M','Mediano plazo'],['L','Largo plazo']];
   var selCss='font-size:10px;border:1px solid #D5D5D5;border-radius:6px;padding:4px 6px;background:white;font-family:Inter,sans-serif;';
   var inCss='width:100%;font-size:10px;border:1px solid #D5D5D5;border-radius:6px;padding:4px 6px;font-family:Inter,sans-serif;';
   var totalAcc=arr.reduce(function(s,b){return s+((b.acciones||[]).length);},0);
-  var h='<div style="font-size:10px;color:var(--gray-dp);margin-bottom:10px;">'+arr.length+' brechas · '+totalAcc+' acciones. Numeración «# de brecha · consecutivo»; la prioridad y el horizonte se heredan de la brecha y son editables por acción.</div>';
-  arr.forEach(function(b,bi){
+  var h='<div style="font-size:10px;color:var(--gray-dp);margin-bottom:10px;">Numeración «# de brecha · consecutivo»; la prioridad y el horizonte se heredan de la brecha y son editables por acción.</div>';
+  // 2026-10-29: mismo orden que la hoja de Brechas (componente principal → requisito principal → B##), con separador por componente
+  var _omP=_eidOrderMap(), _lastC=null, _cnP={}; if(typeof COMP_META!=='undefined') COMP_META.forEach(function(cm){ _cnP[cm.id]=cm.name; });
+  arr.map(function(b,bi){ return {b:b,bi:bi}; }).sort(function(p,q){ return brechaCmp(p.b,q.b,_omP)||(p.bi-q.bi); }).forEach(function(o){ var b=o.b, bi=o.bi;
+    var _vis=(b.acciones||[]).map(function(_,ai){ return ai; }).filter(function(ai){ return _okAcc(b,ai); });
+    if(_fOn && !_vis.length) return; _nVis++;
+    var _pc=+brechaPrimaryComp(b)||0;
+    if(_pc!==_lastC){ _lastC=_pc; h+='<div style="margin:14px 0 7px;border-bottom:2px solid #E4E7EB;padding-bottom:4px;font-size:12px;font-weight:800;color:var(--navy);">'+(_pc?('C'+_pc+' · '+_insEsc(_cnP[_pc]||'')):'Sin componente asociado')+'</div>'; }
     var n=brechaNum(b); var col=brechaColor(b);
     h+='<div class="dx-card" style="padding:0;margin-bottom:12px;overflow:hidden;border-left:3px solid '+col+';">';
     h+='<div onclick="_gotoBrechaFromTopic('+bi+',\''+_insEsc(b.bid||'')+'\')" title="Ir a la brecha origen en la hoja de Brechas" style="cursor:pointer;display:flex;align-items:center;gap:8px;padding:9px 12px;background:#FAFBFC;border-bottom:1px solid #EEF1F4;">'
       +'<span style="font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;color:#fff;background:'+col+';border-radius:5px;padding:2px 7px;flex-shrink:0;">'+(b.bid||('B'+n))+'</span>'
       +'<span style="font-size:11.5px;font-weight:800;color:var(--ink);flex:1;min-width:0;">'+_insEsc(b.titulo)+'</span>'
       +'<span class="mi" style="font-size:14px;color:#C4CAD0;flex-shrink:0;">open_in_new</span>'
-      +'<span style="font-size:8.5px;color:#9AA4AC;flex-shrink:0;">'+((b.acciones||[]).length)+' acciones</span></div>';
+      +'<span style="font-size:8.5px;color:#9AA4AC;flex-shrink:0;">'+(_fOn?(_vis.length+' de '+((b.acciones||[]).length)):((b.acciones||[]).length))+' acciones</span></div>';
     if(!(b.acciones||[]).length){ h+='<div style="padding:10px 12px;font-size:10px;color:#9AA4AC;font-style:italic;">Sin acciones registradas en esta brecha.</div>'; }
     else {
       h+='<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;min-width:740px;font-family:Inter,sans-serif;"><thead><tr style="background:#F4F6F8;color:#6B7A86;font-size:8.5px;text-transform:uppercase;letter-spacing:.03em;">'
         +'<th style="padding:6px 8px;text-align:left;width:38px;">#</th><th style="padding:6px 8px;text-align:left;">Acción sugerida</th>'
         +'<th style="padding:6px 8px;text-align:left;width:120px;">Prioridad</th><th style="padding:6px 8px;text-align:left;width:130px;">Horizonte</th>'
         +'<th style="padding:6px 8px;text-align:left;width:150px;">Responsable</th><th style="padding:6px 8px;text-align:left;width:140px;">Fecha estimada</th></tr></thead><tbody>';
-      (b.acciones||[]).forEach(function(a,ai){ var m=brechaAccMeta(b,ai);
+      (b.acciones||[]).forEach(function(a,ai){ if(_fOn && _vis.indexOf(ai)<0) return; var m=brechaAccMeta(b,ai);
         h+='<tr style="border-bottom:1px solid #F0F1F3;vertical-align:top;">'
           +'<td style="padding:6px 8px;font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:800;color:'+col+';white-space:nowrap;">'+n+'.'+(ai+1)+'</td>'
           +'<td style="padding:6px 8px;"><div contenteditable="true" lang="es" spellcheck="true" onblur="planSetAccionText('+bi+','+ai+',this)" style="outline:none;border:1px dashed #E0E4E8;border-radius:5px;padding:3px 6px;background:#FFFEFB;font-size:10px;color:#444;line-height:1.5;">'+(a||'')+'</div></td>'
@@ -4848,6 +4893,7 @@ function renderPlanAccion(){
     h+='</div>';
   });
   if(!arr.length) h+='<div style="padding:20px;text-align:center;color:#9AA4AC;font-size:11px;">No hay brechas registradas.</div>';
+  else if(!_nVis) h+='<div style="padding:20px;text-align:center;color:#9AA4AC;font-size:11px;">No hay acciones con la combinación de filtros seleccionada.</div>';
   host.innerHTML=h;
 }
 function brechaSetText(i,field,el){ getBrechas()[i][field]=(el.innerText||'').trim(); saveState(); renderBrechas(); }
@@ -4867,7 +4913,7 @@ function brechaNum(b){ var m=/(\d+)$/.exec((b&&b.bid)||''); return m?parseInt(m[
 function _ensureAccMeta(b){ if(!Array.isArray(b.accionMeta)) b.accionMeta=[]; while(b.accionMeta.length<((b.acciones||[]).length)) b.accionMeta.push({}); return b.accionMeta; }
 function brechaAccMeta(b,ai){ var m=(b&&Array.isArray(b.accionMeta)&&b.accionMeta[ai])?b.accionMeta[ai]:{}; return {prioridad:m.prioridad||b.prioridad||'MEDIA', horizonte:m.horizonte||b.horizonte||'M', responsable:m.responsable||'', fecha:m.fecha||''}; }
 function planSetAccionText(bi,ai,el){ var b=getBrechas()[bi]; if(!b||!b.acciones)return; b.acciones[ai]=(el.innerHTML||'').trim(); saveState(); if(document.getElementById('brechasContainer')&&typeof renderBrechas==='function') renderBrechas(); }
-function planSetMeta(bi,ai,field,val){ var b=getBrechas()[bi]; if(!b)return; _ensureAccMeta(b); if(!b.accionMeta[ai]) b.accionMeta[ai]={}; b.accionMeta[ai][field]=val; saveState(); }
+function planSetMeta(bi,ai,field,val){ var b=getBrechas()[bi]; if(!b)return; _ensureAccMeta(b); if(!b.accionMeta[ai]) b.accionMeta[ai]={}; b.accionMeta[ai][field]=val; saveState(); if(field==='prioridad'||field==='horizonte') renderPlanAccion(); }
 function brechaDelete(i){ if(!confirm('¿Eliminar esta brecha?')) return; getBrechas().splice(i,1); brechaRefresh(); }
 function brechaAdd(){
   var arr=getBrechas();
@@ -4945,13 +4991,13 @@ function brechaFromAsunto(ti){
   var mv=ts.score, ev=topicScoreEff(ti,lv);
   var v=Math.round(((ev!==undefined&&ev!==null)?ev:mv)||1);
   var label=(SCORE_LABELS[Math.min(5,Math.max(0,v))]||'');
-  var evalu=[['gov',meta.gov],['proc',meta.proc],['tech',meta.tech||'△'],['ind',meta.ind]];
+  var _c=(meta.crit&&meta.crit[lv])||{};
+  var evalu=TOPIC_CRIT_KEYS.map(function(k){ return [k,_c[k]||'△']; });
   var gaps=evalu.filter(function(c){return c[1]!=='✓';});
-  var rat=ts.rationale||suggestTopicRationale(ti,mv);
+  var rat=ts.rationale||suggestTopicRationale(ti,mv,lv);
   var acciones=brechaMejorasFromRationale(rat);
   if(!acciones){
     acciones=gaps.map(function(c){var m=CRIT_META[c[0]]; return m.n+': implementar '+m.req+' (ref.: '+m.src+').';});
-    if(!meta.rep) acciones.push(CRIT_META.rep.n+': '+CRIT_META.rep.req+' (ref.: '+CRIT_META.rep.src+').');
     if(!acciones.length) acciones=['Sostener la gestión y reforzar aseguramiento independiente y benchmarking frente a '+(meta.marcos||'GRI/SASB')+'.'];
   }
   var num=ti+1;
@@ -4960,13 +5006,13 @@ function brechaFromAsunto(ti){
   var desc='Brecha en el asunto material «'+meta.name+'» ('+tlabel+'). '
     +'Madurez actual '+(v>=1?(v+'/5 · '+label):'N/A')+'. '
     +(gaps.length?('Criterios no consolidados: '+gaps.map(function(c){return CRIT_META[c[0]].n+' ('+critWord(c[1])+')';}).join(', ')+'. '):'')
-    +'Responsable: '+(meta.roles||'—')+'. Divulgación: '+(meta.rep||'—')+'.';
+    +'Nivel evaluado: '+lvMeta.label+'.';
   brechaDocumentar({
     prioridad:brechaPrioridadFromScore(v), color:BRECHA_PRC[brechaPrioridadFromScore(v)]||'#1565C0',
     horizonte:brechaHorizonteFromScore(v), titulo:'Brecha · '+meta.name,
     descripcion:desc, topics:[num], iros:iros, comps:_compsForTopic(num), acciones:acciones,
     fuente:'Diagnóstico Capa 3 · asunto «'+meta.name+'» · '+lvMeta.label
-      +' · madurez Modelo '+(mv===0?'NA':mv)+' / Analista '+(ev===0?'NA':ev)+' · marcos: '+(meta.marcos||'—')+'. Base: sustentación del asunto (editable por el analista).'
+      +' · madurez por criterios '+(ev>=1?ev:'NA')+' · marcos: '+(meta.marcos||'—')+'. Base: sustentación del asunto (editable por el analista).'
   });
 }
 function brechaDocumentar(b){
@@ -5015,6 +5061,12 @@ function topicLinkBrecha(ti,bi){ var num=ti+1; var b=getBrechas()[bi]; if(!b)ret
 function topicUnlinkBrecha(ti,bi){ var num=ti+1; var b=getBrechas()[bi]; if(!b||!Array.isArray(b.topics))return; b.topics=b.topics.filter(function(x){return String(x)!==String(num);}); saveState(); _refreshTopicCard(ti); if(document.getElementById('brechasContainer')) renderBrechas(); }
 function _gotoBrechaFromTopic(bi,bid){ try{ if(bid) brechasOpen[bid]=true; }catch(e){} var tb=document.querySelector('.tab-btn[onclick*="brechas"]'); if(typeof showTab==='function') showTab('brechas', tb); if(typeof renderBrechas==='function') renderBrechas(); setTimeout(function(){ var c=document.getElementById('brecha-card-'+bi); if(c){ c.scrollIntoView({behavior:'smooth',block:'center'}); var o=c.style.boxShadow; c.style.transition='box-shadow .3s'; c.style.boxShadow='0 0 0 3px #F18446'; setTimeout(function(){ c.style.boxShadow=o||''; },1700); } },70); }
 function brechaPrimaryComp(b){ return (b.comps&&b.comps.length)?b.comps[0]:0; }
+// 2026-10-29: requisito principal = primer requisito vinculado que pertenece al componente principal (sigue la reclasificación).
+// Orden de presentación: componente principal → orden del requisito principal dentro del componente (orden del modelo) → consecutivo B##.
+function _eidOrderMap(){ var m={}; (state.items||[]).forEach(function(comp,ci){ ((comp&&comp.corp)||[]).forEach(function(it,ii){ if(it&&it.eid) m[it.eid]={c:ci+1,ii:ii,label:it.label||''}; }); }); return m; }
+function brechaPrimaryEid(b, om){ om=om||_eidOrderMap(); var pc=+brechaPrimaryComp(b), e=(b&&b.eids)||[]; if(!pc) return ''; for(var i=0;i<e.length;i++){ var o=om[e[i]]; if(o&&o.c===pc) return e[i]; } return ''; }
+function brechaSortKey(b, om){ om=om||_eidOrderMap(); var pc=+brechaPrimaryComp(b)||99, pe=brechaPrimaryEid(b,om), n=parseInt(String((b&&b.bid)||'').replace(/\D/g,''),10); return [pc, pe?om[pe].ii:999, isNaN(n)?9999:n]; }
+function brechaCmp(a, b, om){ var x=brechaSortKey(a,om), y=brechaSortKey(b,om); for(var k=0;k<3;k++){ if(x[k]!==y[k]) return x[k]-y[k]; } return 0; }
 function brechaOptLists(){
   var comps=[]; if(typeof COMP_META!=='undefined') COMP_META.forEach(function(cm){ comps.push([cm.id,'C'+cm.id+' · '+cm.name]); });
   var topics=[]; var tm=(typeof getTopicsMeta==='function')?getTopicsMeta():[]; tm.forEach(function(t,i){ topics.push([i+1,(i+1)+'. '+(t.name||'')]); });
@@ -5081,7 +5133,7 @@ function renderBrechas(){
   var OPTS=brechaOptLists();
   var HZ={C:{l:'Corto plazo',sub:'< 1 año',c:'#C62828'},M:{l:'Mediano plazo',sub:'1–3 años',c:'#E9711C'},L:{l:'Largo plazo',sub:'> 3 años',c:'#2E7D32'}};
   var compName={}; if(typeof COMP_META!=='undefined') COMP_META.forEach(function(cm){ compName[cm.id]=cm.name; });
-  var eidLabel={}; try{ (state.items||[]).forEach(function(comp){ (comp&&comp.corp||[]).forEach(function(it){ if(it&&it.eid) eidLabel[it.eid]=it.label; }); }); }catch(e){}
+  var _om=_eidOrderMap();
   var nav=function(id){ return "showTab('"+id+"',document.querySelector('[onclick*=\\\''+id+'\\\']'))"; };
   var PR_OPTS=[['CRÍTICA','CRÍTICA'],['ALTA','ALTA'],['MEDIA','MEDIA'],['PREPARACIÓN','PREPARACIÓN']];
   var HZ_OPTS=[['C','Corto plazo'],['M','Mediano plazo'],['L','Largo plazo']];
@@ -5131,7 +5183,7 @@ function renderBrechas(){
     rh+='</div></div><div style="display:flex;flex-direction:column;gap:4px;flex:3 1 290px;min-width:0;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;letter-spacing:.06em;">Horizonte</div><div style="display:flex;gap:8px;">';
     ['C','M','L'].forEach(function(k){ var hz=HZ[k]; rh+=card(hzCount[k]||0, hz.l, hz.sub, hz.c); });
     rh+='</div></div></div>';
-    rh+='<div style="font-size:9.5px;color:var(--gray-dp);margin-top:8px;display:flex;align-items:center;gap:6px;"><span class="mi" style="color:var(--orange);font-size:15px;">route</span>'+data.length+' brechas · cada una se muestra una vez, agrupada por su <strong>'+(brechasView==='eje'?'eje estratégico principal':'componente principal')+'</strong>'+(brechasView==='eje'?' (el eje de su asunto material principal)':'')+'.</div>';
+    rh+='<div style="font-size:9.5px;color:var(--gray-dp);margin-top:8px;display:flex;align-items:center;gap:6px;"><span class="mi" style="color:var(--orange);font-size:15px;">route</span>'+data.length+' brechas · cada una se muestra una vez, agrupada por su <strong>'+(brechasView==='eje'?'eje estratégico principal':'componente principal')+'</strong>'+(brechasView==='eje'?' (el eje de su asunto material principal)':'')+' y ordenada según el requisito principal (orden del modelo).</div>';
     rb.innerHTML=rh;
   }
 
@@ -5161,13 +5213,15 @@ function renderBrechas(){
       d+='<div style="font-size:8.5px;font-weight:800;color:#0E2029;text-transform:uppercase;margin:7px 0 3px;">IROs</div>'+brechaListEditor(i,'iros',OPTS.iros);
       d+='<div style="font-size:8.5px;font-weight:800;color:#5C4A2E;text-transform:uppercase;margin:7px 0 3px;">Componentes</div>'+brechaListEditor(i,'comps',OPTS.comps);
       d+='<div style="font-size:8.5px;font-weight:800;color:#7A3E0E;text-transform:uppercase;margin:7px 0 3px;">Requisitos (eids)</div>'+brechaListEditor(i,'eids',OPTS.eids);
+      var _pcE=+brechaPrimaryComp(b); if(_pcE && !brechaPrimaryEid(b,_om)) d+='<div style="font-size:9px;color:#B7791F;margin-top:4px;"><span class="mi" style="font-size:12px;vertical-align:-2px;">warning</span> Ningún requisito vinculado es del componente principal C'+_pcE+'. Agrega uno para que la brecha muestre su requisito y se ordene dentro del componente.</div>';
       d+='<div style="border-top:1px solid #F0F1F3;margin-top:9px;padding-top:7px;"><div style="font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;margin-bottom:3px;">Acciones</div>';
       (b.acciones||[]).forEach(function(a,ai){ d+='<div style="display:flex;gap:5px;margin-bottom:3px;align-items:flex-start;"><span style="color:'+color+';font-size:9px;font-weight:800;font-family:ui-monospace,Menlo,monospace;flex-shrink:0;min-width:24px;text-align:right;margin-top:1px;">'+brechaNum(b)+'.'+(ai+1)+'</span><div contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetAccionRich('+i+','+ai+',this)" style="'+edCss+'flex:1;font-size:9.5px;color:#555;line-height:1.5;text-align:justify;">'+(a||'')+'</div><button onclick="brechaDelAccion('+i+','+ai+')" style="background:none;border:none;color:#C62828;font-size:13px;cursor:pointer;line-height:1;">×</button></div>'; });
       d+='<button onclick="brechaAddAccion('+i+')" class="add-item-btn" style="font-size:9px;margin-top:2px;">+ acción</button></div>';
       d+='<div style="margin-top:7px;font-size:8.5px;color:#888;">Fuente: <span contenteditable="true" lang="es" spellcheck="true" onpaste="return brechaPaste(event)" onblur="brechaSetText('+i+',\'fuente\',this)" style="'+edCss+'display:inline-block;">'+_insEsc(b.fuente)+'</span></div>';
     } else {
       d+='<div style="font-size:10px;color:#555;line-height:1.6;margin:4px 0 8px;text-align:justify;">'+(b.descripcion||'')+'</div>';
-      d+=chipRow('Asuntos',b.topics,topicChip)+chipRow('IROs',b.iros,iroChip)+chipRow('Componentes',b.comps,compChip)+chipRow('Requisitos',(b.eids||[]),eidChip);
+      var _eo=(b.eids||[]).slice(), _p0=brechaPrimaryEid(b,_om); if(_p0){ _eo.splice(_eo.indexOf(_p0),1); _eo.unshift(_p0); }
+      d+=chipRow('Asuntos',b.topics,topicChip)+chipRow('IROs',b.iros,iroChip)+chipRow('Componentes',b.comps,compChip)+chipRow('Requisitos',_eo,eidChip);
       d+='<div style="margin-top:8px;border-top:1px solid #F0F1F3;padding-top:7px;">'+(b.acciones||[]).map(function(a,ai){return '<div style="font-size:9.5px;color:#555;line-height:1.55;display:flex;gap:5px;"><span style="color:'+color+';flex-shrink:0;font-weight:800;font-family:ui-monospace,Menlo,monospace;font-size:9px;min-width:24px;text-align:right;">'+brechaNum(b)+'.'+(ai+1)+'</span><span style="flex:1;text-align:justify;">'+(a||'')+'</span></div>';}).join('')+'</div>';
       d+='<div style="font-size:8.5px;color:#A5A5A5;margin-top:6px;"><span class="mi" style="font-size:11px;vertical-align:-2px;">verified</span> '+_insEsc(b.fuente)+'</div>';
     }
@@ -5178,14 +5232,17 @@ function renderBrechas(){
     var key=b.bid||('i'+i); var open=!!brechasOpen[key];
     var color=brechaColor(b); var hz=HZ[b.horizonte]||HZ.M;
     var extra=(b.comps||[]).filter(function(x){return String(x)!==String(primaryComp);});
-    var reqTxt; if(b.eids&&b.eids.length){ var e0=b.eids[0]; reqTxt=e0+(eidLabel[e0]?(' · '+eidLabel[e0]):''); if(b.eids.length>1) reqTxt+=' (+'+(b.eids.length-1)+')'; } else { reqTxt='sin requisito vinculado'; }
+    var _pe=brechaPrimaryEid(b,_om), _eAll=b.eids||[], reqTxt, reqWarn=false;
+    if(_pe){ reqTxt=_pe+' · '+(_om[_pe].label||''); if(_eAll.length>1) reqTxt+=' (+'+(_eAll.length-1)+')'; }
+    else if(_eAll.length){ reqWarn=true; reqTxt=(primaryComp?('Sin requisito de C'+primaryComp+' vinculado'):'Sin componente principal')+' · vinculados: '+_eAll[0]+(_eAll.length>1?(' (+'+(_eAll.length-1)+')'):''); }
+    else { reqTxt='sin requisito vinculado'; }
     var meta=reqTxt;
     var r='<div class="dx-card" id="brecha-card-'+i+'" style="padding:0;margin-bottom:6px;border-left:3px solid '+color+';overflow:hidden;background:#fff;">';
     r+='<div onclick="brechaToggleOpen(\''+_insEsc(key)+'\')" style="display:flex;align-items:center;gap:11px;padding:10px 14px;cursor:pointer;">';
     r+='<span class="mi" style="font-size:16px;color:#AEB7BF;flex-shrink:0;'+(open?'transform:rotate(90deg);':'')+'">chevron_right</span>';
     r+='<span style="font-family:ui-monospace,Menlo,monospace;font-size:9px;font-weight:700;color:#9AA4AC;background:#F2F4F6;border:1px solid #E4E7EB;border-radius:5px;padding:2px 7px;flex-shrink:0;letter-spacing:.3px;">'+_insEsc(b.bid||'B?')+'</span>';
     r+='<div style="flex:1;min-width:0;">';
-    r+='<div style="font-size:8.5px;color:#9AA4AC;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+_insEsc(meta)+'</div>';
+    r+='<div'+(reqWarn?' title="Ninguno de los requisitos vinculados pertenece al componente principal; vincula uno en modo edición para titular y ordenar la brecha."':'')+' style="font-size:8.5px;color:'+(reqWarn?'#B7791F':'#9AA4AC')+';font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+(reqWarn?'<span class="mi" style="font-size:11px;vertical-align:-2px;margin-right:2px;">warning</span>':'')+_insEsc(meta)+'</div>';
     r+='<div style="font-size:11.5px;font-weight:700;color:var(--ink);line-height:1.3;margin-top:1px;">'+_insEsc(b.titulo)+'</div>';
     r+='</div>';
     var _tm=(typeof getTopicsMeta==='function')?getTopicsMeta():[];
@@ -5214,6 +5271,7 @@ function renderBrechas(){
     return r;
   }
   var groups={}; filtered.forEach(function(o){ var c=(brechasView==='eje')?(brechaPrimaryEje(o.b)||'_'):(brechaPrimaryComp(o.b)||0); (groups[c]=groups[c]||[]).push(o); });   // cada brecha una sola vez (componente o eje principal)
+  Object.keys(groups).forEach(function(k){ groups[k].sort(function(p,q){ return brechaCmp(p.b,q.b,_om) || (p.i-q.i); }); });   // orden del requisito principal (orden del modelo)
   var h='';
   if(!filtered.length){ h+='<div style="padding:26px;text-align:center;color:#999;font-size:11px;">No hay brechas que coincidan con el filtro.</div>'; }
   if(filtered.length) h+='<div style="display:flex;align-items:center;gap:11px;padding:6px 14px 0;font-size:8.5px;font-weight:800;color:#AAB2B8;text-transform:uppercase;letter-spacing:.05em;">'
@@ -5246,26 +5304,7 @@ function renderBrechas(){
   });
   host.innerHTML=h;
 
-  var rm=document.getElementById('brechasRoadmap');
-  if(rm){
-    var cols=[['C','2025–2026'],['M','2026–2028'],['L','2028+']];
-    var rh2='<div class="dx-card" style="padding:18px;">';
-    rh2+='<h3 style="font-size:13px;font-weight:800;color:var(--ink);margin:0 0 3px;font-family:\'Gotu\',sans-serif;">Hoja de ruta hacia la madurez</h3>';
-    rh2+='<p style="font-size:10px;color:var(--gray-dp);margin:0 0 14px;">Secuenciación de las brechas por horizonte de cierre.</p>';
-    rh2+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;" class="roadmap-grid">';
-    cols.forEach(function(cd){ var hz=HZ[cd[0]]; var items=data.filter(function(b){return b.horizonte===cd[0];});
-      rh2+='<div style="border-top:3px solid '+hz.c+';background:'+hz.c+'08;border-radius:0 0 10px 10px;padding:12px;">';
-      rh2+='<div style="font-size:11px;font-weight:800;color:'+hz.c+';">'+hz.l+'</div>';
-      rh2+='<div style="font-size:9px;color:#9A9A9A;margin-bottom:9px;">'+hz.sub+' · '+cd[1]+' · '+items.length+' brecha'+(items.length!==1?'s':'')+'</div>';
-      items.forEach(function(b){ var color=brechaColor(b);
-        rh2+='<div style="background:white;border:1px solid #E4E7EB;border-radius:8px;padding:8px 10px;margin-bottom:7px;">'
-          +'<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px;"><span style="font-family:ui-monospace,Menlo,monospace;font-size:8px;font-weight:800;color:#C4631A;">'+(b.bid||'')+'</span><span style="width:6px;height:6px;border-radius:50%;background:'+color+';flex-shrink:0;"></span><span style="font-size:9.5px;font-weight:800;color:var(--ink);line-height:1.25;">'+_insEsc(b.titulo)+'</span></div>'
-          +'<div style="font-size:8.5px;color:#888;padding-left:12px;">'+_insEsc(b.acciones&&b.acciones[0]||'')+'</div></div>';
-      });
-      rh2+='</div>';
-    });
-    rh2+='</div></div>'; rm.innerHTML=rh2;
-  }
+  // 2026-10-29: la «Hoja de ruta hacia la madurez» se retiró; las brechas se detallan en el Plan de acción (resumen y filtros por prioridad y horizonte)
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -5929,12 +5968,12 @@ var TOPIC_TYPE_LABEL = {
 // MADUREZ DE ASUNTOS MATERIALES (Capa 2) — doble calificación
 // ═══════════════════════════════════════════════
 function topicScoreEff(ti, level) {
-  const lv = level || activeLevel || 'corp';
-  const ts = state.topicScores[ti][lv];
-  return (ts.expertScore !== undefined && ts.expertScore !== null) ? ts.expertScore : ts.score;
+  // 2026-10-29: la madurez del asunto por nivel sale de sus 6 criterios en la tabla de asuntos materiales (regla del criterio más débil).
+  // La calificación Modelo/Analista de las tarjetas es documental: ver topicCardScore().
+  return topicLevelScore(ti, level || activeLevel || 'corp');
 }
 function topicGlobal(ti) {
-  // Promedio ponderado de los 3 niveles (calificación del analista)
+  // Promedio ponderado de los 3 niveles (madurez por criterios de cada nivel; pesos de Parámetros)
   return weightedAvg(topicScoreEff(ti,'corp'), topicScoreEff(ti,'col'), topicScoreEff(ti,'nic'));
 }
 function topicMatAvg() {
@@ -5951,7 +5990,6 @@ function onTopicScoreClick(e) {
   const v  = parseInt(e.currentTarget.dataset.val);
   const lv = e.currentTarget.dataset.lv || activeLevel;
   const field = e.currentTarget.dataset.field || 'expertScore';
-  if(!state.topicManual) state.topicManual={}; state.topicManual[ti]=true; // editar la nota = override a Manual
   var _ts = state.topicScores[ti][lv];
   var _oldScore = _ts.score, _oldExpert = _ts.expertScore;
   _ts[field] = v;
@@ -5990,17 +6028,9 @@ function makeTopicPicker(ti, field) {
 
 // Opción B — madurez SUGERIDA desde los criterios cualitativos (gov/proc/tech/ind),
 // con criterio conservador (el criterio más débil limita el nivel). Es solo una pista; el analista la acepta.
-function suggestTopicMaturityFromCrit(ti){
-  var m=(typeof getTopicsMeta==='function')?getTopicsMeta()[ti]:null; if(!m) return 0;
-  function S(x){ return (x==='✓'||x==='△'||x==='✗')?x:'△'; }
-  var syms=[S(m.gov),S(m.proc),S(m.tech),S(m.ind)];
-  var nX=syms.filter(function(s){return s==='✗';}).length;
-  var nP=syms.filter(function(s){return s==='△';}).length;
-  var nV=syms.filter(function(s){return s==='✓';}).length;
-  if(nX>=2) return 1;              // dos o más criterios ausentes → No gestionado/Reactivo
-  if(nX===1) return 2;            // un criterio ausente → Básico/Informal
-  if(nP>=1) return (nP===1 && nV>=3) ? 4 : 3;  // sin ausentes: casi todo ✓ → Incorporado; mezcla con △ → En desarrollo
-  return 4;                       // los 4 criterios en ✓ → Incorporado/Gestionado (el nivel 5·Líder es juicio experto)
+function suggestTopicMaturityFromCrit(ti, lv){
+  // 2026-10-29: equivale a la madurez por criterios del nivel (tabla de asuntos materiales)
+  return topicLevelScore(ti, lv || activeLevel || 'corp');
 }
 function applyTopicSuggestedMaturity(ti){
   if(!state.editMode) return;
@@ -6018,10 +6048,8 @@ function applyTopicSuggestedMaturity(ti){
 // Manual congela la nota del analista. No recalcula en carga: solo escribe al cambiar criterios o al pulsar sincronizar.
 function topicIsAuto(ti){ return !state.topicManual || state.topicManual[ti]!==true; }
 function syncTopicFromCrit(ti, force){
-  if(!force && !topicIsAuto(ti)) return false;
-  var v=suggestTopicMaturityFromCrit(ti); if(!(v>=1)) return false;
-  ['corp','col','nic'].forEach(function(lv){ if(state.topicScores[ti] && state.topicScores[ti][lv]) state.topicScores[ti][lv].expertScore=v; });
-  return true;
+  // 2026-10-29: sin efecto — la madurez de los asuntos ya no se copia a las tarjetas (sección documental)
+  return false;
 }
 function _refreshTopicEverywhere(ti){
   var old=document.getElementById('topic-mat-'+ti); if(old){ var nw=buildTopicMaturityCard(ti); old.replaceWith(nw); }
@@ -6054,8 +6082,8 @@ function buildTopicMaturityCard(ti) {
   const lv = activeLevel;
   const ts = state.topicScores[ti][lv];
   const modelV  = ts.score;
-  const expertV = topicScoreEff(ti, lv);
-  const glob    = topicGlobal(ti);
+  const expertV = topicCardScore(ti, lv);
+  const glob    = topicCardGlobal(ti);
   const tt = TOPIC_TYPE_LABEL[t.type] || {label:t.type, bg:'#888', color:'white'};
   const lvMeta = LEVELS.find(l => l.id === lv) || LEVELS[0];
 
@@ -6066,7 +6094,7 @@ function buildTopicMaturityCard(ti) {
 
   // Mini badges por nivel (calificación efectiva del analista)
   const miniBadges = LEVELS.map(l => {
-    const s = topicScoreEff(ti, l.id);
+    const s = topicCardScore(ti, l.id);
     return '<span style="display:inline-flex;align-items:center;gap:2px;font-size:9px;font-weight:700;color:' + l.color + ';border:1px solid ' + l.color + '22;background:' + l.color + '11;border-radius:4px;padding:1px 5px;">' +
       '<span style="font-size:8px;">' + l.flag + '</span>' + (s===0?'NA':s) + '</span>';
   }).join('');
@@ -6083,9 +6111,9 @@ function buildTopicMaturityCard(ti) {
       '<span style="font-size:9px;color:#AAA;">' + t.marcos + '</span>' +
     '</div></div>' +
     '<div style="flex-shrink:0;text-align:center;background:#FFF6EF;border:1px solid #F6D9C2;border-radius:8px;padding:4px 9px;">' +
-      '<div style="font-size:8px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.03em;">Global</div>' +
+      '<div style="font-size:8px;font-weight:700;color:#B0B0B0;text-transform:uppercase;letter-spacing:.03em;">Referencia</div>' +
       '<div style="font-size:16px;font-weight:800;color:#F18446;line-height:1;">' + (glob>=1?glob.toFixed(1):'N/A') + '</div>' +
-      '<div style="font-size:7.5px;color:#C09A80;">ponderado</div>' +
+      '<div style="font-size:7.5px;color:#C09A80;">no consolida</div>' +
     '</div>';
   card.appendChild(head);
 
@@ -6129,29 +6157,7 @@ function buildTopicMaturityCard(ti) {
   dual.appendChild(deltaChip(modelV, expertV));
   card.appendChild(dual);
 
-  // Madurez: modo Auto (sigue criterios) / Manual (nota fija) + valor sugerido por criterios
-  var sug = suggestTopicMaturityFromCrit(ti);
-  if (sug >= 1) {
-    var autoOn = topicIsAuto(ti);
-    var sugCol = (typeof matColor === 'function') ? matColor(sug) : '#888';
-    var sugBox = document.createElement('div');
-    sugBox.style.cssText = 'display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:6px;padding:6px 10px;background:#F7FAFB;border:1px solid #E3EBEF;border-radius:8px;';
-    sugBox.innerHTML =
-      '<span style="font-size:8.5px;font-weight:800;color:#6B7A86;text-transform:uppercase;letter-spacing:.03em;">Sugerida por criterios</span>' +
-      '<span style="display:inline-flex;align-items:center;gap:5px;"><span style="width:18px;height:18px;border-radius:50%;background:' + sugCol + ';color:#fff;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">' + sug + '</span>' +
-      '<span style="font-size:9.5px;font-weight:700;color:' + sugCol + ';">' + (SCORE_LABELS[sug] || '') + '</span></span>' +
-      '<span style="display:inline-flex;align-items:center;gap:4px;font-size:8.5px;font-weight:800;border-radius:20px;padding:2px 8px;' + (autoOn ? 'background:#E8F3EC;color:#1E6E4E;border:1px solid #BEDCC9;' : 'background:#FDF3E7;color:#C4631A;border:1px solid #F6D9C2;') + '"><span class="mi" style="font-size:12px;">' + (autoOn ? 'sync' : 'lock') + '</span>' + (autoOn ? 'Auto · sigue a los criterios' : 'Manual · nota fija') + '</span>';
-    if (state.editMode) {
-      var tbtn = document.createElement('button');
-      tbtn.type = 'button'; tbtn.className = 'no-print';
-      tbtn.style.cssText = 'margin-left:auto;font-size:9px;font-weight:800;border:1.5px solid #F18446;background:#FFF6EF;color:#C4631A;border-radius:7px;padding:4px 10px;cursor:pointer;';
-      tbtn.textContent = autoOn ? 'Cambiar a Manual' : 'Volver a Auto (usar criterios)';
-      tbtn.title = autoOn ? 'Congela la nota del analista; dejará de seguir a los criterios.' : 'La madurez volverá a seguir a los criterios y aplica la sugerencia ahora.';
-      tbtn.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); setTopicAuto(ti, !autoOn); });
-      sugBox.appendChild(tbtn);
-    }
-    card.appendChild(sugBox);
-  }
+  // 2026-10-29: sin modo Auto/Manual — la tarjeta es documental y no alimenta la madurez del asunto
 
   // Sustentación (por nivel)
   const ratLbl = document.createElement('div');
@@ -6160,7 +6166,7 @@ function buildTopicMaturityCard(ti) {
   const ta = document.createElement('textarea');
   ta.className = 'notes-area';
   ta.style.cssText = 'min-height:210px;font-size:10.5px;line-height:1.55;';
-  ta.value = ts.rationale || suggestTopicRationale(ti, modelV);
+  ta.value = ts.rationale || suggestTopicRationale(ti, modelV, lv);
   if (!state.editMode) ta.readOnly = true;
   ta.addEventListener('input', e => { state.topicScores[ti][activeLevel].rationale = e.target.value; saveState(); });
   card.appendChild(ratLbl);
@@ -6280,7 +6286,7 @@ function buildTopicMaturityCard(ti) {
 
 function updateTopicMatAvg() {
   const el = document.getElementById('topicMatAvg');
-  if (el) el.textContent = topicMatAvg().toFixed(1);
+  if (el) el.textContent = topicCardAvg().toFixed(1);   // referencia documental (no consolida)
 }
 
 function renderTopicMaturity() {
@@ -6292,7 +6298,7 @@ function renderTopicMaturity() {
     const seen = {};
     groups.forEach(g => {
       const hd = document.createElement('div'); hd.className = 'sust-grp-head'; hd.style.cssText = 'grid-column:1/-1;margin-top:6px;';
-      hd.innerHTML = sustGroupHeadHtml(g, false); list.appendChild(hd);
+      hd.innerHTML = sustGroupHeadHtml(g, false, null, true); list.appendChild(hd);
       g.v.p.forEach(ti => { seen[ti] = 1; list.appendChild(buildTopicMaturityCard(ti)); });
     });
     getTopicsMeta().forEach((_, ti) => { if (!seen[ti]) list.appendChild(buildTopicMaturityCard(ti)); });
@@ -6301,7 +6307,6 @@ function renderTopicMaturity() {
   }
   updateTopicMatAvg();
   updateTopicLevelSelector();
-  renderTopicsTable();   // mantener la tabla sincronizada con el global ponderado
   if(document.getElementById('panoramaIntegrado')) renderPanorama();
   if(typeof renderStrategyChains==='function') renderStrategyChains();
 }
@@ -6680,16 +6685,16 @@ function sustGroupSelectorHtml(){
     +'<span style="font-size:10px;font-weight:800;color:var(--navy);">Agrupar asuntos por:</span>'
     +b('eje','Eje estratégico')+b('com','Compromiso de sostenibilidad')+b('none','Ranking de materialidad')+'</div>';
 }
-function sustGroupHeadHtml(g, compact){
-  var o=g.o, v=g.v, col=(v.val>=1)?matColor(v.val):'#9AA4AC';
-  var lbl=(v.val>=1)?SCORE_LABELS[Math.min(5,Math.max(1,Math.round(v.val)))]:'Sin datos';
+function sustGroupHeadHtml(g, compact, lv, hideVal){
+  var o=g.o, v=g.v, isLv=(lv&&lv!=='global'), val=isLv?sustValLv(g.kind,o.k,lv):v.val, col=(val>=1)?matColor(val):'#9AA4AC';
+  var lbl=(val>=1)?SCORE_LABELS[Math.min(5,Math.max(1,Math.round(val)))]:'Sin datos';
   return '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 11px;border-radius:8px;background:'+o.color+'10;border-left:4px solid '+o.color+';">'
     +'<span class="mi" style="font-size:18px;color:'+o.color+';">'+o.icon+'</span>'
     +'<div style="min-width:0;flex:1;"><div style="font-size:11.5px;font-weight:800;color:'+o.color+';">'+(g.kind==='com'?'Compromiso · ':(o.hab?'':'Eje estratégico · '))+o.n+'</div>'
     +(compact?'':'<div style="font-size:9px;color:#6B7A86;line-height:1.35;">'+o.d+'</div>')+'</div>'
     +'<span style="font-size:9px;color:#6B7A86;">'+v.p.length+' asunto'+(v.p.length!==1?'s':'')+(v.r.length?(' · +'+v.r.length+' relacionado'+(v.r.length!==1?'s':'')):'')+'</span>'
-    +'<span title="Madurez media (Analista, global ponderada) de los asuntos principales" style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;color:'+col+';background:white;border:1px solid '+col+'55;border-radius:6px;padding:2px 8px;">'
-    +'<span style="display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:18px;border-radius:9px;background:'+col+';color:white;font-size:9.5px;padding:0 4px;">'+(v.val>=1?v.val.toFixed(1):'NA')+'</span>'+lbl+'</span></div>';
+    +(hideVal?'':('<span title="Madurez media de los asuntos principales'+(isLv?(' · nivel '+((typeof TOPICS_VIEW_LBL!=='undefined'&&TOPICS_VIEW_LBL[lv])||lv)):' · global ponderada')+'" style="display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;color:'+col+';background:white;border:1px solid '+col+'55;border-radius:6px;padding:2px 8px;">'
+    +'<span style="display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:18px;border-radius:9px;background:'+col+';color:white;font-size:9.5px;padding:0 4px;">'+(val>=1?val.toFixed(1):'NA')+'</span>'+lbl+'</span>'))+'</div>';
 }
 // ── Pestaña Estrategia sostenibilidad: compromisos y ejes con sus asuntos (dinámico) ──
 function _sustCard(kind, o){
@@ -6740,7 +6745,7 @@ function getTopicsMeta(){
   if(!state.topicsMeta || !Array.isArray(state.topicsMeta) || state.topicsMeta.length!==TOPICS.length){
     state.topicsMeta = JSON.parse(JSON.stringify(TOPICS));
   }
-  state.topicsMeta.forEach(function(t,ti){ if(t.tech===undefined) t.tech=(TOPICS[ti]?TOPICS[ti].tech:'△');
+  state.topicsMeta.forEach(function(t,ti){
     // Estrategia de sostenibilidad (2026-10-26): vínculo a compromiso y eje estratégico (aditivo; respeta ediciones)
     var d=(typeof TOPIC_SUST!=='undefined'&&TOPIC_SUST[ti])?TOPIC_SUST[ti]:['REF',[],'HAB',[]];
     if(t.sCom===undefined){ t.sCom=d[0]; t.sComRel=d[1].slice(); }
@@ -6752,44 +6757,165 @@ function getTopicsMeta(){
   if(!state._migCompSust2){ var tm=state.topicsMeta; function eq(a,b){ return JSON.stringify((a||[]).slice().sort())===JSON.stringify(b.slice().sort()); }
     [[1,'REF',['LP'],'LP',['REF']],[16,'REF',['GI'],'LP',['REF']],[17,'LP',[],'LP',['GI']]].forEach(function(c){ var t=tm[c[0]]; if(t && t.sCom===c[1] && eq(t.sComRel,c[2])){ t.sCom=c[3]; t.sComRel=c[4].slice(); } });
     state._migCompSust2=true; }
+  // 2026-10-29 (usuario): criterios por nivel (6 × 3) con semilla del análisis; se retiran una sola vez los criterios únicos
+  // anteriores y los textos de Roles y Reporte. Idempotente: solo completa lo que falte.
+  state.topicsMeta.forEach(function(t,ti){
+    if(!t.crit||typeof t.crit!=='object') t.crit=_topicCritSeed(ti);
+    ['corp','col','nic'].forEach(function(lv){ if(!t.crit[lv]||typeof t.crit[lv]!=='object') t.crit[lv]=_topicCritSeed(ti)[lv];
+      TOPIC_CRIT_KEYS.forEach(function(k){ t.crit[lv][k]=_critNorm(t.crit[lv][k])||'△'; }); }); });
+  if(!state._migCritNivel){ state.topicsMeta.forEach(function(t){ ['gov','proc','tech','ind','roles','rep'].forEach(function(k){ delete t[k]; }); }); state._migCritNivel=true; }
   return state.topicsMeta;
 }
 function topicSetName(ti,el){ getTopicsMeta()[ti].name=(el.innerText||'').trim(); saveState(); renderMaterialityMap(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); }
 function topicSetType(ti,v){ getTopicsMeta()[ti].type=v; saveState(); renderTopicsTable(); renderMaterialityMap(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); if(document.getElementById('panoramaIntegrado')) renderPanorama(); }
 function topicSetText(ti,field,el){ getTopicsMeta()[ti][field]=(el.innerText||'').trim(); saveState(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); }
-function topicCycleCrit(ti,field){ var C=['✗','△','✓']; var cur=getTopicsMeta()[ti][field]; var i=C.indexOf(cur); getTopicsMeta()[ti][field]=C[(i+1)%3]; var synced=syncTopicFromCrit(ti,false); saveState(); renderTopicsTable(); if(document.getElementById('topicMaturityList')) renderTopicMaturity(); if(synced){ if(typeof updateTopicMatAvg==='function') updateTopicMatAvg(); if(typeof renderEjecutivo==='function') renderEjecutivo(); if(typeof renderPanorama==='function' && document.getElementById('panoramaIntegrado')) renderPanorama(); } }
 function toggleTopicsEdit(){ state.topicsEdit=!state.topicsEdit; var b=document.getElementById('topicsEditBtn'),l=document.getElementById('topicsEditLabel'),ic=document.getElementById('topicsEditIcon'); if(l)l.textContent=state.topicsEdit?'Edición activa':'Activar edición'; if(ic)ic.textContent=state.topicsEdit?'lock_open':'edit'; if(b){b.style.background=state.topicsEdit?'var(--orange)':'white';b.style.color=state.topicsEdit?'white':'var(--orange)';} saveState(); renderTopicsTable(); }
+
+// ═══════════════════════════════════════════════════════════════
+// CAPA 3 · CALIFICACIÓN POR CRITERIOS Y POR NIVEL (2026-10-29, usuario)
+// La tabla de asuntos materiales es la base autónoma de la madurez de cada asunto:
+//   6 criterios (Políticas, Roles, Procesos, Tecnología y datos, Indicadores, Reporte) × 3 niveles (Corp/Col/Nic),
+//   escala ✗ No existe · △ Parcial · ✓ Completo.
+// Nota de cada nivel (el criterio más débil limita): ≥2 ✗ → 1 · 1 ✗ → 2 · sin ✗ y ≥2 △ → 3 · sin ✗ y ≤1 △ → 4
+//   (el 5 · Optimizado/Líder no se asigna por criterios). Global = promedio ponderado por nivel (pesos de Parámetros).
+// La sección «Madurez de la gestión por asunto material» (tarjetas) es documental: sus notas no alimentan esta calificación.
+// ═══════════════════════════════════════════════════════════════
+var TOPIC_CRIT_KEYS = ['gov','roles','proc','tech','ind','rep'];
+var TOPIC_CRIT_LBL  = {gov:'Políticas', roles:'Roles', proc:'Procesos', tech:'Tecnología y datos', ind:'Indicadores', rep:'Reporte'};
+// Semilla inicial (análisis 2026-10-29): Corp · Col · Nic; orden Políticas, Roles, Procesos, Tec./datos, Indicadores, Reporte
+// Y = ✓ Completo · P = △ Parcial · N = ✗ No existe. Base: criterios vigentes de la tabla, sustentación por nivel del analista,
+// notas actuales por nivel y evidencia de la Memoria 2025 (TOPIC_CRIT_JUSTIF). A validar por el analista.
+var TOPIC_CRIT_SEED = [
+  /* 1 Gobierno corporativo            */ ['YYYYYY','YYYYYY','YYYYYY'],
+  /* 2 Materiales, residuos y relaves  */ ['YYYPYY','YYYPYY','YYYPYY'],
+  /* 3 Gestión de riesgos y crisis     */ ['PYPPPY','PYPPPY','PYPPPY'],
+  /* 4 Gestión de la energía           */ ['YYYYYY','YYYYYY','YYYYYY'],
+  /* 5 Salud y seguridad en el trabajo */ ['YYYYYY','YYYYYY','YYYYYY'],
+  /* 6 Gestión social con comunidades  */ ['PPYPPY','YYYYPY','PYYPNY'],
+  /* 7 Biodiversidad                   */ ['PYYPPY','PYYPPY','PYYPPY'],
+  /* 8 Cadena de suministro            */ ['PYPPNP','PYPPNP','PYPPNP'],
+  /* 9 Minería artesanal               */ ['NPPPPY','PPNPPP','YYPPPY'],
+  /* 10 Ética, transparencia           */ ['YYPPPY','YYYPYY','YYPPPY'],
+  /* 11 Innovación y competitividad    */ ['YPYYPP','YPYYPP','YPYYPP'],
+  /* 12 Sostenibilidad financiera      */ ['YYYPYY','YYYPYY','YYYPYY'],
+  /* 13 Derechos humanos               */ ['PPPNPY','PPNNPY','PPNNPY'],
+  /* 14 Relaciones laborales           */ ['YYYPYY','YYYPYY','YYPPYY'],
+  /* 15 Cambio climático               */ ['PYPPPY','PYPPPY','PYPPPY'],
+  /* 16 Impactos económicos            */ ['YYYPPY','YYYPPY','YYYPPY'],
+  /* 17 Agua                           */ ['YYYYPY','YYYYPY','YYYYPY'],
+  /* 18 Ciberseguridad                 */ ['YYYPPN','YYYPPN','YYYPPN']
+];
+function _critSym(c){ return c==='Y'?'✓':(c==='N'?'✗':'△'); }
+function _topicCritSeed(ti){
+  var s=TOPIC_CRIT_SEED[ti]||['PPPPPP','PPPPPP','PPPPPP'], o={};
+  ['corp','col','nic'].forEach(function(lv,i){ var r={}; TOPIC_CRIT_KEYS.forEach(function(k,j){ r[k]=_critSym(String(s[i]||'').charAt(j)); }); o[lv]=r; });
+  return o;
+}
+function _critNorm(v){
+  if(v==='✓'||v==='△'||v==='✗') return v;
+  var t=String(v==null?'':v).trim().toLowerCase().replace(/\s+/g,'_');
+  if(/^(✔|completo|si|sí|yes|y|2)$/.test(t)) return '✓';
+  if(/^(parcial|p|1)$/.test(t)) return '△';
+  if(/^(x|✘|no|no_existe|noexiste|n|0)$/.test(t)) return '✗';
+  return null;
+}
+function topicCrit(ti, lv){ var m=getTopicsMeta()[ti]; return (m&&m.crit&&m.crit[lv])?m.crit[lv]:null; }
+function topicCritCounts(c){ var x=0,p=0,y=0; TOPIC_CRIT_KEYS.forEach(function(k){ var v=c&&c[k]; if(v==='✗') x++; else if(v==='✓') y++; else p++; }); return {x:x,p:p,y:y}; }
+function topicCritRule(c){ if(!c) return 0; var n=topicCritCounts(c); if(n.x>=2) return 1; if(n.x===1) return 2; if(n.p>=2) return 3; return 4; }
+function topicLevelScore(ti, lv){ return topicCritRule(topicCrit(ti, lv||'corp')); }
+// Sección documental (tarjetas): calificación de referencia Modelo/Analista por nivel — no consolida
+function topicCardScore(ti, lv){ var x=state.topicScores&&state.topicScores[ti]&&state.topicScores[ti][lv||'corp']; if(!x) return 0; return (x.expertScore!==undefined&&x.expertScore!==null)?x.expertScore:x.score; }
+function topicCardGlobal(ti){ return weightedAvg(topicCardScore(ti,'corp'), topicCardScore(ti,'col'), topicCardScore(ti,'nic')); }
+function topicCardAvg(){ var v=(state.topicScores||[]).map(function(_,ti){ return topicCardGlobal(ti); }).filter(function(x){ return x>=1; });
+  return v.length?Math.round(v.reduce(function(a,b){ return a+b; },0)/v.length*10)/10:0; }
+
+// ── Vista de la tabla (Global / Corporativo / Colombia / Nicaragua) ──
+var TOPICS_VIEW_LBL = {global:'Global', corp:'Corporativo', col:'Colombia', nic:'Nicaragua'};
+function topicsView(){ var v=state&&state.topicsView; return TOPICS_VIEW_LBL[v]?v:'global'; }
+function setTopicsView(v){ state.topicsView=TOPICS_VIEW_LBL[v]?v:'global'; saveState(); renderTopicsTable(); }
+function topicsViewBarHtml(){
+  var cur=topicsView();
+  var b=function(k,t,first){ var on=(k===cur); return '<button type="button" onclick="setTopicsView(\''+k+'\')" aria-pressed="'+on+'" style="padding:5px 12px;border:none;'+(first?'':'border-left:1px solid #E4E7EB;')+'background:'+(on?'var(--navy)':'white')+';color:'+(on?'white':'var(--navy)')+';font-size:10.5px;font-weight:600;cursor:pointer;font-family:\'Satoshi\',\'Inter\',sans-serif;">'+t+'</button>'; };
+  return '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">'
+    +'<span style="font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-dp);">Vista</span>'
+    +'<div role="group" aria-label="Vista de la tabla de asuntos por nivel" style="display:inline-flex;border:1px solid #E4E7EB;border-radius:6px;overflow:hidden;">'
+    +b('global','Global',1)+b('corp','Corporativo')+b('col','Colombia')+b('nic','Nicaragua')+'</div>'
+    +'<span style="font-size:9.5px;color:#8A97A1;">'+(cur==='global'
+      ? 'Madurez ponderada de los 3 niveles (pesos de Parámetros) · criterios en orden Corp · Col · Nic'
+      : 'Criterios y madurez del nivel '+TOPICS_VIEW_LBL[cur])+'</span></div>';
+}
+function _topicCritRefresh(){
+  saveState();
+  renderTopicsTable();
+  if(typeof renderSustStrategy==='function') _safeRun(function(){ renderSustStrategy(); });
+  if(typeof renderMaterialityMap==='function') _safeRun(function(){ renderMaterialityMap(); });
+  if(typeof renderEjecutivo==='function' && document.getElementById('ejecutivoContent')) _safeRun(function(){ renderEjecutivo(); });
+  if(typeof renderPanorama==='function' && document.getElementById('panoramaIntegrado')) _safeRun(function(){ renderPanorama(); });
+  if(typeof renderStrategyChains==='function') _safeRun(function(){ renderStrategyChains(); });
+}
+function topicCycleCrit(ti, field, lv){
+  lv=lv||topicsView(); if(lv==='global'||TOPIC_CRIT_KEYS.indexOf(field)<0) return;
+  var m=getTopicsMeta()[ti]; if(!m||!m.crit||!m.crit[lv]) return;
+  var C=['✗','△','✓'], i=C.indexOf(m.crit[lv][field]); m.crit[lv][field]=C[(i+1)%3];
+  _topicCritRefresh();
+}
 
 function renderTopicsTable() {
   var tb = document.getElementById('topicsTableBody');
   if (!tb) return;
   tb.innerHTML = '';
-  var ed = !!state.topicsEdit;
+  var edOn = !!state.topicsEdit, view = topicsView(), isG = (view === 'global');
+  // En la vista Global se editan nombre, cuadrante, compromiso, eje y marcos; en Corporativo/Colombia/Nicaragua solo los criterios del nivel
+  var ed = edOn && isG, edCrit = edOn && !isG;
   var data = getTopicsMeta();
   var TYPE_OPTS=[['dm','Doble materialidad'],['fin','Materialidad financiera'],['lp','Monitoreo largo plazo'],['imp','Impacto GI']];
+  var vb=document.getElementById('topicsViewBar'); if(vb) vb.innerHTML=topicsViewBarHtml();
+  var tbl=document.getElementById('topicsTable'); if(tbl) tbl.classList.toggle('v-global', isG);
+  var thM=document.getElementById('thTopicMat');
+  if(thM){ thM.innerHTML = isG ? 'Madurez<br>global' : 'Madurez<br>'+(view==='corp'?'Corp.':TOPICS_VIEW_LBL[view]);
+    thM.title = isG ? 'Promedio ponderado de la madurez de los 3 niveles (pesos de Parámetros)' : 'Madurez del nivel '+TOPICS_VIEW_LBL[view]+', calculada con sus 6 criterios'; }
+  var hint=document.getElementById('topicsEditHint');
+  if(hint) hint.innerHTML = !edOn
+    ? 'Para calificar, activa la edición y elige <strong>Corporativo</strong>, <strong>Colombia</strong> o <strong>Nicaragua</strong>: clic en cada criterio para ciclar ✗ → △ → ✓.'
+    : (isG ? 'Edición activa: nombre, cuadrante, compromiso, eje y marcos editables. Para calificar los criterios elige <strong>Corporativo</strong>, <strong>Colombia</strong> o <strong>Nicaragua</strong>.'
+           : 'Edición activa · <strong>'+TOPICS_VIEW_LBL[view]+'</strong>: clic en cada criterio para ciclar ✗ → △ → ✓; se recalculan la madurez del nivel y la global. Nombre, cuadrante, compromiso, eje y marcos se editan en la vista Global.');
 
-  function critCell(ti, field, val) {
-    var color = val==='✓'?'#2E7D52':(val==='△'?'#C17F24':'#C0392B');
-    var size  = val==='✓'?'15px':'14px';
-    if(ed){
-      return '<td style="padding:6px 8px;text-align:center;"><span onclick="topicCycleCrit('+ti+',\''+field+'\')" title="Clic para ciclar ✗ → △ → ✓" style="cursor:pointer;font-size:'+size+';color:'+color+';border:1px dashed #E0C089;border-radius:5px;padding:1px 8px;display:inline-block;">'+val+'</span></td>';
+  function symColor(v){ return v==='✓'?'#2E7D52':(v==='△'?'#C17F24':'#C0392B'); }
+  function critCell(ti, field) {
+    var cr=data[ti].crit||{};
+    if(isG){
+      var tip=TOPIC_CRIT_LBL[field]+' — '+LEVELS.map(function(l){ var v=(cr[l.id]||{})[field]; return l.label+': '+(v||'—')+' '+critWord(v); }).join(' · ');
+      return '<td class="tt-k" style="padding:6px 2px;text-align:center;" title="'+tip+'"><span style="display:inline-flex;gap:4px;align-items:center;justify-content:center;font-size:11.5px;line-height:1;">'
+        +['corp','col','nic'].map(function(lv){ var v=(cr[lv]||{})[field]||'△'; return '<span style="color:'+symColor(v)+';">'+v+'</span>'; }).join('')+'</span></td>';
     }
-    return '<td style="padding:6px 8px;text-align:center;font-size:'+size+';color:'+color+';">'+val+'</td>';
+    var val=(cr[view]||{})[field]||'△', color=symColor(val), size=val==='✓'?'15px':'14px';
+    var title=TOPIC_CRIT_LBL[field]+' · '+TOPICS_VIEW_LBL[view]+': '+critWord(val);
+    if(edCrit){
+      return '<td class="tt-k" style="padding:6px 2px;text-align:center;"><span onclick="topicCycleCrit('+ti+',\''+field+'\',\''+view+'\')" title="'+title+' — clic para ciclar ✗ → △ → ✓" style="cursor:pointer;font-size:'+size+';color:'+color+';border:1px dashed #E0C089;border-radius:5px;padding:1px 8px;display:inline-block;">'+val+'</span></td>';
+    }
+    return '<td class="tt-k" style="padding:6px 2px;text-align:center;font-size:'+size+';color:'+color+';" title="'+title+'">'+val+'</td>';
+  }
+  function matCell(ti){
+    if(isG) return topicGlobalCell(ti);
+    var v=topicLevelScore(ti,view), col=(v>=1)?matColor(v):'#9AA4AC', n=topicCritCounts(topicCrit(ti,view));
+    return '<td style="padding:6px 8px;text-align:center;" title="'+TOPICS_VIEW_LBL[view]+': '+v+' · '+(SCORE_LABELS[v]||'')+' — '+n.y+' ✓ · '+n.p+' △ · '+n.x+' ✗">'
+      +'<span style="display:inline-flex;align-items:center;gap:4px;">'
+      +'<span style="width:22px;height:22px;border-radius:50%;background:'+col+';color:white;font-size:10px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">'+v+'</span>'
+      +'<span style="font-size:11px;font-weight:800;color:'+col+';">'+v.toFixed(1)+'</span></span></td>';
   }
   function txtCell(ti, field, val, css) {
-    if(ed) return '<td style="padding:6px 8px;'+css+'"><div contenteditable="true" onblur="topicSetText('+ti+',\''+field+'\',this)" style="outline:none;border:1px dashed #E0C089;border-radius:4px;padding:1px 4px;background:#FFFDF8;min-width:60px;">'+val+'</div></td>';
-    return '<td style="padding:6px 8px;'+css+'">'+val+'</td>';
+    if(ed) return '<td style="padding:6px 8px;'+css+'"><div contenteditable="true" onblur="topicSetText('+ti+',\''+field+'\',this)" style="outline:none;border:1px dashed #E0C089;border-radius:4px;padding:1px 4px;background:#FFFDF8;min-width:0;">'+(val||'')+'</div></td>';
+    return '<td style="padding:6px 8px;line-height:1.35;'+css+'">'+(val||'')+'</td>';
   }
-
   function sustCell(ti, kind) {
     var m=sustMeta(ti), main=(kind==='com')?m.com:m.eje, rel=(kind==='com')?m.comRel:m.ejeRel, LIST=(kind==='com')?SUST_COMPROMISOS:SUST_EJES;
     var fMain=(kind==='com')?'sCom':'sEje', fRel=(kind==='com')?'sComRel':'sEjeRel';
     if(ed){
-      var sel='<select onchange="topicSetSust('+ti+',\''+fMain+'\',this.value)" style="font-size:9px;border:1px solid #D5D5D5;border-radius:5px;padding:2px 3px;background:white;max-width:150px;">'+LIST.map(function(o){ return '<option value="'+o.k+'"'+(o.k===main?' selected':'')+'>'+o.n+'</option>'; }).join('')+'</select>';
-      var tg=LIST.filter(function(o){ return o.k!==main; }).map(function(o){ var on=rel.indexOf(o.k)>=0; return '<span onclick="topicToggleSustRel('+ti+',\''+fRel+'\',\''+o.k+'\')" title="Relacionado: '+o.n+' (clic para '+(on?'quitar':'agregar')+')" style="cursor:pointer;font-size:8px;font-weight:700;border-radius:4px;padding:0 4px;border:1px '+(on?'solid':'dashed')+' '+o.color+';color:'+(on?'white':o.color)+';background:'+(on?o.color:'white')+';">'+(kind==='com'?o.k:o.k)+'</span>'; }).join(' ');
-      return '<td style="padding:6px 6px;background:#FFFBF7;">'+sel+'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">'+tg+'</div></td>';
+      var sel='<select onchange="topicSetSust('+ti+',\''+fMain+'\',this.value)" style="font-size:9px;border:1px solid #D5D5D5;border-radius:5px;padding:2px 3px;background:white;width:100%;">'+LIST.map(function(o){ return '<option value="'+o.k+'"'+(o.k===main?' selected':'')+'>'+o.n+'</option>'; }).join('')+'</select>';
+      var tg=LIST.filter(function(o){ return o.k!==main; }).map(function(o){ var on=rel.indexOf(o.k)>=0; return '<span onclick="topicToggleSustRel('+ti+',\''+fRel+'\',\''+o.k+'\')" title="Relacionado: '+o.n+' (clic para '+(on?'quitar':'agregar')+')" style="cursor:pointer;font-size:8px;font-weight:700;border-radius:4px;padding:0 4px;border:1px '+(on?'solid':'dashed')+' '+o.color+';color:'+(on?'white':o.color)+';background:'+(on?o.color:'white')+';">'+o.k+'</span>'; }).join(' ');
+      return '<td style="padding:6px 8px;background:#FFFBF7;">'+sel+'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">'+tg+'</div></td>';
     }
-    return '<td style="padding:6px 5px;background:#FFFBF7;width:118px;max-width:118px;"><div style="display:flex;flex-wrap:wrap;gap:3px;">'+(sustChip(kind,main,false)+rel.map(function(k){ return sustChip(kind,k,true); }).join('')).replace(/white-space:nowrap;/g,'line-height:1.2;')+'</div></td>';
+    return '<td style="padding:6px 6px 6px 8px;background:#FFFBF7;"><div style="display:flex;flex-wrap:wrap;gap:3px;">'+(sustChip(kind,main,false)+rel.map(function(k){ return sustChip(kind,k,true); }).join('')).replace(/white-space:nowrap;/g,'line-height:1.2;')+'</div></td>';
   }
   function buildRow(t, ti) {
     var tt = TOPIC_TYPE_LABEL[t.type] || {label:t.type, bg:'#888', color:'white'};
@@ -6797,33 +6923,31 @@ function renderTopicsTable() {
     row.className = 'topic-row';
     row.dataset.type = t.type;
     row.style.borderBottom = '1px solid #F5F5F5';
-
     var nameCell = ed
-      ? '<td style="padding:8px 10px;max-width:200px;"><div contenteditable="true" onblur="topicSetName('+ti+',this)" style="font-size:11px;font-weight:600;color:var(--ink);outline:none;border:1px dashed #E0C089;border-radius:4px;padding:1px 4px;background:#FFFDF8;">'+t.name+'</div></td>'
-      : '<td style="padding:8px 12px;font-size:11px;font-weight:600;color:var(--ink);max-width:200px;">'+t.name+'</td>';
+      ? '<td style="padding:8px 8px;"><div contenteditable="true" onblur="topicSetName('+ti+',this)" style="font-size:11px;font-weight:600;color:var(--ink);outline:none;border:1px dashed #E0C089;border-radius:4px;padding:1px 4px;background:#FFFDF8;">'+t.name+'</div></td>'
+      : '<td style="padding:8px 8px;font-size:11px;font-weight:600;color:var(--ink);line-height:1.3;">'+t.name+'</td>';
     var quadCell = ed
-      ? '<td style="padding:6px 5px;text-align:center;"><select onchange="topicSetType('+ti+',this.value)" style="font-size:9px;border:1px solid #D5D5D5;border-radius:5px;padding:2px 3px;background:white;">'+TYPE_OPTS.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===t.type?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td>'
-      : '<td style="padding:6px 4px;text-align:center;width:92px;max-width:92px;"><span style="display:inline-block;font-size:9px;font-weight:700;background:'+tt.bg+';color:'+tt.color+';border-radius:4px;padding:2px 6px;line-height:1.25;">'+tt.label+'</span></td>';
-
+      ? '<td style="padding:6px 4px;text-align:center;"><select onchange="topicSetType('+ti+',this.value)" style="font-size:9px;border:1px solid #D5D5D5;border-radius:5px;padding:2px 3px;background:white;width:100%;">'+TYPE_OPTS.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===t.type?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select></td>'
+      : '<td style="padding:6px 4px;text-align:center;" title="Cuadrante: '+tt.label+'"><span style="display:inline-flex;align-items:flex-start;justify-content:center;gap:4px;font-size:8.5px;font-weight:500;color:#7A858E;line-height:1.25;"><span style="flex:0 0 6px;width:6px;height:6px;border-radius:50%;background:'+tt.bg+';margin-top:3px;"></span><span style="text-align:left;">'+tt.label+'</span></span></td>';
     row.innerHTML =
       '<td style="padding:8px 6px;text-align:center;"><span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:'+tt.bg+';color:'+tt.color+';font-size:10px;font-weight:800;">'+(ti+1)+'</span></td>' +
-      nameCell + sustCell(ti,'com') + (ed ? sustCell(ti,'eje') : '') + quadCell + topicGlobalCell(ti) +
-      critCell(ti,'gov',t.gov) +
-      txtCell(ti,'roles',t.roles,'font-size:9.5px;color:#444;') +
-      critCell(ti,'proc',t.proc) +
-      critCell(ti,'tech',t.tech) +
-      critCell(ti,'ind',t.ind) +
-      txtCell(ti,'rep',t.rep,'font-size:9.5px;color:#666;') +
+      nameCell + sustCell(ti,'com') + (ed ? sustCell(ti,'eje') : '') + quadCell + matCell(ti) +
+      TOPIC_CRIT_KEYS.map(function(k){ return critCell(ti,k); }).join('') +
       txtCell(ti,'marcos',t.marcos,'font-size:9.5px;color:#888;');
     return row;
   }
   var thE=document.getElementById('thSustEje'), thG=document.getElementById('thSustGrp');
   if(thE) thE.style.display = ed ? '' : 'none'; if(thG) thG.colSpan = ed ? 2 : 1;
   var NCOL = ed ? 13 : 12;
+  // anchos fijos — «Asunto material» toma el resto; los 6 criterios comparten ancho
+  var cg=document.getElementById('topicsColgroup');
+  if(cg){ var CW = ed ? [32,0,170,170,112,64,60,60,60,60,64,60,120] : [30,0,138,74,64,58,58,58,58,62,58,104];
+    cg.innerHTML = CW.map(function(w){ return w ? '<col style="width:'+w+'px">' : '<col>'; }).join(''); }
+  if(tbl) tbl.style.minWidth = ed ? '1300px' : '950px';
   var groups=sustGroups();
   if(groups){
     var seen={};
-    groups.forEach(function(g){ var hr=document.createElement('tr'); hr.className='sust-grp-row'; hr.innerHTML='<td colspan="'+NCOL+'" style="padding:10px 6px 4px;">'+sustGroupHeadHtml(g,true)+'</td>'; tb.appendChild(hr);
+    groups.forEach(function(g){ var hr=document.createElement('tr'); hr.className='sust-grp-row'; hr.innerHTML='<td colspan="'+NCOL+'" style="padding:10px 6px 4px;">'+sustGroupHeadHtml(g,true,view)+'</td>'; tb.appendChild(hr);
       g.v.p.forEach(function(ti){ seen[ti]=1; tb.appendChild(buildRow(data[ti],ti)); }); });
     var rest=[]; data.forEach(function(t,ti){ if(!seen[ti]) rest.push(ti); });
     if(rest.length){ var hr2=document.createElement('tr'); hr2.innerHTML='<td colspan="'+NCOL+'" style="padding:10px 6px 4px;font-size:11px;font-weight:800;color:#C0392B;">Sin vínculo principal válido</td>'; tb.appendChild(hr2); rest.forEach(function(ti){ tb.appendChild(buildRow(data[ti],ti)); }); }
@@ -7169,7 +7293,11 @@ function validateInsumo(data){
       var v=o.score; if(!(typeof v==='number'&&v>=0&&v<=5&&v===Math.round(v))) errs.push(_insEsc(el.eid)+'/'+lv+': score fuera de 0–5 ('+_insEsc(v)+').'); else any=true; } });
     if(any) stats.elem++;
   });
-  (data.asuntos||[]).forEach(function(a,k){ if(!a||typeof a.topic!=='number'||a.topic<1||a.topic>18){ warns.push('asuntos['+k+'] topic inválido (debe ser 1–18).'); return; } stats.topics++; });
+  (data.asuntos||[]).forEach(function(a,k){ if(!a||typeof a.topic!=='number'||a.topic<1||a.topic>18){ warns.push('asuntos['+k+'] topic inválido (debe ser 1–18).'); return; } stats.topics++;
+    var nv=a.niveles||{}; ['corp','col','nic'].forEach(function(lv){ var o=nv[lv]; if(!o||!o.criterios) return;
+      if(typeof o.criterios!=='object'){ errs.push('asunto #'+a.topic+'/'+lv+': «criterios» debe ser un objeto.'); return; }
+      Object.keys(o.criterios).forEach(function(ck){ var key=INS_CRIT_KEY[String(ck).toLowerCase()]; if(!key){ warns.push('asunto #'+a.topic+'/'+lv+': criterio desconocido «'+_insEsc(ck)+'» (se omitirá).'); return; }
+        if(!_critNorm(o.criterios[ck])) errs.push('asunto #'+a.topic+'/'+lv+'/'+_insEsc(ck)+': valor inválido «'+_insEsc(o.criterios[ck])+'» (use ✓/△/✗ o completo/parcial/no_existe).'); }); }); });
   (data.brechas_sugeridas||[]).forEach(function(b,k){ if(!b||!b.titulo){ warns.push('brechas_sugeridas['+k+'] sin «titulo»; se omitirá.'); return; }
     (b.comps||[]).forEach(function(c){ if(!(c>=1&&c<=COMP_META.length)) warns.push('brecha «'+_insEsc(String(b.titulo).slice(0,24))+'…» comp fuera de 1–'+COMP_META.length+': '+_insEsc(c)); });
     (b.topics||[]).forEach(function(t){ if(!(t>=1&&t<=18)) warns.push('brecha «'+_insEsc(String(b.titulo).slice(0,24))+'…» topic fuera de 1–18: '+_insEsc(t)); });
@@ -7191,6 +7319,9 @@ function importInsumo(input){
   };
   reader.readAsText(file);
 }
+var INS_CRIT_KEY={politicas:'gov','políticas':'gov',gov:'gov',gobernanza:'gov',roles:'roles',procesos:'proc',proc:'proc',tecnologia_datos:'tech','tecnología_datos':'tech',tecnologia:'tech',tech:'tech',indicadores:'ind',ind:'ind',reporte:'rep',rep:'rep'};
+function _insCritTxt(o){ if(!o||!o.criterios||typeof o.criterios!=='object') return ''; var m={}; Object.keys(o.criterios).forEach(function(ck){ var k=INS_CRIT_KEY[String(ck).toLowerCase()]; if(k) m[k]=_critNorm(o.criterios[ck])||'?'; });
+  return ' · criterios '+TOPIC_CRIT_KEYS.map(function(k){ return m[k]||'·'; }).join(''); }
 function _lvTxt(o){ if(!o||o.score===undefined||o.score===null) return '—'; var lbl=(typeof SCORE_LABELS!=='undefined'&&SCORE_LABELS[o.score])?SCORE_LABELS[o.score]:''; return o.score+(lbl?(' · '+lbl):''); }
 function showInsumoModal(){
   if(!__insumo) return; var data=__insumo.data, rep=__insumo.rep, idx=rep.idx;
@@ -7224,10 +7355,10 @@ function showInsumoModal(){
   });
   h+='</tbody></table>';
   // asuntos
-  if((data.asuntos||[]).length){ h+='<div style="font-weight:800;font-size:12px;color:#093E5E;margin:16px 0 6px;">Calificación de asuntos materiales (Capa 2)</div>';
+  if((data.asuntos||[]).length){ h+='<div style="font-weight:800;font-size:12px;color:#093E5E;margin:16px 0 6px;">Asuntos materiales (Capa 3) — criterios por nivel → tabla · nota y sustentación → sección documental</div>';
     h+='<table style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="background:#F4F6F8;text-align:left;"><th style="padding:5px 6px;">✓</th><th style="padding:5px 6px;">#</th><th style="padding:5px 6px;">Corp</th><th style="padding:5px 6px;">Col</th><th style="padding:5px 6px;">Nic</th></tr></thead><tbody>';
     (data.asuntos||[]).forEach(function(a,k){ if(!a||typeof a.topic!=='number'||a.topic<1||a.topic>18) return; var nv=a.niveles||{};
-      h+='<tr style="border-bottom:1px solid #eee;"><td style="padding:5px 6px;"><input type="checkbox" class="insTp" data-k="'+k+'" checked></td><td style="padding:5px 6px;font-weight:700;">'+a.topic+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.corp))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.col))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.nic))+'</td></tr>';
+      h+='<tr style="border-bottom:1px solid #eee;"><td style="padding:5px 6px;"><input type="checkbox" class="insTp" data-k="'+k+'" checked></td><td style="padding:5px 6px;font-weight:700;">'+a.topic+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.corp)+_insCritTxt(nv.corp))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.col)+_insCritTxt(nv.col))+'</td><td style="padding:5px 6px;">'+_insEsc(_lvTxt(nv.nic)+_insCritTxt(nv.nic))+'</td></tr>';
     }); h+='</tbody></table>'; }
   // brechas
   if((data.brechas_sugeridas||[]).length){ h+='<div style="font-weight:800;font-size:12px;color:#093E5E;margin:16px 0 6px;">Brechas sugeridas</div>';
@@ -7248,7 +7379,7 @@ function applyInsumo(){
   if(!__insumo){ closeInsumoModal(); return; }
   var data=__insumo.data, idx=__insumo.rep.idx;
   if(typeof snapshotState==='function') snapshotState();
-  var nEl=0,nTp=0,nBr=0;
+  var nEl=0,nTp=0,nBr=0; var nTpc=0;
   // elementos -> expertScore + rationale por nivel
   document.querySelectorAll('input.insEl:checked').forEach(function(cb){
     var el=(data.elementos||[])[+cb.dataset.k]; if(!el||!idx[el.eid]) return; var loc=idx[el.eid], nv=el.niveles||{};
@@ -7265,7 +7396,10 @@ function applyInsumo(){
   document.querySelectorAll('input.insTp:checked').forEach(function(cb){
     var a=(data.asuntos||[])[+cb.dataset.k]; if(!a||typeof a.topic!=='number') return; var ti=a.topic-1; var nv=a.niveles||{};
     if(!Array.isArray(state.topicScores)||!state.topicScores[ti]) return;
-    ['corp','col','nic'].forEach(function(lv){ var o=nv[lv]; if(!o||o.score===undefined||o.score===null) return;
+    ['corp','col','nic'].forEach(function(lv){ var o=nv[lv]; if(!o) return;
+      if(o.criterios&&typeof o.criterios==='object'){ var tm=getTopicsMeta()[ti]; if(tm&&tm.crit&&tm.crit[lv]){ var nC=0;
+        Object.keys(o.criterios).forEach(function(ck){ var k=INS_CRIT_KEY[String(ck).toLowerCase()], v=_critNorm(o.criterios[ck]); if(k&&v){ tm.crit[lv][k]=v; nC++; } }); if(nC) nTpc++; } }
+      if(o.score===undefined||o.score===null) return;
       if(!state.topicScores[ti][lv]) state.topicScores[ti][lv]={score:o.score,expertScore:o.score,rationale:''};
       state.topicScores[ti][lv].expertScore=o.score; if(o.rationale) state.topicScores[ti][lv].rationale=o.rationale; nTp++;
     });
@@ -7280,7 +7414,7 @@ function applyInsumo(){
   });
   try{ if(typeof saveState==='function') saveState(); }catch(e){}
   closeInsumoModal(); __insumo=null;
-  alert('Insumo aplicado: '+nEl+' calificación(es) de elemento, '+nTp+' de asunto y '+nBr+' brecha(s). Se recargará la vista para reflejar los cambios.');
+  alert('Insumo aplicado: '+nEl+' calificación(es) de elemento, '+nTpc+' nivel(es) de asunto con criterios (tabla), '+nTp+' nota(s) de asunto de referencia y '+nBr+' brecha(s). Se recargará la vista para reflejar los cambios.');
   location.reload();
 }
 
@@ -7527,7 +7661,7 @@ function buildPortada(wb){
   var r=6;
   xBanner(ws,r,1,6,'Contenido del libro',XL.NAVY,XL.WHITE,12); r++;
   xHead(ws,r,['Hoja','Descripción'],{align:['left','left']}); ws.mergeCells(r,2,r,6); r++;
-  [['Resumen','Panorama integrado: madurez, materialidad, IROs, estrategia, ODS e indicadores + radar'],['Parametros','Pesos de consolidación por nivel (editables) que alimentan las fórmulas'],['Capa 1 · Modelo',COMP_META.length+' componentes · elementos con calificación Modelo/Analista por nivel y global'],['Capa 2 · IROs','Registro de impactos, riesgos y oportunidades (Fuente vs. Sugerido)'],['Mapa de calor IRO','Matriz Magnitud × Horizonte (GRI 3 · ESRS IRO-1) — gráfico'],['Matriz de materialidad','Doble materialidad · 18 asuntos por cuadrante — gráfico'],['Capa 3 · Materialidad','18 asuntos materiales · madurez por nivel, criterios y vínculos IRO'],['Estrategia sostenibilidad','Estrategia de negocio IDEAS (base, habilitación por pilar) y estrategia de sostenibilidad: madurez por compromiso y eje estratégico'],['ODS · Agenda 2030','Contribución por frente y aportes por ODS'],['Brechas y hoja de ruta','Brechas priorizadas con acciones y vínculos'],['Indicadores (KPIs)','Tablero por bloque, valores por nivel y análisis'],['Marco de referencia','Marcos/estándares activos y regulación por país']].forEach(function(it){ xTxt(ws,r,1,it[0],{bold:true,color:XL.NAVY}); xTxt(ws,r,2,it[1],{color:XL.MUT}); ws.mergeCells(r,2,r,6); xAuto(ws,r,[[24,it[0]],[64,it[1]]]); r++; });
+  [['Resumen','Panorama integrado: madurez, materialidad, IROs, estrategia, ODS e indicadores + radar'],['Parametros','Pesos de consolidación por nivel (editables) que alimentan las fórmulas'],['Capa 1 · Modelo',COMP_META.length+' componentes · elementos con calificación Modelo/Analista por nivel y global'],['Capa 2 · IROs','Registro de impactos, riesgos y oportunidades (Fuente vs. Sugerido)'],['Mapa de calor IRO','Matriz Magnitud × Horizonte (GRI 3 · ESRS IRO-1) — gráfico'],['Matriz de materialidad','Doble materialidad · 18 asuntos por cuadrante — gráfico'],['Capa 3 · Materialidad','18 asuntos materiales · madurez por nivel calculada con 6 criterios (✗/△/✓), global ponderada y vínculos IRO'],['Estrategia sostenibilidad','Estrategia de negocio IDEAS (base, habilitación por pilar) y estrategia de sostenibilidad: madurez por compromiso y eje estratégico'],['ODS · Agenda 2030','Contribución por frente y aportes por ODS'],['Brechas y hoja de ruta','Brechas priorizadas con acciones y vínculos'],['Indicadores (KPIs)','Tablero por bloque, valores por nivel y análisis'],['Marco de referencia','Marcos/estándares activos y regulación por país']].forEach(function(it){ xTxt(ws,r,1,it[0],{bold:true,color:XL.NAVY}); xTxt(ws,r,2,it[1],{color:XL.MUT}); ws.mergeCells(r,2,r,6); xAuto(ws,r,[[24,it[0]],[64,it[1]]]); r++; });
   r++; ws.mergeCells(r,1,r,6); var note=ws.getCell(r,1);
   note.value='Respaldo generado el '+new Date().toLocaleString('es-CO')+'. Las celdas de calificación (1–5) y los pesos de «Parametros» son editables; los valores globales y de componente se recalculan por fórmula. Diferenciación mantenida: «Fuente (Memoria)» = explícito en la fuente · «Sugerido (modelo)» = propuesto para validación del analista.';
   note.font={name:'Calibri',size:9.5,italic:true,color:xArgb(XL.MUT)}; note.alignment={wrapText:true,vertical:'top'}; xAuto(ws,r,[[100,note.value]],{lh:14});
@@ -7699,35 +7833,53 @@ function buildHeatmap(wb){
 }
 
 function buildMaterialidad(wb){
-  var ws=wb.addWorksheet('Capa 3 · Materialidad',{views:[{showGridLines:false,state:'frozen',ySplit:3}]});
-  xCols(ws,[5,30,20,8,8,8,8,8,8,12,12,6,6,6,6,26,22,30,24,30,30]);
-  xBanner(ws,1,1,21,'Capa 3 · Materialidad — 18 asuntos materiales (madurez por nivel, criterios, vínculos IRO y estrategia de sostenibilidad)',XL.NAVY,XL.WHITE,12);
+  // 2026-10-29: la madurez de cada asunto sale de 6 criterios por nivel (fórmulas en la hoja); la global pondera los niveles con Parametros
+  var ws=wb.addWorksheet('Capa 3 · Materialidad',{views:[{showGridLines:false,state:'frozen',xSplit:2,ySplit:3}]});
+  var CK=TOPIC_CRIT_KEYS, CL=['Pol.','Roles','Proc.','Tec./ datos','Ind.','Rep.'];
+  var widths=[5,30,14,7,7,7,8,15]; for(var q=0;q<18;q++) widths.push(6.5); widths=widths.concat([26,20,30,30,7,7,7]);
+  xCols(ws,widths);
+  var NC=widths.length;   // 33
+  xBanner(ws,1,1,NC,'Capa 3 · Materialidad — 18 asuntos: madurez por nivel calculada con 6 criterios (✗ No existe · △ Parcial · ✓ Completo) y global ponderada',XL.NAVY,XL.WHITE,12);
   var gh=2;
-  [[4,5,'Corporativo',XL.NAVY],[6,7,'Colombia',XL.ORANGE2],[8,9,'Nicaragua',XL.GREEN]].forEach(function(g){ ws.mergeCells(gh,g[0],gh,g[1]); var cc=ws.getCell(gh,g[0]); cc.value=g[2]; cc.fill=xFill(g[3]); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
-  [1,2,3,10,11,12,13,14,15,16,17,18,19].forEach(function(col){ ws.getCell(gh,col).border=xBord(); });
-  ws.mergeCells(gh,20,gh,21); var sg=ws.getCell(gh,20); sg.value='Estrategia de sostenibilidad'; sg.fill=xFill(XL.ORANGE2); sg.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; sg.alignment={vertical:'middle',horizontal:'center'}; sg.border=xBord();
-  ws.getRow(gh).height=14;
-  xHead(ws,3,['#','Asunto material','Tipo','Mod.','Anal.','Mod.','Anal.','Mod.','Anal.','Global','Nivel','Gob.','Proc.','Tec.','Ind.','Roles / área','Reporte','Marcos','IROs vinculados','Compromiso (principal · relacionados)','Eje estratégico (principal · relacionados)'],{align:['center','left','left','center','center','center','center','center','center','center','center','center','center','center','center','left','left','left','left','left','left']});
-  var r=4, meta=(typeof getTopicsMeta==='function')?getTopicsMeta():TOPICS, links=(state.iroLinks||{});
+  [[4,8,'Madurez (regla de criterios)',XL.NAVY],[9,14,'Corporativo — criterios',XL.NAVY],[15,20,'Colombia — criterios',XL.ORANGE2],[21,26,'Nicaragua — criterios',XL.GREEN],[29,30,'Estrategia de sostenibilidad',XL.ORANGE2],[31,33,'Referencia documental (no consolida)',XL.MUT]].forEach(function(g){
+    ws.mergeCells(gh,g[0],gh,g[1]); var cc=ws.getCell(gh,g[0]); cc.value=g[2]; cc.fill=xFill(g[3]); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
+  [1,2,3,27,28].forEach(function(col){ ws.getCell(gh,col).border=xBord(); });
+  ws.getRow(gh).height=15;
+  var labels=['#','Asunto material','Cuadrante','Corp','Col','Nic','Global','Nivel'];
+  for(var l=0;l<3;l++) labels=labels.concat(CL);
+  labels=labels.concat(['Marcos','IROs vinculados','Compromiso (principal · relacionados)','Eje estratégico (principal · relacionados)','Corp','Col','Nic']);
+  var al=labels.map(function(_,i){ return (i===1||i>=26&&i<=29)?'left':'center'; });
+  xHead(ws,3,labels,{align:al,h:32});
+  var r=4, meta=getTopicsMeta(), links=(state.iroLinks||{});
+  function colL(c){ var s=''; while(c>0){ var m=(c-1)%26; s=String.fromCharCode(65+m)+s; c=Math.floor((c-1)/26); } return s; }
   meta.forEach(function(tp,ti){
-    var sc=state.topicScores[ti]||{corp:{},col:{},nic:{}};
     xTxt(ws,r,1,ti+1,{h:'center',bold:true}); xTxt(ws,r,2,tp.name,{bold:true,size:9.5});
-    var ty=xTxt(ws,r,3,TTYPE_L[tp.type]||tp.type,{size:9,bold:true,color:XL.WHITE}); ty.fill=xFill(TTYPE_C[tp.type]||XL.MUT);
-    xScoreInt(ws,r,4,sc.corp.score,false); xScoreInt(ws,r,5,sc.corp.expertScore,true);
-    xScoreInt(ws,r,6,sc.col.score,false); xScoreInt(ws,r,7,sc.col.expertScore,true);
-    xScoreInt(ws,r,8,sc.nic.score,false); xScoreInt(ws,r,9,sc.nic.expertScore,true);
-    xNum(ws,r,10,xGForm('E'+r,'G'+r,'I'+r));
-    var nv=ws.getCell(r,11); nv.value=xNivelForm('J'+r); nv.font={name:'Calibri',size:9,color:xArgb(XL.NAVY)}; nv.alignment={vertical:'middle',horizontal:'center',wrapText:true}; nv.border=xBord();
-    xTxt(ws,r,12,tp.gov,{h:'center'}); xTxt(ws,r,13,tp.proc,{h:'center'}); xTxt(ws,r,14,tp.tech,{h:'center'}); xTxt(ws,r,15,tp.ind,{h:'center'});
-    xTxt(ws,r,16,tp.roles,{size:9.5,color:XL.MUT}); xTxt(ws,r,17,tp.rep,{size:9.5,color:XL.MUT}); xTxt(ws,r,18,tp.marcos,{size:9.5,color:XL.MUT});
-    var lk=(links[ti+1]||[]).join(', '); xTxt(ws,r,19,lk,{size:9.5,color:XL.NAVY});
+    var ty=xTxt(ws,r,3,TTYPE_L[tp.type]||tp.type,{size:9,color:XL.MUT});
+    ['corp','col','nic'].forEach(function(lv,i){
+      var c0=9+i*6, rg=colL(c0)+r+':'+colL(c0+5)+r, cr=(tp.crit&&tp.crit[lv])||{};
+      CK.forEach(function(k,j){ var cell=xTxt(ws,r,c0+j,cr[k]||'△',{h:'center',size:11,color:(cr[k]==='✓'?'FF2E7D52':(cr[k]==='✗'?'FFC0392B':'FFC17F24'))});
+        cell.dataValidation={type:'list',allowBlank:false,formulae:['"✓,△,✗"'],showErrorMessage:true,errorStyle:'stop',errorTitle:'Valor inválido',error:'Use ✓ (Completo), △ (Parcial) o ✗ (No existe).'}; });
+      var sc=ws.getCell(r,4+i);
+      sc.value={formula:'IF(COUNTIF('+rg+',"✗")>=2,1,IF(COUNTIF('+rg+',"✗")=1,2,IF(COUNTIF('+rg+',"△")>=2,3,4)))', result:topicLevelScore(ti,lv)};
+      sc.numFmt='0'; sc.alignment={vertical:'middle',horizontal:'center'}; sc.font={name:'Calibri',size:10.5,bold:true,color:xArgb(XL.INK)}; sc.border=xBord();
+    });
+    xNum(ws,r,7,xGForm('D'+r,'E'+r,'F'+r));
+    var nv=ws.getCell(r,8); nv.value=xNivelForm('G'+r); nv.font={name:'Calibri',size:9,color:xArgb(XL.NAVY)}; nv.alignment={vertical:'middle',horizontal:'center',wrapText:true}; nv.border=xBord();
+    xTxt(ws,r,27,tp.marcos,{size:9.5,color:XL.MUT});
+    var lk=(links[ti+1]||[]).join(', '); xTxt(ws,r,28,lk,{size:9.5,color:XL.NAVY});
     var sm=sustMeta(ti), cO=sustComp(sm.com), eO=sustEje(sm.eje);
     var cTx=(cO?cO.n:'—')+(sm.comRel.length?(' · rel.: '+sm.comRel.map(function(k){var o=sustComp(k);return o?o.short:k;}).join(', ')):'');
     var eTx=(eO?eO.n:'—')+(sm.ejeRel.length?(' · rel.: '+sm.ejeRel.map(function(k){var o=sustEje(k);return o?o.n:k;}).join(', ')):'');
-    xTxt(ws,r,20,cTx,{size:9.5,bold:true,color:'FF'+((cO&&cO.color)||'#093E5E').replace('#','')}); xTxt(ws,r,21,eTx,{size:9.5,bold:true,color:'FF'+((eO&&eO.color)||'#093E5E').replace('#','')});
-    xAuto(ws,r,[[30,tp.name],[26,tp.roles],[22,tp.rep],[30,tp.marcos],[24,lk],[30,cTx],[30,eTx]]); r++;
+    xTxt(ws,r,29,cTx,{size:9.5,bold:true,color:'FF'+((cO&&cO.color)||'#093E5E').replace('#','')}); xTxt(ws,r,30,eTx,{size:9.5,bold:true,color:'FF'+((eO&&eO.color)||'#093E5E').replace('#','')});
+    ['corp','col','nic'].forEach(function(lv,i){ var v=topicCardScore(ti,lv); xTxt(ws,r,31+i,(v>=1?v:'N/A'),{h:'center',size:9.5,color:XL.MUT}); });
+    xAuto(ws,r,[[30,tp.name],[26,tp.marcos],[20,lk],[30,cTx],[30,eTx]]); r++;
   });
-  xColorScale(ws,'D4:J'+(r-1));
+  xColorScale(ws,'D4:G'+(r-1));
+  r++;
+  var notes=['Regla por nivel (el criterio más débil limita): 2 o más ✗ → 1 · No gestionado / Reactivo; 1 ✗ → 2 · Básico / Informal; sin ✗ y 2 o más △ → 3 · En desarrollo / Formalización; sin ✗ y máximo 1 △ → 4 · Incorporado / Gestionado. El nivel 5 · Optimizado / Líder no se asigna por criterios.',
+    'Criterios: Políticas, Roles, Procesos, Tecnología y datos, Indicadores y Reporte, calificados por nivel (Corporativo, Colombia, Nicaragua). Global = promedio ponderado por nivel con los pesos de la hoja Parametros. Al cambiar un criterio en esta hoja, las notas se recalculan.',
+    'Referencia documental: calificación del Analista de la sección «Madurez de la gestión por asunto material»; no alimenta la madurez de los asuntos.'];
+  notes.forEach(function(t){ ws.mergeCells(r,1,r,NC); var c=ws.getCell(r,1); c.value=t; c.font={name:'Calibri',italic:true,size:9.5,color:xArgb(XL.MUT)}; c.alignment={vertical:'middle',horizontal:'left',wrapText:true}; ws.getRow(r).height=26; r++; });
 }
 
 function buildIDEAS(wb){
@@ -7799,23 +7951,27 @@ function buildODS(wb){
 
 function buildBrechas(wb){
   var ws=wb.addWorksheet('Brechas y hoja de ruta',{views:[{showGridLines:false,state:'frozen',ySplit:2}]});
-  xCols(ws,[14,11,30,54,16,16,16,50,28]);
-  xBanner(ws,1,1,9,'Brechas y hoja de ruta — priorización y acciones vinculadas al modelo',XL.NAVY,XL.WHITE,12);
-  xHead(ws,2,['Prioridad','Horizonte','Brecha','Descripción','Asuntos','IROs','Componentes','Acciones propuestas','Fuente / origen'],{align:['center','center','left','left','left','left','left','left','left']});
-  var r=3, br=(typeof getBrechas==='function')?getBrechas():(state.brechasData||[]);
+  xCols(ws,[7,14,11,30,30,54,16,16,16,50,28]);
+  xBanner(ws,1,1,11,'Brechas y hoja de ruta — priorización y acciones vinculadas al modelo (orden: componente principal → requisito principal)',XL.NAVY,XL.WHITE,12);
+  xHead(ws,2,['ID','Prioridad','Horizonte','Componente · requisito principal','Brecha','Descripción','Asuntos','IROs','Componentes','Acciones propuestas','Fuente / origen'],{align:['center','center','center','left','left','left','left','left','left','left','left']});
+  var r=3, br=((typeof getBrechas==='function')?getBrechas():(state.brechasData||[])).slice(), _om=_eidOrderMap();
+  br=br.map(function(b,i){ return {b:b,i:i}; }).sort(function(p,q){ return brechaCmp(p.b,q.b,_om)||(p.i-q.i); }).map(function(o){ return o.b; });
   br.forEach(function(b){
+    var _pcx=+brechaPrimaryComp(b), _pex=brechaPrimaryEid(b,_om);
+    var cpTx=_pcx?('C'+_pcx+' · '+((COMP_META[_pcx-1]&&COMP_META[_pcx-1].name)||'')+(_pex?('\n'+_pex+' · '+(_om[_pex].label||'')):'\n(sin requisito del componente principal)')):'Sin componente';
+    xTxt(ws,r,1,b.bid||'',{h:'center',size:9.5,bold:true,color:XL.MUT}); xTxt(ws,r,4,cpTx,{size:9.5,color:XL.NAVY});
     var pc=(b.color||'#888888'); pc = pc.charAt(0)==='#'?('FF'+pc.slice(1)):pc;
-    var pcell=xTxt(ws,r,1,b.prioridad,{h:'center',bold:true,color:XL.WHITE}); pcell.fill=xFill(pc);
-    xTxt(ws,r,2,HOR_L[b.horizonte]||b.horizonte,{h:'center',size:9.5});
-    xTxt(ws,r,3,b.titulo,{bold:true,size:9.5,color:XL.NAVY}); xTxt(ws,r,4,b.descripcion,{size:9.5,color:XL.INK});
-    xTxt(ws,r,5,(b.topics||[]).map(function(n){return '#'+n;}).join(', '),{size:9.5,color:XL.MUT});
-    xTxt(ws,r,6,(b.iros||[]).join(', '),{size:9.5,color:XL.MUT});
-    xTxt(ws,r,7,(b.comps||[]).map(function(n){return 'C'+n;}).join(', '),{size:9.5,color:XL.MUT});
+    var pcell=xTxt(ws,r,2,b.prioridad,{h:'center',bold:true,color:XL.WHITE}); pcell.fill=xFill(pc);
+    xTxt(ws,r,3,HOR_L[b.horizonte]||b.horizonte,{h:'center',size:9.5});
+    xTxt(ws,r,5,b.titulo,{bold:true,size:9.5,color:XL.NAVY}); xTxt(ws,r,6,b.descripcion,{size:9.5,color:XL.INK});
+    xTxt(ws,r,7,(b.topics||[]).map(function(n){return '#'+n;}).join(', '),{size:9.5,color:XL.MUT});
+    xTxt(ws,r,8,(b.iros||[]).join(', '),{size:9.5,color:XL.MUT});
+    xTxt(ws,r,9,(b.comps||[]).map(function(n){return 'C'+n;}).join(', '),{size:9.5,color:XL.MUT});
     var acc=(b.acciones||[]).map(function(a,i){return (i+1)+'. '+a;}).join('\n');
-    xTxt(ws,r,8,acc,{size:9.5,color:XL.INK}); xTxt(ws,r,9,b.fuente,{size:9.5,italic:true,color:XL.MUT});
-    xAuto(ws,r,[[30,b.titulo],[54,b.descripcion],[50,acc],[28,b.fuente]]); r++;
+    xTxt(ws,r,10,acc,{size:9.5,color:XL.INK}); xTxt(ws,r,11,b.fuente,{size:9.5,italic:true,color:XL.MUT});
+    xAuto(ws,r,[[30,cpTx],[30,b.titulo],[54,b.descripcion],[50,acc],[28,b.fuente]]); r++;
   });
-  ws.autoFilter={from:{row:2,column:1},to:{row:2,column:9}};
+  ws.autoFilter={from:{row:2,column:1},to:{row:2,column:11}};
 }
 
 function buildKPIs(wb){
