@@ -5020,7 +5020,7 @@ var CONCL_BLOCKS=[
   {k:'mensaje',    t:'Mensaje central',                         icon:'campaign',     color:'#093E5E'},
   {k:'fortalezas', t:'Fortalezas a capitalizar',                icon:'verified',     color:'#2E7D32'},
   {k:'focos',      t:'Focos estructurales de gestión y mejora', icon:'construction', color:'#E9711C'},
-  {k:'ruta',       t:'Ruta recomendada',                        icon:'route',        color:'#1A5C80'},
+  {k:'ruta',       t:'Conclusión de la ruta',                   icon:'route',        color:'#1A5C80'},   // 2026-11-11: síntesis editable; el detalle automático va debajo como «Ruta recomendada»
   {k:'cierre',     t:'Conclusión',                              icon:'flag',         color:'#093E5E'}
 ];
 var CONCL_SEED_DATE='2026-11-05';
@@ -5065,7 +5065,8 @@ function _conclBaseBlocks(){
   var o={}; CONCL_BLOCKS.forEach(function(bk){ o[bk.k]=_conclResolveSeed(CONCL_SEED[bk.k]||''); }); return o;   // propuesta (no se guarda hasta editar)
 }
 // 2026-11-06: la «Ruta recomendada» se arma sola desde Brechas y Plan de acción (horizonte de cada acción y título de la brecha).
-// Modo «manual» conserva el texto editable anterior (state.conclusiones.rutaMode='manual').
+// 2026-11-11: se muestran las dos vistas: «Conclusión de la ruta» (bloque «ruta», síntesis editable por el equipo, la que usa la
+//   presentación) y, debajo, «Ruta recomendada» (detalle automático por horizonte). El modo manual/automático queda sin uso.
 function conclRutaMode(){ var c=state.conclusiones; return (c && c.rutaMode==='manual')?'manual':'auto'; }
 function _conclShort(t){ var s0=String(t||'').replace(/\s*\([^)]*\)\s*$/,'').trim(); return s0||String(t||''); }
 var CONCL_HZ_L={C:'Corto plazo (< 1 año)',M:'Mediano plazo (1–3 años)',L:'Largo plazo (> 3 años)'};
@@ -5085,8 +5086,7 @@ function conclRutaAutoHtml(){
     return '<li><b>'+esc(CONCL_HZ_L[z])+':</b> '+(it.length?it.map(function(x){ return esc((x.b.bid||'')+' · '+_conclShort(x.b.titulo)); }).join('; '):'sin acciones en este horizonte')+'.</li>'; }).join('')+'</ul>';
 }
 function conclBlocks(){
-  var base=_conclBaseBlocks(); if(conclRutaMode()==='manual') return base;
-  var o={}; for(var k in base) o[k]=base[k]; o.ruta=conclRutaAutoHtml(); return o;
+  var base=_conclBaseBlocks(), o={}; for(var k in base) o[k]=base[k]; return o;   // «ruta» = síntesis editable (2026-11-11)
 }
 function conclSetRutaMode(m){ var c=_conclEnsure(); if(m==='manual') c.rutaMode='manual'; else delete c.rutaMode; c.updatedAt=new Date().toISOString(); saveState(); renderConclusiones(); }
 function _conclRutaAutoView(){
@@ -5193,18 +5193,13 @@ function renderConclusiones(){
   h+=card(B.mensaje);
   h+='<div class="concl-two">'+card(B.fortalezas)+card(B.focos)+'</div>';
   h+=card(B.cierre);   // 2026-11-06: la conclusión va antes de la ruta recomendada
-  if(conclRutaMode()==='auto'){
-    h+='<section class="concl-card" style="border-left:4px solid '+B.ruta.color+';"><div class="concl-card-h"><span class="mi" style="font-size:18px;color:'+B.ruta.color+';">'+B.ruta.icon+'</span><span style="color:'+B.ruta.color+';">'+B.ruta.t+'</span>'
-      +'<span class="concl-auto-tag" title="Se actualiza con los cambios de prioridad, horizonte y títulos en Brechas y Plan de acción">automática</span>'
-      +'<span style="margin-left:auto;font-size:9.5px;font-weight:600;color:#6B7A86;">Plan de acción: '+hzN.C+' acciones de corto · '+hzN.M+' de mediano · '+hzN.L+' de largo plazo</span>'
-      +(ed?'<button type="button" class="no-print" onclick="conclSetRutaMode(\'manual\')" style="margin-left:8px;font-size:9.5px;border:1px solid #D5D5D5;background:white;border-radius:6px;padding:3px 8px;cursor:pointer;color:#5F6B75;">Usar texto manual</button>':'')+'</div>'
-      +'<div class="concl-body">'+_conclRutaAutoView()+'<div style="font-size:9px;color:#8A97A1;margin-top:6px;">Cada brecha aparece en el horizonte de sus acciones del Plan de acción (si tiene acciones en dos horizontes, aparece en ambos), ordenada por prioridad y por el orden del modelo. Título abreviado sin el paréntesis aclaratorio.</div></div></section>';
-  } else {
-    h+=card(B.ruta, '<span style="margin-left:auto;font-size:9.5px;font-weight:600;color:#6B7A86;">Plan de acción: '+hzN.C+' acciones de corto · '+hzN.M+' de mediano · '+hzN.L+' de largo plazo</span>'
-      +(ed?'<button type="button" class="no-print" onclick="conclSetRutaMode(\'auto\')" style="margin-left:8px;font-size:9.5px;border:1px solid var(--orange);background:white;border-radius:6px;padding:3px 8px;cursor:pointer;color:var(--orange);font-weight:700;">Volver a ruta automática</button>':''));
-  }
+  h+=card(B.ruta, '<span class="concl-auto-tag" style="background:#FFF4EC;color:#E9711C;border-color:#F6C9A6;" title="Síntesis redactada por el equipo; es la que lleva la presentación">síntesis editable</span>');
+  h+='<section class="concl-card" style="border-left:4px solid '+B.ruta.color+';"><div class="concl-card-h"><span class="mi" style="font-size:18px;color:'+B.ruta.color+';">format_list_bulleted</span><span style="color:'+B.ruta.color+';">Ruta recomendada</span>'
+    +'<span class="concl-auto-tag" title="Se actualiza con los cambios de prioridad, horizonte y títulos en Brechas y Plan de acción">automática</span>'
+    +'<span style="margin-left:auto;font-size:9.5px;font-weight:600;color:#6B7A86;">Plan de acción: '+hzN.C+' acciones de corto · '+hzN.M+' de mediano · '+hzN.L+' de largo plazo</span></div>'
+    +'<div class="concl-body">'+_conclRutaAutoView()+'<div style="font-size:9px;color:#8A97A1;margin-top:6px;">Detalle por horizonte: cada brecha aparece en el horizonte de sus acciones del Plan de acción (si tiene acciones en dos horizontes, aparece en ambos), ordenada por prioridad y por el orden del modelo. Título abreviado sin el paréntesis aclaratorio.</div></div></section>';
   h+='<div id="conclStamp" style="font-size:9px;color:#9AA4AC;margin-top:8px;">'+_conclStampHtml()+'</div>';
-  h+='<div style="font-size:9px;color:#9AA4AC;margin-top:2px;">Las cifras del encabezado y la ruta recomendada se calculan en vivo con el modelo (Brechas y Plan de acción); el resto de la narrativa es editable por el equipo de trabajo. Clic en un código de brecha para ir a su detalle.</div>';
+  h+='<div style="font-size:9px;color:#9AA4AC;margin-top:2px;">Las cifras del encabezado y la ruta recomendada (detalle) se calculan en vivo con el modelo (Brechas y Plan de acción); el resto de la narrativa, incluida la conclusión de la ruta, es editable por el equipo de trabajo. Clic en un código de brecha para ir a su detalle.</div>';
   host.innerHTML=h;
   _conclRefreshRefs(host);
 }
@@ -5232,8 +5227,10 @@ function buildConclusiones(wb){
   kv('Brechas', br.length+' ('+br.filter(function(b){return b.prioridad==='CRÍTICA';}).length+' críticas)');
   kv('Plan de acción', acc+' acciones ('+accC+' de corto plazo)');
   r++;
-  var blocks=conclBlocks();
-  CONCL_BLOCKS.forEach(function(bk){
+  var blocks=conclBlocks(), _bk={}; CONCL_BLOCKS.forEach(function(bk){ _bk[bk.k]=bk; });
+  var _ord=['mensaje','fortalezas','focos','cierre','ruta'].filter(function(k){ return _bk[k]; }).map(function(k){ return _bk[k]; });
+  _ord.push({k:'_rutaAuto',t:'Ruta recomendada (detalle por horizonte, automático)',color:'#1A5C80'}); blocks._rutaAuto=conclRutaAutoHtml();
+  _ord.forEach(function(bk){
     var t=_conclPlain(blocks[bk.k]);
     var c1=xTxt(ws,r,1,bk.t,{bold:true,size:11,color:'FF'+bk.color.replace('#','')}); c1.alignment={vertical:'top',horizontal:'left',wrapText:true};
     var c2=xTxt(ws,r,2,t,{size:10.5}); c2.alignment={vertical:'top',horizontal:'left',wrapText:true};
