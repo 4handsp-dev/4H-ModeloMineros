@@ -9042,7 +9042,7 @@ function buildCompanion(media){
 
 // ═══════════════════════════════════════════════
 // ANEXO EXCEL «Detalle diagnóstico» — archivo aparte (A5 · A6 · A7 de la presentación)
-// Hojas: 1. Detalle informe diagnóstico · 2. Esquema materialidad · 3. Esquema IROs
+// Hojas: Resumen ejecutivo · 1. Detalle informe diagnóstico · 2. Esquema materialidad · 3. Esquema IROs
 // ═══════════════════════════════════════════════
 function _anxBtn(busy){ var b=document.getElementById('anxBtn'); if(!b) return; b.disabled=!!busy;
   b.innerHTML=busy?'<span class="mi">hourglass_top</span><span class="tab-label">Generando…</span>':'<span class="mi">grid_on</span><span class="tab-label">Anexo: Detalle diagnóstico</span>'; }
@@ -9077,10 +9077,77 @@ async function buildAnexoWorkbook(){
   var wb=new ExcelJS.Workbook();
   wb.creator='Diagnóstico de Sostenibilidad · Grupo Mineros S.A.'; wb.created=new Date(); wb.company='Grupo Mineros S.A.';
   wb.title='Anexo: Detalle diagnóstico';
+  anxSheetResumen(wb);
   anxSheetDetalle(wb);
   anxSheetMaterialidad(wb,media);
   anxSheetIROs(wb,media);
   return wb;
+}
+
+// ── Resumen ejecutivo (2026-11-12): por componente y requisito, una fila por brecha (código y nombre en columnas separadas)
+//    con su número de planes de acción; el requisito se combina sobre sus brechas. Cada brecha se cuenta una vez, en su
+//    requisito principal (mismo criterio de la hoja 1).
+function anxSheetResumen(wb){
+  var ws=wb.addWorksheet('Resumen ejecutivo',{views:[{showGridLines:false,state:'frozen',ySplit:4}]});
+  var W=[8,30,10,38,10,10,64,12]; xCols(ws,W); var NC=W.length;
+  var om=_eidOrderMap(), byEid={}, all=getBrechas().slice().sort(function(a,b){ return brechaCmp(a,b,om); });
+  all.forEach(function(b){ var e=brechaPrimaryEid(b,om)||('C'+(+brechaPrimaryComp(b)||0)); (byEid[e]=byEid[e]||[]).push(b); });
+  var nAcc=function(b){ return (b.acciones||[]).length; };
+  var totB=all.length, totA=all.reduce(function(x,b){ return x+nAcc(b); },0), nCrit=all.filter(function(b){ return b.prioridad==='CRÍTICA'; }).length;
+  var nReq=(state.items||[]).reduce(function(x,c){ return x+((c&&c.corp)||[]).length; },0);
+  xBanner(ws,1,1,NC,'Resumen ejecutivo — brechas y planes de acción por componente y requisito',XL.NAVY,XL.WHITE,12);
+  xTxt(ws,2,1,'Totales: '+(state.items||[]).length+' componentes · '+nReq+' requisitos · '+totB+' brechas ('+nCrit+' críticas) · '+totA+' planes de acción. Una fila por brecha; cada brecha se cuenta una vez, en su requisito principal (primer requisito vinculado del componente principal). El detalle completo está en la hoja «1. Detalle informe diagnóstico».',{size:9.5,color:XL.INK});
+  ws.mergeCells(2,1,2,NC); ws.getRow(2).height=28;
+  var lg=ws.getCell(3,1); ws.mergeCells(3,1,3,NC);
+  lg.value={richText:[{text:'Prioridad de la brecha (color del código):  ',font:{name:'Calibri',size:9,italic:true,color:xArgb(XL.MUT)}}]
+    .concat(['CRÍTICA','ALTA','MEDIA'].map(function(p,i){ return {text:'■ '+ANX_PRIO[p].l+(i<2?'   ':''),font:{name:'Calibri',size:9,bold:true,color:xArgb(p==='MEDIA'?'FFB8860B':ANX_PRIO[p].c)}}; }))};
+  lg.alignment={vertical:'middle',horizontal:'left'}; ws.getRow(3).height=16;
+  var H=['Comp.','Componente','Requisito','Nombre del requisito','N.º brechas','Código brecha','Brecha','N.º planes de acción'];
+  xHead(ws,4,H,{h:32,align:H.map(function(_,i){ return [1,3,6].indexOf(i)>=0?'left':'center'; })});
+  var r=5;
+  function hNeed(w,t){ var ln=0; String(t==null?'':t).split('\n').forEach(function(sg){ ln+=Math.max(1,Math.ceil((sg.length+0.5)/(w*1.1))); }); return ln*13.2+5; }
+  function vmerge(c,r1,r2,h){ if(r2>r1) ws.mergeCells(r1,c,r2,c); var cell=ws.getCell(r1,c); cell.alignment={vertical:'middle',horizontal:h||'left',wrapText:true}; for(var q=r1;q<=r2;q++) ws.getCell(q,c).border=xBord(); }
+  var bandOpt=function(o){ o=o||{}; o.fill=XL.TEAL; o.color=XL.WHITE; return o; };
+  (state.items||[]).forEach(function(comp,ci){
+    var cm=COMP_META[ci]; if(!cm) return;
+    var its=((comp&&comp.corp)||[]), cB=0, cA=0;
+    its.forEach(function(it){ (byEid[it.eid]||[]).forEach(function(b){ cB++; cA+=nAcc(b); }); });
+    // Franja del componente (totales)
+    xTxt(ws,r,1,'C'+cm.id,bandOpt({h:'center',bold:true})); xTxt(ws,r,2,cm.name,bandOpt({bold:true}));
+    xTxt(ws,r,3,'',bandOpt()); xTxt(ws,r,4,its.length+(its.length===1?' requisito':' requisitos'),bandOpt({size:9.5,italic:true}));
+    xTxt(ws,r,5,cB,bandOpt({h:'center',bold:true})); xTxt(ws,r,6,'',bandOpt()); xTxt(ws,r,7,'Total del componente',bandOpt({size:9.5,italic:true}));
+    xTxt(ws,r,8,cA,bandOpt({h:'center',bold:true})); ws.getRow(r).height=Math.max(18,hNeed(W[1],cm.name)); r++;
+    its.forEach(function(it){
+      var brs=byEid[it.eid]||[], rReq=r, reqH=Math.max(hNeed(W[3],it.label||''),hNeed(W[1],cm.name));
+      xTxt(ws,r,1,'C'+cm.id,{h:'center',size:9,color:XL.MUT}); xTxt(ws,r,2,cm.name,{size:9,color:XL.MUT});
+      xTxt(ws,r,3,it.eid||'',{h:'center',bold:true,size:9.5,color:XL.NAVY}); xTxt(ws,r,4,it.label||'',{size:9.5});
+      xTxt(ws,r,5,brs.length,{h:'center',bold:true,color:brs.length?XL.INK:XL.MUT});
+      if(!brs.length){
+        xTxt(ws,r,6,'',{}); xTxt(ws,r,7,'Sin brecha asociada',{italic:true,size:9,color:XL.MUT}); xTxt(ws,r,8,0,{h:'center',color:XL.MUT});
+        ws.getRow(r).height=Math.min(409,Math.max(18,reqH)); r++; return; }
+      var hs=[];
+      brs.forEach(function(b){ var n=nAcc(b), pc=(ANX_PRIO[b.prioridad]||{}).c||XL.NAVY;
+        xTxt(ws,r,6,b.bid||'',{h:'center',bold:true,size:10,color:(b.prioridad==='MEDIA'?'FFB8860B':pc)});
+        xTxt(ws,r,7,b.titulo||'',{size:9.5});
+        xTxt(ws,r,8,n,{h:'center',bold:true,color:n?XL.INK:XL.MUT});
+        hs.push(Math.max(18,hNeed(W[6],b.titulo||''))); r++; });
+      // Requisito combinado sobre sus brechas; el alto del grupo alcanza para el nombre del requisito
+      [1,2,3,4,5].forEach(function(c){ vmerge(c,rReq,r-1,(c===1||c===3||c===5)?'center':'left'); });
+      var tot=hs.reduce(function(x,y){ return x+y; },0); if(tot<reqH){ var ex=(reqH-tot)/hs.length; hs=hs.map(function(h){ return h+ex; }); }
+      hs.forEach(function(h,k){ ws.getRow(rReq+k).height=Math.min(409,h); });
+    });
+  });
+  // Brechas cuyo requisito principal no se encontró (control de integridad)
+  var seen={}; (state.items||[]).forEach(function(c){ ((c&&c.corp)||[]).forEach(function(it){ seen[it.eid]=1; }); });
+  Object.keys(byEid).forEach(function(e){ if(seen[e]) return; byEid[e].forEach(function(b){
+    xTxt(ws,r,3,e,{h:'center'}); xTxt(ws,r,4,'(requisito no encontrado en el modelo)',{italic:true,size:9,color:XL.RED});
+    xTxt(ws,r,5,1,{h:'center'}); xTxt(ws,r,6,b.bid||'',{h:'center',bold:true}); xTxt(ws,r,7,b.titulo||'',{size:9.5}); xTxt(ws,r,8,nAcc(b),{h:'center'}); r++; }); });
+  // Total general
+  var tot=function(c,v,o){ o=o||{}; o.fill=XL.NAVY; o.color=XL.WHITE; o.bold=true; xTxt(ws,r,c,v,o); };
+  tot(1,''); tot(2,'Total general'); tot(3,''); tot(4,nReq+' requisitos'); tot(5,totB,{h:'center'}); tot(6,''); tot(7,nCrit+' brechas críticas'); tot(8,totA,{h:'center'}); ws.getRow(r).height=20;
+  ws.autoFilter={from:{row:4,column:1},to:{row:4,column:NC}};
+  ws.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
+  return ws;
 }
 
 // ── 1. Detalle informe diagnóstico: requisito → madurez → brecha → plan de acción (una fila por acción)
@@ -9168,7 +9235,7 @@ function anxSheetDetalle(wb){
 function anxSheetMaterialidad(wb,media){
   var ws=wb.addWorksheet('2. Esquema materialidad',{views:[{showGridLines:false}]});
   var CK=TOPIC_CRIT_KEYS, CL=['Pol.','Roles','Proc.','Tec./ datos','Ind.','Rep.'];
-  var W=[5,30,16,15,15,15,15]; for(var q=0;q<18;q++) W.push(6); W=W.concat([24,18,30,30]);
+  var W=[5,30,16,15,15,15,15]; for(var q=0;q<18;q++) W.push(6); W=W.concat([30,30]);   // 2026-11-12: sin columnas «Marcos» e «IROs vinculados»
   xCols(ws,W); var NC=W.length;
   xBanner(ws,1,1,NC,'Esquema de materialidad — matriz de doble materialidad y calificación de los '+getTopicsMeta().length+' asuntos materiales',XL.NAVY,XL.WHITE,12);
   xTxt(ws,2,1,'Clasificación de doble materialidad de la Memoria 2025 (el número identifica el asunto). La calificación de cada asunto se construye con 6 criterios por nivel (✓ Completo · △ Parcial · ✗ No existe); la global pondera los niveles.',{italic:true,size:9.5,color:XL.MUT});
@@ -9177,14 +9244,14 @@ function anxSheetMaterialidad(wb,media){
   if(pl.ok) r=pl.r+1; else { xTxt(ws,r,1,'(La matriz se visualiza en la herramienta; el detalle está en la tabla siguiente.)',{italic:true,color:XL.MUT}); ws.mergeCells(r,1,r,NC); r++; }
   xBanner(ws,r,1,NC,'Calificación de los asuntos materiales',XL.TEAL,XL.WHITE,11); r++;
   var gh=r;
-  [[4,7,'Madurez (regla de criterios)',XL.NAVY],[8,13,'Corporativo — criterios',XL.NAVY],[14,19,'Colombia — criterios',XL.ORANGE2],[20,25,'Nicaragua — criterios',XL.GREEN],[28,29,'Estrategia de sostenibilidad',XL.ORANGE2]].forEach(function(g){
+  [[4,7,'Madurez (regla de criterios)',XL.NAVY],[8,13,'Corporativo — criterios',XL.NAVY],[14,19,'Colombia — criterios',XL.ORANGE2],[20,25,'Nicaragua — criterios',XL.GREEN],[26,27,'Estrategia de sostenibilidad',XL.ORANGE2]].forEach(function(g){
     ws.mergeCells(gh,g[0],gh,g[1]); var cc=ws.getCell(gh,g[0]); cc.value=g[2]; cc.fill=xFill(g[3]); cc.font={name:'Calibri',bold:true,size:9,color:xArgb(XL.WHITE)}; cc.alignment={vertical:'middle',horizontal:'center'}; cc.border=xBord(); });
   ws.getRow(gh).height=16; r++;
   var labels=['#','Asunto material','Cuadrante','Global','Corporativo','Colombia','Nicaragua'];
   for(var l=0;l<3;l++) labels=labels.concat(CL);
-  labels=labels.concat(['Marcos','IROs vinculados','Compromiso (principal · relacionados)','Eje estratégico (principal · relacionados)']);
+  labels=labels.concat(['Compromiso (principal · relacionados)','Eje estratégico (principal · relacionados)']);
   xHead(ws,r,labels,{align:labels.map(function(_,i){ return (i===1||i>=25)?'left':'center'; }),h:32}); var hr=r; r++;
-  var meta=getTopicsMeta(), links=(state.iroLinks||{});
+  var meta=getTopicsMeta();
   meta.forEach(function(tp,ti){
     xTxt(ws,r,1,ti+1,{h:'center',bold:true}); xTxt(ws,r,2,tp.name,{bold:true,size:9.5});
     var ty=xTxt(ws,r,3,TTYPE_L[tp.type]||tp.type,{size:9,bold:true,color:XL.WHITE,h:'center'}); ty.fill=xFill(XLMATC_ARGB[tp.type]||XL.MUT);
@@ -9192,13 +9259,11 @@ function anxSheetMaterialidad(wb,media){
     ['corp','col','nic'].forEach(function(lv,i){ anxLvlCell(ws,r,5+i,topicLevelScore(ti,lv));
       var cr=(tp.crit&&tp.crit[lv])||{}, c0=8+i*6;
       CK.forEach(function(k,j){ var v=cr[k]||'△'; xTxt(ws,r,c0+j,v,{h:'center',size:11,color:(v==='✓'?'FF2E7D52':(v==='✗'?'FFC0392B':'FFC17F24'))}); }); });
-    xTxt(ws,r,26,tp.marcos,{size:9,color:XL.MUT});
-    var lk=(links[ti+1]||[]).join(', '); xTxt(ws,r,27,lk,{size:9,color:XL.NAVY});
     var sm=sustMeta(ti), cO=sustComp(sm.com), eO=sustEje(sm.eje);
     var cTx=(cO?cO.n:'—')+(sm.comRel.length?(' · rel.: '+sm.comRel.map(function(k){var o=sustComp(k);return o?o.short:k;}).join(', ')):'');
     var eTx=(eO?eO.n:'—')+(sm.ejeRel.length?(' · rel.: '+sm.ejeRel.map(function(k){var o=sustEje(k);return o?o.n:k;}).join(', ')):'');
-    xTxt(ws,r,28,cTx,{size:9,bold:true,color:'FF'+((cO&&cO.color)||'#093E5E').replace('#','')}); xTxt(ws,r,29,eTx,{size:9,bold:true,color:'FF'+((eO&&eO.color)||'#093E5E').replace('#','')});
-    xAuto(ws,r,[[30,tp.name],[24,tp.marcos],[18,lk],[30,cTx],[30,eTx]]); r++; });
+    xTxt(ws,r,26,cTx,{size:9,bold:true,color:'FF'+((cO&&cO.color)||'#093E5E').replace('#','')}); xTxt(ws,r,27,eTx,{size:9,bold:true,color:'FF'+((eO&&eO.color)||'#093E5E').replace('#','')});
+    xAuto(ws,r,[[30,tp.name],[30,cTx],[30,eTx]]); r++; });
   ws.autoFilter={from:{row:hr,column:1},to:{row:hr,column:NC}};
   ws.pageSetup={orientation:'landscape',fitToPage:true,fitToWidth:1,fitToHeight:0,paperSize:9};
   r++;
@@ -9623,7 +9688,8 @@ function buildMarco(wb){
   if(XLMEDIA && XLMEDIA.marco){ var mh=XLMEDIA.marcoH?Math.round(740*XLMEDIA.marcoH/1040):400; var plm=placeImage(wb,ws,XLMEDIA.marco,3,740,mh); }
   var startR=(XLMEDIA && XLMEDIA.marco)?( (typeof plm!=='undefined'&&plm.ok)?plm.r+1:3 ):3;
   var data=(typeof getMarco==='function')?getMarco():[];
-  var layers=[{id:1,t:'1 · Legal obligatoria (Colombia y Nicaragua)',c:XL.NAVY},{id:2,t:'2 · Estándares internacionales de desempeño',c:XL.TEAL},{id:3,t:'3 · Estándares específicos de minería y oro',c:'FFB45309'},{id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',c:XL.GREEN}];
+  var _mlc=function(id,d){ var L=(typeof MARCO_LAYERS!=='undefined')?MARCO_LAYERS.filter(function(x){ return x.id===id; })[0]:null; return L?('FF'+L.col.replace('#','').toUpperCase()):d; };
+  var layers=[{id:1,t:'1 · Legal obligatoria (Colombia y Nicaragua)',c:_mlc(1,XL.NAVY)},{id:2,t:'2 · Estándares internacionales de desempeño',c:_mlc(2,XL.TEAL)},{id:3,t:'3 · Estándares específicos de minería y oro',c:_mlc(3,'FFB45309')},{id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',c:_mlc(4,XL.GREEN)}];
   var r=startR;
   layers.forEach(function(L){
     xBanner(ws,r,1,4,L.t,L.c,XL.WHITE,11); r++;
@@ -9673,10 +9739,11 @@ function buildMatrixMateriality(wb){
 // MARCO DE REFERENCIA — 4 capas, editable (validado con Memoria 2025 · AIF · Código País)
 // ═══════════════════════════════════════════════════════════════
 var MARCO_LAYERS=[
-  {id:1,t:'1 · Legal obligatoria',sub:'Colombia · Nicaragua · Canadá (cascada)',ic:'gavel',col:'#093E5E'},
-  {id:2,t:'2 · Estándares internacionales de desempeño',sub:'ISO · ONU · gestión de riesgo',ic:'verified',col:'#1A5C80'},
-  {id:3,t:'3 · Estándares específicos de minería y oro',sub:'WGC · TSM · ICMM · reservas · relaves',ic:'diamond',col:'#B45309'},
-  {id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',sub:'GRI · SASB · TCFD · ISSB · ODS',ic:'assessment',col:'#2E7D32'}
+  // 2026-11-12: paleta sobria (acento desaturado + tinte claro por capa), coherente con el azul institucional
+  {id:1,t:'1 · Legal obligatoria',sub:'Colombia · Nicaragua · Canadá (cascada)',ic:'gavel',col:'#0E3B57',tint:'#EAF0F4'},
+  {id:2,t:'2 · Estándares internacionales de desempeño',sub:'ISO · ONU · gestión de riesgo',ic:'verified',col:'#2F6585',tint:'#ECF2F6'},
+  {id:3,t:'3 · Estándares específicos de minería y oro',sub:'WGC · TSM · ICMM · reservas · relaves',ic:'diamond',col:'#7A6440',tint:'#F5F1EA'},
+  {id:4,t:'4 · Reporte y divulgación ESG / Sostenibilidad',sub:'GRI · SASB · TCFD · ISSB · ODS',ic:'assessment',col:'#3D6B5C',tint:'#ECF3F0'}
 ];
 var MARCO_DEFAULT=[
   {capa:1,nombre:'Código de Minas — Ley 685 de 2001',ambito:'Colombia',desc:'Régimen de títulos, concesiones y obligaciones mineras (con modificaciones de 2018). Autoridades: MinMinas / ANM.',estado:'Vigente'},
@@ -9783,13 +9850,14 @@ function renderMarco(){
   MARCO_LAYERS.forEach(function(L){
     var items=data.map(function(m,idx){return {m:m,idx:idx};}).filter(function(x){return x.m.capa===L.id;});
     var open=marcoLayerOpen(L.id);
-    h+='<div style="margin-bottom:16px;border:1px solid #E4E7EB;border-radius:12px;overflow:hidden;">';
-    h+='<div onclick="marcoToggleLayer('+L.id+')" title="Mostrar u ocultar esta capa" style="cursor:pointer;display:flex;align-items:center;gap:10px;padding:11px 16px;background:'+L.col+';color:white;">'
-      +'<span class="mi" style="font-size:19px;">'+L.ic+'</span>'
-      +'<div style="min-width:0;"><div style="font-size:12.5px;font-weight:800;font-family:\'Gotu\',sans-serif;line-height:1.15;">'+L.t+'</div>'
-      +'<div style="font-size:9.5px;opacity:.85;">'+L.sub+'</div></div>'
-      +'<span style="margin-left:auto;font-size:10px;font-weight:800;background:rgba(255,255,255,.18);border-radius:20px;padding:2px 10px;flex-shrink:0;">'+items.length+' norma'+(items.length===1?'':'s')+'</span>'
-      +'<span class="mi" style="font-size:20px;flex-shrink:0;transition:transform .2s;'+(open?'transform:rotate(180deg);':'')+'">expand_more</span></div>';
+    var tint=L.tint||'#F3F6F8';
+    h+='<div style="margin-bottom:16px;border:1px solid #E1E6EA;border-radius:12px;overflow:hidden;background:white;">';
+    h+='<div onclick="marcoToggleLayer('+L.id+')" title="Mostrar u ocultar esta capa" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 16px 10px 12px;background:'+tint+';border-left:5px solid '+L.col+';'+(open?'border-bottom:1px solid #E1E6EA;':'')+'">'
+      +'<span style="width:32px;height:32px;border-radius:8px;background:'+L.col+';color:white;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="mi" style="font-size:18px;">'+L.ic+'</span></span>'
+      +'<div style="min-width:0;"><div style="font-size:12.5px;font-weight:800;font-family:\'Gotu\',sans-serif;line-height:1.15;color:'+L.col+';">'+L.t+'</div>'
+      +'<div style="font-size:9.5px;color:#5B6B77;margin-top:2px;">'+L.sub+'</div></div>'
+      +'<span style="margin-left:auto;font-size:10px;font-weight:800;color:'+L.col+';background:white;border:1px solid '+L.col+'40;border-radius:20px;padding:2px 10px;flex-shrink:0;">'+items.length+' norma'+(items.length===1?'':'s')+'</span>'
+      +'<span class="mi" style="font-size:20px;flex-shrink:0;color:'+L.col+';transition:transform .2s;'+(open?'transform:rotate(180deg);':'')+'">expand_more</span></div>';
     if(open){
     if(L.id===1){
       marcoLayer1Subs().forEach(function(S){
@@ -9872,15 +9940,18 @@ function buildMarcoSummarySvg(){
   s+='<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#FFFFFF"/>';
   s+='<text x="'+M+'" y="26" font-size="18" font-weight="800" fill="#093E5E">Marco de referencia · síntesis de las 4 capas</text>';
   s+='<text x="'+M+'" y="42" font-size="11" fill="#8A97A0">Nombres abreviados por capa · &#9670; sugerido por el modelo (borde punteado)</text>';
-  bands.forEach(function(b){
-    var L=b.L;
-    s+='<rect x="'+M+'" y="'+b.y+'" width="'+(W-2*M)+'" height="'+b.h+'" rx="12" fill="#FFFFFF" stroke="#E4E7EB" stroke-width="1"/>';
-    s+='<path d="M'+(M+12)+','+b.y+' h'+(LBLW-12)+' v'+b.h+' h-'+(LBLW-12)+' a12,12 0 0 1 -12,-12 v-'+(b.h-24)+' a12,12 0 0 1 12,-12 z" fill="'+L.col+'"/>';
+  bands.forEach(function(b,bi){
+    var L=b.L, tint=L.tint||'#F3F6F8';
+    s+='<clipPath id="mcb'+bi+'"><rect x="'+M+'" y="'+b.y+'" width="'+(W-2*M)+'" height="'+b.h+'" rx="12"/></clipPath>';
+    s+='<rect x="'+M+'" y="'+b.y+'" width="'+(W-2*M)+'" height="'+b.h+'" rx="12" fill="#FFFFFF"/>';
+    s+='<g clip-path="url(#mcb'+bi+')"><rect x="'+M+'" y="'+b.y+'" width="'+LBLW+'" height="'+b.h+'" fill="'+tint+'"/><rect x="'+M+'" y="'+b.y+'" width="6" height="'+b.h+'" fill="'+L.col+'"/>'
+      +'<line x1="'+(M+LBLW)+'" y1="'+b.y+'" x2="'+(M+LBLW)+'" y2="'+(b.y+b.h)+'" stroke="#E1E6EA" stroke-width="1"/></g>';
+    s+='<rect x="'+M+'" y="'+b.y+'" width="'+(W-2*M)+'" height="'+b.h+'" rx="12" fill="none" stroke="#E1E6EA" stroke-width="1"/>';
     var ty=b.y+21;
-    b.titleLines.forEach(function(ln){ s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="12" font-weight="800" fill="#FFFFFF">'+xmlEscM(ln)+'</text>'; ty+=14; });
+    b.titleLines.forEach(function(ln){ s+='<text x="'+(M+17)+'" y="'+ty+'" font-size="12" font-weight="800" fill="'+L.col+'">'+xmlEscM(ln)+'</text>'; ty+=14; });
     ty+=3;
-    b.subLines.forEach(function(ln){ s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="9" fill="#FFFFFF" opacity="0.82">'+xmlEscM(ln)+'</text>'; ty+=11; });
-    ty+=4; s+='<text x="'+(M+15)+'" y="'+ty+'" font-size="9" font-weight="800" fill="#FFFFFF" opacity="0.9">'+b.n+' normas</text>';
+    b.subLines.forEach(function(ln){ s+='<text x="'+(M+17)+'" y="'+ty+'" font-size="9" fill="#5B6B77">'+xmlEscM(ln)+'</text>'; ty+=11; });
+    ty+=4; s+='<text x="'+(M+17)+'" y="'+ty+'" font-size="9" font-weight="800" fill="'+L.col+'">'+b.n+' normas</text>';
     b.chips.forEach(function(c){ var yy=b.y+PAD+c.y;
       s+='<rect x="'+c.x+'" y="'+yy+'" width="'+c.w+'" height="'+chipH+'" rx="6" fill="#FFFFFF" stroke="'+c.bcol+'" stroke-opacity="'+(c.sug?'0.9':'0.8')+'" stroke-width="1"'+(c.sug?' stroke-dasharray="3.5,2.5"':'')+'/>';
       s+='<text x="'+(c.x+c.w/2)+'" y="'+(yy+15.5)+'" font-size="'+fs+'" font-weight="600" fill="'+c.tcol+'" text-anchor="middle">'+xmlEscM(c.lab)+'</text>';
