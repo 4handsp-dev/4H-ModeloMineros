@@ -8433,6 +8433,9 @@ function pptData(){
   var om=_eidOrderMap(); var br=getBrechas().slice().sort(function(a,b){ return brechaCmp(a,b,om); });
   D.br=br; D.om=om;
   D.prio={'CRÍTICA':[],'ALTA':[],'MEDIA':[]}; br.forEach(function(b){ var p=PPT_PRIO[b.prioridad]?b.prioridad:'MEDIA'; D.prio[p].push(b); });
+  // 2026-11-12: dentro de cada prioridad, por horizonte (corto → mediano → largo) y luego por el orden del modelo
+  var _HZO={C:0,M:1,L:2}; Object.keys(D.prio).forEach(function(p){ D.prio[p]=D.prio[p].map(function(b,i){ return {b:b,i:i}; }).sort(function(x,y){
+    var hx=_HZO[PPT_HZ[x.b.horizonte]?x.b.horizonte:'M'], hy=_HZO[PPT_HZ[y.b.horizonte]?y.b.horizonte:'M']; return (hx-hy)||(x.i-y.i); }).map(function(o){ return o.b; }); });
   D.mx={}; ['CRÍTICA','ALTA','MEDIA'].forEach(function(p){ D.mx[p]={C:0,M:0,L:0}; D.prio[p].forEach(function(b){ var h=PPT_HZ[b.horizonte]?b.horizonte:'M'; D.mx[p][h]++; }); });
   D.acc={n:0,p:{'CRÍTICA':0,'ALTA':0,'MEDIA':0},h:{C:0,M:0,L:0}};
   br.forEach(function(b){ (b.acciones||[]).forEach(function(_,ai){ var m=brechaAccMeta(b,ai); D.acc.n++; if(D.acc.p[m.prioridad]!==undefined) D.acc.p[m.prioridad]++; if(D.acc.h[m.horizonte]!==undefined) D.acc.h[m.horizonte]++; }); });
@@ -8892,7 +8895,7 @@ function buildPresentation(media){
       dot(s,1.35,6.66,0.15,'',PX.LAGO); T(s,'vinculado',{x:1.55,y:6.62,w:0.7,h:0.22,fontSize:8.5,color:PX.MUT,valign:'middle'});
       T(s,'Componentes:',{x:2.35,y:6.6,w:1.0,h:0.2,fontSize:8.5,bold:true,color:PX.NAVY});
       COMP_META.forEach(function(c,ci){ var col=ci%5, row=Math.floor(ci/5); T(s,[{text:c.id+'  ',options:{bold:true,color:PX.NAVY}},{text:pCompShort(c),options:{color:PX.MUT}}],{x:3.35+col*1.9,y:6.6+row*0.22,w:1.88,h:0.2,fontSize:8.5}); });
-      note(s,'Orden: por componente y requisito del modelo (mismo orden de la pestaña Brechas). La franja muestra con qué componentes del modelo se conecta cada brecha.');
+      note(s,'Orden: por horizonte (corto, mediano y largo plazo) y, dentro de cada horizonte, por componente y requisito del modelo (orden de la pestaña Brechas). La franja muestra con qué componentes del modelo se conecta cada brecha.');
     }
   });
 
